@@ -1,28 +1,25 @@
 package visao;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
+import modelo.Config;
+
 public abstract class Tela extends JFrame implements KeyListener{
 	
-
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	int width = (int) screenSize.getWidth();
-	int height = (int) screenSize.getHeight();
+	Config cfg = new Config();
 	Game game = new Game();
 	
 	public Tela(){
 		this.addKeyListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(width, height);
+		this.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
 		this.setLocationRelativeTo(null);
-		this.setUndecorated(true);
-		this.setBackground(new Color(0.0f,0.0f,0.0f,0.0f));
+		//this.setUndecorated(true);
+		this.setBackground(Color.BLACK);
 		this.add(game);
 		this.setVisible(true);
 	}

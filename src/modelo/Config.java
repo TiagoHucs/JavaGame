@@ -1,21 +1,22 @@
 package modelo;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Config {
 	
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int larguraTela = (int) screenSize.getWidth();
-	private  int alturaTela = (int) screenSize.getHeight();
+	private int resolution = 800;
+	private int larguraTela = resolution;
+	private int alturaTela = ((resolution/100)*75);
 	
-	public int getLarguraTela() {
-		return larguraTela;
-	}
-	public int getAlturaTela() {
-		return alturaTela;
-	}
+	//private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	//private int larguraTela = (int) screenSize.getWidth();
+	//private int alturaTela = (int) screenSize.getHeight();
 	
-	
-
 }

@@ -1,7 +1,6 @@
 package modelo;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Space {
 	
@@ -9,7 +8,7 @@ public class Space {
 	
 	public Space(){
 		
-		for(int i = 0 ; i < 200;i++){	
+		for(int i = 0 ; i < 100;i++){	
 			Star estrela = new Star();
 			estrelas.add(estrela);
 		}

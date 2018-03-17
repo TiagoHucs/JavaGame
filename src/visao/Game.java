@@ -2,27 +2,32 @@ package visao;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JComponent;
 
 import modelo.Config;
+import modelo.Enemy;
 import modelo.Ship;
 import modelo.Shot;
 import modelo.Space;
 
 class Game extends JComponent {
-
-	private Ship heroi = new Ship();
-	Image img1 = Toolkit.getDefaultToolkit().getImage("src\\disk.png");
-	ArrayList<Shot> listaTiros = new ArrayList<Shot>();
-	Space espaco = new Space();
+	
 	Config cfg = new Config();
-
+	
+	private Ship nave = new Ship();
+	private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
+	private Space espaco = new Space();
+	private int speedDefault = cfg.getResolution()/200;
+	private Random r = new Random();
+	private Enemy inimigo1 = new Enemy();
+		
 	public Game() {
+		inimigo1.setY(10);
+		inimigo1.setX(r.nextInt(cfg.getResolution()));
 
 		Thread animationThread = new Thread(new Runnable() {
 			public void run() {
@@ -47,16 +52,25 @@ class Game extends JComponent {
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,cfg.getLarguraTela(),cfg.getAlturaTela());
 		
-		g.setColor(heroi.getCor());
-		g.drawImage(img1, heroi.getX(), heroi.getY(), 50, 50, this);
+		g.setColor(Color.WHITE);
+		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
+		
+		g.setColor(Color.RED);
+		g.drawImage(inimigo1.getImg(),inimigo1.getX(),inimigo1.getY(),inimigo1.getLargura(),inimigo1.getLargura(),this);
 		
 		g.setColor(Color.YELLOW);
+		for (Shot tiro : listaTiros) {
+			g.fillRect(tiro.getX(),tiro.getY(),tiro.getLargura(),tiro.getAltura());
+		}
+		
+		
+		
 		for (int i = 0; i < listaTiros.size(); i++) {
-			g.fillRect(listaTiros.get(i).getX(), listaTiros.get(i).getY(), 5,
-					30);
+			g.fillRect(listaTiros.get(i).getX(), listaTiros.get(i).getY(), listaTiros.get(i).getLargura(),
+					listaTiros.get(i).getAltura());
 
 		}
-		g.setColor(Color.WHITE);
+		g.setColor(Color.gray);
 		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
 			int dim = espaco.getEstrelas().get(i).getDim();
 			g.fillOval(espaco.getEstrelas().get(i).getX(), espaco.getEstrelas()
@@ -68,7 +82,8 @@ class Game extends JComponent {
 	}
 
 	private void update() {
-		heroi.mover();
+		nave.mover();
+		inimigo1.mover();
 		for (int i = 0; i < listaTiros.size(); i++) {
 			listaTiros.get(i).move();
 			if (listaTiros.get(i).getY() < -10) {
@@ -78,28 +93,32 @@ class Game extends JComponent {
 		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
 			espaco.getEstrelas().get(i).move();
 		}
-
+		if(inimigo1.getY()>cfg.getAlturaTela()){
+			inimigo1.setY(-5);
+			inimigo1.setX(r.nextInt(cfg.getResolution()));
+		}
+		
 	}
 
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			heroi.setVelocidadeY(-5);
+			nave.setVelocidadeY(-speedDefault);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			heroi.setVelocidadeY(5);
+			nave.setVelocidadeY(speedDefault);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			heroi.setVelocidadeX(-5);
+			nave.setVelocidadeX(-speedDefault);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			heroi.setVelocidadeX(5);
+			nave.setVelocidadeX(speedDefault);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			listaTiros.add(heroi.atirar());
+			listaTiros.add(nave.atirar());
 		}
 
 	}
@@ -107,16 +126,16 @@ class Game extends JComponent {
 	public void keyReleased(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			heroi.setVelocidadeY(0);
+			nave.setVelocidadeY(0);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			heroi.setVelocidadeY(0);
+			nave.setVelocidadeY(0);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			heroi.setVelocidadeX(0);
+			nave.setVelocidadeX(0);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			heroi.setVelocidadeX(0);
+			nave.setVelocidadeX(0);
 		}
 
 	}
