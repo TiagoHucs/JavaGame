@@ -1,19 +1,20 @@
-package visao;
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-import modelo.Config;
-
-public abstract class Tela extends JFrame implements KeyListener{
+public class Tela extends JFrame implements KeyListener{
 	
-	Config cfg = new Config();
+    Config cfg = new Config();
 	Game game = new Game();
-	
+
+    public static void main(String[] args) {
+        new Tela() {};
+    }
+
 	public Tela(){
+
 		this.addKeyListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
@@ -23,10 +24,6 @@ public abstract class Tela extends JFrame implements KeyListener{
 		this.add(game);
 		this.setVisible(true);
 	}
-
-    public static void main(String[] args) {
-        new Tela() {};
-    }
     
 	@Override
 	public void keyTyped(KeyEvent e) {

@@ -1,5 +1,3 @@
-package visao;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -7,12 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JComponent;
-
-import modelo.Config;
-import modelo.Enemy;
-import modelo.Ship;
-import modelo.Shot;
-import modelo.Space;
 
 class Game extends JComponent {
 	
