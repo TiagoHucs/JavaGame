@@ -7,11 +7,7 @@ import javax.swing.JFrame;
 public class Tela extends JFrame implements KeyListener{
 	
     Config cfg = new Config();
-	Game game = new Game();
-
-    public static void main(String[] args) {
-        new Tela() {};
-    }
+    Game game = new Game();
 
 	public Tela(){
 

@@ -18,7 +18,7 @@ public class Enemy {
 	//private Image img = Toolkit.getDefaultToolkit().getImage("src\\enemy.png");
 	private Image img = Toolkit.getDefaultToolkit().getImage("enemy.png");
 
-	public void mover() {
+	public void move() {
 		this.setX(this.getX() + this.getVelocidadeX());
 		this.setY(this.getY() + this.getVelocidadeY());
 	}
@@ -29,12 +29,7 @@ public class Enemy {
 	}
 	
 	public void destroi(){
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.gc();
 	}
 
 }
