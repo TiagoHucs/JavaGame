@@ -1,8 +1,9 @@
 Compilar jogo:
-javac -cp lombok.jar Shot.java Enemy.java Star.java Tela.java Config.java Game.java Ship.java Space.java
+javac -cp lombok.jar Shot.java Enemy.java Star.java Tela.java Config.java Game.java Ship.java Space.java Colisor.java Shooter.java Ator.java
 
 Executar jogo:
-Java Tela
+Java Shooter
 
 
-jar cfm shooter.jar manifest.txt Tela.class Shot.class Enemy.class Star.class  Config.class Game.class Ship.class Space.class
+
+javac -cp lombok.jar Shot.java Enemy.java Star.java Tela.java Config.java Game.java Ship.java Space.java Colisor.java Shooter.java

@@ -18,6 +18,7 @@ public class Game extends JComponent {
 	private Random r = new Random();
 	private Enemy novoInimigo = new Enemy();
 	private Colisor colisor = new Colisor();
+	private boolean paused = true;
 		
 	public Game() {
 
@@ -32,7 +33,9 @@ public class Game extends JComponent {
 		Thread animationThread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
-					update();
+					if(!paused){
+						update();	
+					}
 					repaint();
 					try {
 						Thread.sleep(10);
@@ -52,14 +55,14 @@ public class Game extends JComponent {
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,cfg.getLarguraTela(),cfg.getAlturaTela());
 		
+
 		g.setColor(Color.WHITE);
 		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
-		
+			
 		for (Enemy i : listaInimigos) {
 			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
 		}
-
-		g.setColor(Color.YELLOW);
+			g.setColor(Color.YELLOW);
 		for (Shot tiro : listaTiros) {
 			g.fillRect(tiro.getX(),tiro.getY(),tiro.getLargura(),tiro.getAltura());
 		}
@@ -67,16 +70,12 @@ public class Game extends JComponent {
 		for (int i = 0; i < listaTiros.size(); i++) {
 			g.fillRect(listaTiros.get(i).getX(), listaTiros.get(i).getY(), listaTiros.get(i).getLargura(),
 					listaTiros.get(i).getAltura());
-
 		}
-
-		g.setColor(Color.gray);
+			g.setColor(Color.gray);
 		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
 			int dim = espaco.getEstrelas().get(i).getDim();
 			g.fillOval(espaco.getEstrelas().get(i).getX(), espaco.getEstrelas()
-					.get(i).getY(), dim, dim);
-			
-
+					.get(i).getY(), dim, dim);	
 		}
 
 	}
@@ -85,36 +84,46 @@ public class Game extends JComponent {
 
 		nave.move();
 
-		for (int i = 0; i < listaTiros.size(); i++) {
-			listaTiros.get(i).move();
-		}
-
-		for (int i = 0; i < listaInimigos.size(); i++) {
-			listaInimigos.get(i).move();
-			if(listaInimigos.get(i).getY() > cfg.getAlturaTela()){
-				listaInimigos.get(i).setY(-100);
-				listaInimigos.get(i).setX(r.nextInt(cfg.getResolution()));
-			}
-		}
-
-		for (int e = 0; e < listaInimigos.size(); e++) {
+		if(!paused){
 			for (int i = 0; i < listaTiros.size(); i++) {
-				if (listaTiros.get(i).getY() < -10) {
-					listaTiros.remove(i);
-				}else if ( colisor.detectaColisao( listaTiros.get(i),listaInimigos.get(e) ) ){
-					listaTiros.remove(i);
-					listaInimigos.remove(e);
+				listaTiros.get(i).move();
+			}
+
+			for (int i = 0; i < listaInimigos.size(); i++) {
+				listaInimigos.get(i).move();
+				if(listaInimigos.get(i).getY() > cfg.getAlturaTela()){
+					listaInimigos.get(i).setY(-100);
+					listaInimigos.get(i).setX(r.nextInt(cfg.getResolution()));
 				}
 			}
+
+			for (int e = 0; e < listaInimigos.size(); e++) {
+				for (int i = 0; i < listaTiros.size(); i++) {
+					if (listaTiros.get(i).getY() < -10) {
+						listaTiros.remove(i);
+					}else if ( colisor.detectaColisao( listaTiros.get(i),listaInimigos.get(e) ) ){
+						listaTiros.remove(i);
+						listaInimigos.remove(e);
+					}
+				}
+			}
+
+			for (int i = 0; i < espaco.getEstrelas().size(); i++) {
+				espaco.getEstrelas().get(i).move();
+			}	
 		}
 
-		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
-			espaco.getEstrelas().get(i).move();
-		}
-		
 	}
 
 	public void keyPressed(KeyEvent e) {
+
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+//			this.emJogo = true;
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_P) {
+			this.paused = !this.paused;
+		}
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			nave.setVelocidadeY(-speedDefault);
 		}
