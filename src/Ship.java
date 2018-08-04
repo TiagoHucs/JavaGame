@@ -5,10 +5,8 @@ public class Ship extends Ator{
 	}
 
 	public Shot atirar() {
-		Shot tiro = new Shot(getX(), getY());
+		Shot tiro = new Shot(getX()+(getLargura()/2), getY());
 		return tiro;
 	}
-
-
 
 }

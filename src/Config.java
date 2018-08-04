@@ -6,7 +6,7 @@ public class Config {
 
 	public Config(){};
 	
-	private int resolution = 800;
+	private int resolution = 900;
 	private int larguraTela = resolution;
 	private int alturaTela = ((resolution/100)*75);
 	
