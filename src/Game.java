@@ -23,7 +23,7 @@ public class Game extends JComponent {
 
 		for (int i = 0; i < 10; i++) {
 			novoInimigo = new Enemy();
-			novoInimigo.setY(i*-100);
+			novoInimigo.setY(i*-10);// aumentar a distancia entre os inimigos
 			novoInimigo.setX(r.nextInt(cfg.getResolution()));
 
 			listaInimigos.add(novoInimigo);
@@ -83,7 +83,7 @@ public class Game extends JComponent {
 
 	private void update() {
 
-		nave.mover();
+		nave.move();
 
 		for (int i = 0; i < listaTiros.size(); i++) {
 			listaTiros.get(i).move();

@@ -2,11 +2,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class Config {
 
 	public Config(){};
@@ -18,5 +13,15 @@ public class Config {
 	//private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	//private int larguraTela = (int) screenSde.getWidth();
 	//private int alturaTela = (int) screenSize.getHeight();
+
+	public int getResolution(){
+		return this.resolution;
+	}
+	public int getLarguraTela(){
+		return this.larguraTela;
+	}
+	public int getAlturaTela(){
+		return this.alturaTela;
+	}
 	
 }
