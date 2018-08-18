@@ -1,7 +1,7 @@
 public class Enemy extends Ator{
 		
 	public Enemy(){
-		this.setImg("Enemy.png");
+		this.setImg("enemy.png");
 		this.setVelocidadeY(2);
 	}
 

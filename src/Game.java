@@ -54,15 +54,23 @@ public class Game extends JComponent {
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,cfg.getLarguraTela(),cfg.getAlturaTela());
-		
+
+		g.setColor(Color.gray);
+		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
+			int dim = espaco.getEstrelas().get(i).getDim();
+			g.fillOval(espaco.getEstrelas().get(i).getX(), espaco.getEstrelas()
+					.get(i).getY(), dim, dim);	
+		}
 
 		g.setColor(Color.WHITE);
 		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
 			
+		g.setColor(Color.RED);
 		for (Enemy i : listaInimigos) {
 			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
 		}
-			g.setColor(Color.YELLOW);
+		
+		g.setColor(Color.YELLOW);
 		for (Shot tiro : listaTiros) {
 			g.fillRect(tiro.getX(),tiro.getY(),tiro.getLargura(),tiro.getAltura());
 		}
@@ -71,12 +79,8 @@ public class Game extends JComponent {
 			g.fillRect(listaTiros.get(i).getX(), listaTiros.get(i).getY(), listaTiros.get(i).getLargura(),
 					listaTiros.get(i).getAltura());
 		}
-			g.setColor(Color.gray);
-		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
-			int dim = espaco.getEstrelas().get(i).getDim();
-			g.fillOval(espaco.getEstrelas().get(i).getX(), espaco.getEstrelas()
-					.get(i).getY(), dim, dim);	
-		}
+
+		g.drawString("Energia: "+nave.getEnergia(),10, 20);
 
 	}
 
