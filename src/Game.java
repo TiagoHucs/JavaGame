@@ -16,19 +16,14 @@ public class Game extends JComponent {
 	private Space espaco = new Space();
 	private int speedDefault = cfg.getResolution()/200;
 	private Random r = new Random();
-	private Enemy novoInimigo = new Enemy();
+	//private Enemy novoInimigo = new Enemy();
 	private Colisor colisor = new Colisor();
 	private boolean paused = true;
+	private int level = 1;
 		
 	public Game() {
 
-		for (int i = 0; i < 10; i++) {
-			novoInimigo = new Enemy();
-			novoInimigo.setY(i*-10);// aumentar a distancia entre os inimigos
-			novoInimigo.setX(r.nextInt(cfg.getResolution()));
-
-			listaInimigos.add(novoInimigo);
-		}
+		geraInimigos();
 
 		Thread animationThread = new Thread(new Runnable() {
 			public void run() {
@@ -62,10 +57,9 @@ public class Game extends JComponent {
 					.get(i).getY(), dim, dim);	
 		}
 
-		g.setColor(Color.WHITE);
 		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
 			
-		g.setColor(Color.RED);
+
 		for (Enemy i : listaInimigos) {
 			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
 		}
@@ -80,73 +74,92 @@ public class Game extends JComponent {
 					listaTiros.get(i).getAltura());
 		}
 
-		g.drawString("Energia: "+nave.getEnergia(),10, 20);
+		if(paused){
+			g.drawString("Pausado",10, 20);
+		}else{
+			g.drawString("Level: "+level,10, 20);
+			g.drawString("Energia: "+nave.getEnergia(),10, 40);
+			g.drawString("Inimigos: "+listaInimigos.size(),10, 60);
+		}
+		
+	}
 
+	private void geraInimigos(){
+		for (int i = 0; i < 10; i++) {
+			listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()),i*-50));
+		}
 	}
 
 	private void update() {
 
 		nave.move();
 
-		if(!paused){
-			for (int i = 0; i < listaTiros.size(); i++) {
-				listaTiros.get(i).move();
-			}
-
-			for (int i = 0; i < listaInimigos.size(); i++) {
-				listaInimigos.get(i).move();
-				if(listaInimigos.get(i).getY() > cfg.getAlturaTela()){
-					listaInimigos.get(i).setY(-100);
-					listaInimigos.get(i).setX(r.nextInt(cfg.getResolution()));
-				}
-			}
-
-			for (int e = 0; e < listaInimigos.size(); e++) {
-				for (int i = 0; i < listaTiros.size(); i++) {
-					if (listaTiros.get(i).getY() < -10) {
-						listaTiros.remove(i);
-					}else if ( colisor.detectaColisao( listaTiros.get(i),listaInimigos.get(e) ) ){
-						listaTiros.remove(i);
-						listaInimigos.remove(e);
-					}
-				}
-			}
-
-			for (int i = 0; i < espaco.getEstrelas().size(); i++) {
-				espaco.getEstrelas().get(i).move();
-			}	
+		//se acabarem os inimigos gere mais
+		if(listaInimigos.size()<1){
+			geraInimigos();
+			level++;
 		}
+
+		for (int i = 0; i < listaTiros.size(); i++) {
+			listaTiros.get(i).move();
+		}
+		
+		for (int i = 0; i < listaInimigos.size(); i++) {
+			listaInimigos.get(i).move();
+			if(listaInimigos.get(i).getY() > cfg.getAlturaTela()){
+				listaInimigos.get(i).setY(-100);
+				listaInimigos.get(i).setX(r.nextInt(cfg.getResolution()));
+			}
+		}
+		
+		for (int e = 0; e < listaInimigos.size(); e++) {
+			for (int i = 0; i < listaTiros.size(); i++) {
+				if (listaTiros.get(i).getY() < -10) {
+					listaTiros.remove(i);
+				}else if ( colisor.detectaColisao( listaTiros.get(i),listaInimigos.get(e) ) ){
+					listaTiros.remove(i);
+					listaInimigos.remove(e);
+				}
+			}
+			if (colisor.detectaColisao(nave,listaInimigos.get(e))){
+				listaInimigos.remove(e);
+				nave.sofreDano(25);
+			}
+		}
+
+		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
+			espaco.getEstrelas().get(i).move();
+		}	
 
 	}
 
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//			this.emJogo = true;
-		}
-
 		if (e.getKeyCode() == KeyEvent.VK_P) {
 			this.paused = !this.paused;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			nave.setVelocidadeY(-speedDefault);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			nave.setVelocidadeY(speedDefault);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			nave.setVelocidadeX(-speedDefault);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			nave.setVelocidadeX(speedDefault);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
-		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			listaTiros.add(nave.atirar());
-		}
 
+		if(!paused){
+
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				nave.setVelocidadeY(-speedDefault);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				nave.setVelocidadeY(speedDefault);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				nave.setVelocidadeX(-speedDefault);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				nave.setVelocidadeX(speedDefault);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				System.exit(0);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				listaTiros.add(nave.atirar());
+			}
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {

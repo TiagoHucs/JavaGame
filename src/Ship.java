@@ -16,4 +16,8 @@ public class Ship extends Ator{
 		return this.energia;
 	}
 
+	public void sofreDano(int d){
+		this.energia = this.energia-d; 
+	}
+
 }
