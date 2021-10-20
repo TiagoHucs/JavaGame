@@ -57,11 +57,14 @@ public class Game extends JComponent {
 					.get(i).getY(), dim, dim);	
 		}
 
-		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
-			
+		//g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
+		g.fillRect(nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura());
+
 
 		for (Enemy i : listaInimigos) {
-			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
+			//g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
+			g.fillRect(i.getX(), i.getY(),i.getLargura(), i.getAltura());
+
 		}
 		
 		g.setColor(Color.YELLOW);
