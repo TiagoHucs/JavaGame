@@ -1,5 +1,9 @@
+import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Ator{
 
@@ -10,8 +14,7 @@ public class Ator{
 	private int y = (cfg.getAlturaTela()/2)-(altura/2);
 	private int velocidadeX = 0;
 	private int velocidadeY = 0;
-	//private Image img = Toolkit.getDefaultToolkit().getImage("src\\hero.png");
-	private Image img;
+	private BufferedImage image = null;
 
 	public void move() {
 		this.x = this.x + this.velocidadeX;
@@ -48,7 +51,7 @@ public class Ator{
 	}
 
 	public Image getImg(){
-		return this.img;
+		return this.image;
 	}
 
 
@@ -77,8 +80,14 @@ public class Ator{
 		this.velocidadeY = velY;
 	}
 
-	public void setImg(String img){
-		this.img = Toolkit.getDefaultToolkit().getImage(img);
+	public void setImg(String imgName){
+		try {
+			String path = cfg.getRelativePath();
+			image = ImageIO.read(new File(path, imgName));
+		} catch (
+				IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 

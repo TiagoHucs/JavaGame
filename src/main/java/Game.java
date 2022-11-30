@@ -1,10 +1,14 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
-
-import javax.swing.JComponent;
+import java.util.Set;
 
 public class Game extends JComponent {
 	
@@ -13,10 +17,8 @@ public class Game extends JComponent {
 	private Ship nave = new Ship();
 	private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
 	private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
-	private Space espaco = new Space();
 	private int speedDefault = cfg.getResolution()/200;
 	private Random r = new Random();
-	//private Enemy novoInimigo = new Enemy();
 	private Colisor colisor = new Colisor();
 	private boolean paused = true;
 	private int level = 1;
@@ -29,7 +31,7 @@ public class Game extends JComponent {
 			public void run() {
 				while (true) {
 					if(!paused){
-						update();	
+						loop();
 					}
 					repaint();
 					try {
@@ -51,19 +53,13 @@ public class Game extends JComponent {
 		g.fillRect(0,0,cfg.getLarguraTela(),cfg.getAlturaTela());
 
 		g.setColor(Color.gray);
-		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
-			int dim = espaco.getEstrelas().get(i).getDim();
-			g.fillOval(espaco.getEstrelas().get(i).getX(), espaco.getEstrelas()
-					.get(i).getY(), dim, dim);	
-		}
-
-		//g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
-		g.fillRect(nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura());
+		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
+		//g.fillRect(nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura());
 
 
 		for (Enemy i : listaInimigos) {
-			//g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
-			g.fillRect(i.getX(), i.getY(),i.getLargura(), i.getAltura());
+			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
+			//g.fillRect(i.getX(), i.getY(),i.getLargura(), i.getAltura());
 
 		}
 		
@@ -84,6 +80,8 @@ public class Game extends JComponent {
 			g.drawString("Energia: "+nave.getEnergia(),10, 40);
 			g.drawString("Inimigos: "+listaInimigos.size(),10, 60);
 		}
+
+
 		
 	}
 
@@ -93,7 +91,7 @@ public class Game extends JComponent {
 		}
 	}
 
-	private void update() {
+	private void loop() {
 
 		nave.move();
 
@@ -103,36 +101,40 @@ public class Game extends JComponent {
 			level++;
 		}
 
-		for (int i = 0; i < listaTiros.size(); i++) {
-			listaTiros.get(i).move();
+		for (Shot tiro:listaTiros) {
+			tiro.move();
 		}
-		
-		for (int i = 0; i < listaInimigos.size(); i++) {
-			listaInimigos.get(i).move();
-			if(listaInimigos.get(i).getY() > cfg.getAlturaTela()){
-				listaInimigos.get(i).setY(-100);
-				listaInimigos.get(i).setX(r.nextInt(cfg.getResolution()));
-			}
-		}
-		
-		for (int e = 0; e < listaInimigos.size(); e++) {
-			for (int i = 0; i < listaTiros.size(); i++) {
-				if (listaTiros.get(i).getY() < -10) {
-					listaTiros.remove(i);
-				}else if ( colisor.detectaColisao( listaTiros.get(i),listaInimigos.get(e) ) ){
-					listaTiros.remove(i);
-					listaInimigos.remove(e);
-				}
-			}
-			if (colisor.detectaColisao(nave,listaInimigos.get(e))){
-				listaInimigos.remove(e);
-				nave.sofreDano(25);
+
+		for (Enemy inimigo: listaInimigos) {
+			inimigo.move();
+			if(inimigo.getY() > cfg.getAlturaTela()){
+				inimigo.setY(-100);
+				inimigo.setX(r.nextInt(cfg.getResolution()));
 			}
 		}
 
-		for (int i = 0; i < espaco.getEstrelas().size(); i++) {
-			espaco.getEstrelas().get(i).move();
-		}	
+		Set<Enemy> listaInimigosDestruidos = new HashSet<Enemy>();
+		Set<Shot> listaTirosDestruidos = new HashSet<Shot>();
+
+		for (Enemy inimigo : listaInimigos) {
+			for (Shot tiro: listaTiros) {
+				if (tiro.getY() < -10) {
+					listaTirosDestruidos.add(tiro);
+				} else if (colisor.detectaColisao(tiro, inimigo)) {
+					listaTirosDestruidos.add(tiro);
+					listaInimigosDestruidos.add(inimigo);
+				}
+			}
+
+			if (colisor.detectaColisao(nave, inimigo)) {
+				listaInimigosDestruidos.add(inimigo);
+				nave.sofreDano(25);
+			}
+
+		}
+
+		listaInimigos.removeAll(listaInimigosDestruidos);
+		listaTiros.removeAll(listaTirosDestruidos);
 
 	}
 
