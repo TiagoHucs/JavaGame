@@ -1,4 +1,7 @@
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -6,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class Ator{
+
+	private static final String RESOURCE_PATH = "src/main/resources/";
 
 	private Config cfg = new Config();
 	private int altura = cfg.getResolution()/20;
@@ -87,6 +92,18 @@ public class Ator{
 		} catch (
 				IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	public void playSound(String filename) {
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(RESOURCE_PATH+filename).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace();
 		}
 	}
 

@@ -89,6 +89,7 @@ public class Game extends JComponent {
 		for (int i = 0; i < 10; i++) {
 			listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()),i*-50));
 		}
+		nave.playSound("fighters-coming.wav");
 	}
 
 	private void loop() {
