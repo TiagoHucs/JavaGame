@@ -1,3 +1,6 @@
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -8,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+@Getter
+@Setter
 public class Ator{
 
 	private static final String RESOURCE_PATH = "src/main/resources/";
@@ -19,6 +24,7 @@ public class Ator{
 	private int y = (cfg.getAlturaTela()/2)-(altura/2);
 	private int velocidadeX = 0;
 	private int velocidadeY = 0;
+
 	private BufferedImage image = null;
 
 	public void move() {
@@ -29,36 +35,6 @@ public class Ator{
 	public void destroi(){
 		System.gc();
 	}
-
-	// getters
-	public int getAltura(){
-		return this.altura;
-	}
-
-	public int getLargura(){
-		return this.largura;
-	}
-
-	public int getX(){
-		return this.x;
-	}
-
-	public int getY(){
-		return this.y;
-	}
-
-	public int getVelocidadeX(){
-		return this.velocidadeX;
-	}
-
-	public int getVelocidadeY(){
-		return this.velocidadeY;
-	}
-
-	public Image getImg(){
-		return this.image;
-	}
-
 
 	//setters
 	public void setAltura(int altura){

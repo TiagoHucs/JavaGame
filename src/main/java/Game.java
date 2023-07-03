@@ -1,10 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -35,7 +31,7 @@ public class Game extends JComponent {
 					}
 					repaint();
 					try {
-						Thread.sleep(10);
+						Thread.sleep(16);
 					} catch (Exception ex) {
 					}
 				}
@@ -53,17 +49,17 @@ public class Game extends JComponent {
 		g.fillRect(0,0,cfg.getLarguraTela(),cfg.getAlturaTela());
 
 		g.setColor(Color.gray);
-		g.drawImage(nave.getImg(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
+		g.drawImage(nave.getImage(), nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura(), this);
 		//g.fillRect(nave.getX(), nave.getY(),nave.getLargura(), nave.getAltura());
 
 
 		for (Enemy i : listaInimigos) {
-			g.drawImage(i.getImg(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
+			g.drawImage(i.getImage(),i.getX(),i.getY(),i.getLargura(),i.getLargura(),this);
 			//g.fillRect(i.getX(), i.getY(),i.getLargura(), i.getAltura());
 
 		}
 		
-		g.setColor(Color.YELLOW);
+		g.setColor(Color.RED);
 		for (Shot tiro : listaTiros) {
 			g.fillRect(tiro.getX(),tiro.getY(),tiro.getLargura(),tiro.getAltura());
 		}
@@ -73,6 +69,8 @@ public class Game extends JComponent {
 					listaTiros.get(i).getAltura());
 		}
 
+
+		g.setColor(Color.YELLOW);
 		if(paused){
 			g.drawString("Pausado",10, 20);
 		}else{
