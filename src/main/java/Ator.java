@@ -32,36 +32,7 @@ public class Ator{
 		this.y = this.y + this.velocidadeY;
 	}
 
-	public void destroi(){
-		System.gc();
-	}
-
-	//setters
-	public void setAltura(int altura){
-		this.altura = altura;
-	}
-
-	public void setLargura(int largura){
-		this.largura = largura;
-	}
-
-	public void setX(int x){
-		this.x = x;
-	}
-
-	public void setY(int y){
-		this.y = y;
-	}
-
-	public void setVelocidadeX(int velX){
-		this.velocidadeX = velX;
-	}
-
-	public void setVelocidadeY(int velY){
-		this.velocidadeY = velY;
-	}
-
-	public void setImg(String imgName){
+	public void setImage(String imgName){
 		try {
 			String path = cfg.getRelativePath();
 			image = ImageIO.read(new File(path, imgName));

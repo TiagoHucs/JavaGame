@@ -1,5 +1,5 @@
 Compilar jogo:
-javac Shooter.java
+javac Main.java
 
 Executar jogo:
-Java Shooter
+Java Main

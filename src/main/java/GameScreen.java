@@ -4,12 +4,12 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-public class Tela extends JFrame implements KeyListener{
+public class GameScreen extends JFrame implements KeyListener{
 	
     Config cfg = new Config();
-    Game game = new Game();
+    GameLogic game = new GameLogic();
 
-	public Tela(){
+	public GameScreen(){
 
 		this.addKeyListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class Game extends JComponent {
+public class GameLogic extends JComponent {
 	
 	Config cfg = new Config();
 	
@@ -16,10 +16,10 @@ public class Game extends JComponent {
 	private int speedDefault = cfg.getResolution()/200;
 	private Random r = new Random();
 	private Colisor colisor = new Colisor();
-	private boolean paused = true;
+	private boolean paused = false;
 	private int level = 1;
 		
-	public Game() {
+	public GameLogic() {
 
 		geraInimigos();
 
@@ -71,16 +71,11 @@ public class Game extends JComponent {
 
 
 		g.setColor(Color.YELLOW);
-		if(paused){
-			g.drawString("Pausado",10, 20);
-		}else{
-			g.drawString("Level: "+level,10, 20);
-			g.drawString("Energia: "+nave.getEnergia(),10, 40);
-			g.drawString("Inimigos: "+listaInimigos.size(),10, 60);
-		}
+		g.drawString("Level: " + level, 10, 20);
+		g.drawString("Energia: " + nave.getEnergia(), 10, 40);
+		g.drawString("Inimigos: " + listaInimigos.size(), 10, 60);
+		g.drawString("Pausado: " + paused, 10, 80);
 
-
-		
 	}
 
 	private void geraInimigos(){
