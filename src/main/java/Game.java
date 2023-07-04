@@ -24,7 +24,8 @@ public class Game extends JComponent implements KeyListener {
 
     private boolean left = false;
     private boolean right = false;
-
+    private boolean up = false;
+    private boolean down = false;
 
     public Game() {
         addKeyListener(this);
@@ -42,6 +43,8 @@ public class Game extends JComponent implements KeyListener {
                     try {
                         Thread.sleep(16);
                     } catch (Exception ex) {
+                        System.out.println("Error in Thread.sleep");
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -136,12 +139,21 @@ public class Game extends JComponent implements KeyListener {
     }
 
     private void moveShip() {
+        //Horizontalmente
         if(left == right){
-            nave.slowDown();
+            nave.slowDownX();
         } else if(left){
             nave.decreaseXVelocity();
         } else if (right) {
             nave.increaseXVelocity();
+        }
+        //Verticalmente
+        if(up == down){
+            nave.slowDownY();
+        } else if(up){
+            nave.decreaseYVelocity();
+        } else if (down) {
+            nave.increaseYVelocity();
         }
         nave.move();
     }
@@ -151,7 +163,7 @@ public class Game extends JComponent implements KeyListener {
 
     }
 
-    private void playSound(String filename) {
+    private void  playSound(String filename) {
         if (!muted) {
             try {
                 Clip sound = ResourceManager.get().getAudio(filename);
@@ -178,19 +190,15 @@ public class Game extends JComponent implements KeyListener {
         if (!paused) {
 
             if (e.getKeyCode() == KeyEvent.VK_UP) {
-                nave.setVelocidadeY(-speedDefault);
+                up = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                nave.setVelocidadeY(speedDefault);
+                down = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                //nave.setVelocidadeX(-speedDefault);
-                //nave.decreaseXVelocity();
                 left = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                //nave.setVelocidadeX(speedDefault);
-                //nave.increaseXVelocity();
                 right = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -207,17 +215,15 @@ public class Game extends JComponent implements KeyListener {
     public void keyReleased(KeyEvent e) {
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            nave.setVelocidadeY(0);
+            up = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            nave.setVelocidadeY(0);
+            down = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            //nave.setVelocidadeX(0);
             left = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            //nave.setVelocidadeX(0);
             right = false;
         }
 

@@ -1,14 +1,7 @@
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 @Getter
@@ -22,6 +15,7 @@ public class Ator {
     private int y = (cfg.getAlturaTela() / 2) - (altura / 2);
     private int velocidadeX = 0;
     private int velocidadeY = 0;
+    private int maxVelocity = 15;
 
     private BufferedImage image = null;
 
@@ -39,18 +33,34 @@ public class Ator {
     }
 
     public void increaseXVelocity(){
-        this.velocidadeX = velocidadeX >= 20 ? velocidadeX : velocidadeX+1;
+        this.velocidadeX = velocidadeX >= maxVelocity ? velocidadeX : velocidadeX+1;
     }
 
     public void decreaseXVelocity(){
-        this.velocidadeX = velocidadeX <= -20 ? velocidadeX : velocidadeX-1;
+        this.velocidadeX = velocidadeX <= -maxVelocity ? velocidadeX : velocidadeX-1;
     }
 
-    public void slowDown(){
+    public void increaseYVelocity(){
+        this.velocidadeY = velocidadeY >= maxVelocity ? velocidadeY : velocidadeY+1;
+    }
+
+    public void decreaseYVelocity(){
+        this.velocidadeY = velocidadeY <= -maxVelocity ? velocidadeY : velocidadeY-1;
+    }
+
+    public void slowDownX(){
         if(this.velocidadeX > 0){
             this.velocidadeX--;
         } else if (this.velocidadeX < 0){
             this.velocidadeX++;
+        }
+    }
+
+    public void slowDownY(){
+        if(this.velocidadeY > 0){
+            this.velocidadeY--;
+        } else if (this.velocidadeY < 0){
+            this.velocidadeY++;
         }
     }
 }
