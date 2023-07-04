@@ -2,8 +2,6 @@ import java.awt.*;
 
 public class Config {
 
-	private static final String PATH = ".\\src\\main\\resources";
-
 	public Config(){};
 	
 	//private int resolution = 900;
@@ -23,10 +21,6 @@ public class Config {
 	}
 	public int getAlturaTela(){
 		return this.alturaTela;
-	}
-
-	public String getRelativePath(){
-		return PATH;
 	}
 	
 }

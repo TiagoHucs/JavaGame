@@ -13,47 +13,39 @@ import java.io.IOException;
 
 @Getter
 @Setter
-public class Ator{
-
-	private static final String RESOURCE_PATH = "src/main/resources/";
+public class Ator {
 
 	private Config cfg = new Config();
-	private int altura = cfg.getResolution()/20;
-	private int largura = altura;
-	private int x = (cfg.getLarguraTela()/2)+(largura/2);
-	private int y = (cfg.getAlturaTela()/2)-(altura/2);
-	private int velocidadeX = 0;
-	private int velocidadeY = 0;
+    private int altura = cfg.getResolution() / 20;
+    private int largura = altura;
+    private int x = (cfg.getLarguraTela() / 2) + (largura / 2);
+    private int y = (cfg.getAlturaTela() / 2) - (altura / 2);
+    private int velocidadeX = 0;
+    private int velocidadeY = 0;
 
-	private BufferedImage image = null;
+    private BufferedImage image = null;
 
-	public void move() {
-		this.x = this.x + this.velocidadeX;
-		this.y = this.y + this.velocidadeY;
-	}
+    public void move() {
+        this.x = this.x + this.velocidadeX;
+        this.y = this.y + this.velocidadeY;
+    }
 
-	public void setImage(String imgName){
-		try {
-			String path = cfg.getRelativePath();
-			image = ImageIO.read(new File(path, imgName));
-		} catch (
-				IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public void setImage(String filename) {
+        try {
+            image = ResourceManager.get().getImage(filename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public void playSound(String filename) {
-		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(RESOURCE_PATH+filename).getAbsoluteFile());
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.start();
-		} catch(Exception ex) {
-			System.out.println("Error with playing sound.");
-			ex.printStackTrace();
-		}
-	}
-
-
+    public void playSound(String filename) {
+        try {
+            Clip sound = ResourceManager.get().getAudio(filename);
+            sound.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
+    }
 
 }
