@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class GameLogic extends JComponent {
-	
+public class Game extends JComponent implements KeyListener {
+
 	Config cfg = new Config();
-	
+
 	private Ship nave = new Ship();
 	private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
 	private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
@@ -18,8 +19,10 @@ public class GameLogic extends JComponent {
 	private Colisor colisor = new Colisor();
 	private boolean paused = false;
 	private int level = 1;
-		
-	public GameLogic() {
+
+	public Game() {
+		addKeyListener(this);
+		setFocusable(true);
 
 		geraInimigos();
 
@@ -132,6 +135,12 @@ public class GameLogic extends JComponent {
 
 	}
 
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_P) {
@@ -161,6 +170,7 @@ public class GameLogic extends JComponent {
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_UP) {

@@ -5,14 +5,15 @@ import java.awt.event.KeyListener;
 
 public class Main extends JComponent implements KeyListener {
 
-    Config cfg = new Config();
+    private Config cfg = new Config();
     private int selectedOption;
     private final String[] options;
+    private JFrame gameFrame;
 
     public Main(String[] options) {
         this.options = options;
         this.selectedOption = 0;
-        setPreferredSize(new Dimension(200, 100));
+        setPreferredSize(new Dimension(cfg.getLarguraTela(), cfg.getAlturaTela()));
         setFocusable(true);
         addKeyListener(this);
     }
@@ -43,6 +44,9 @@ public class Main extends JComponent implements KeyListener {
             selectedOption = Math.min(options.length - 1, selectedOption + 1);
         } else if (keyCode == KeyEvent.VK_ENTER) {
             openSelectedOption();
+        } else if (keyCode == KeyEvent.VK_ESCAPE) {
+            JFrame menuFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            menuFrame.dispose();
         }
 
         repaint();
@@ -56,20 +60,31 @@ public class Main extends JComponent implements KeyListener {
 
     private void openSelectedOption() {
         String selected = options[selectedOption];
-        System.out.println("Selected option: " + selected);
 
         if (selectedOption == 0) {
-            GameScreen game = new GameScreen();
-            game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            game.setVisible(true);
+            gameFrame = new JFrame();
+            gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            gameFrame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
+            gameFrame.setLocationRelativeTo(null);
+            gameFrame.setBackground(Color.BLACK);
+            gameFrame.setUndecorated(true);
+            gameFrame.add(new Game());
+            gameFrame.setVisible(true);
         }
 
-        // Por exemplo, creditos, cofiguracoes
+        //TELA DE EXEMPLO
         if (selectedOption == 1) {
-            JFrame tela2 = new JFrame("Tela 2");
-            tela2.setSize(300, 200);
-            tela2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            tela2.setVisible(true);
+            JFrame configuracoes = new JFrame("Configurações");
+            configuracoes.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
+            configuracoes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            configuracoes.setVisible(true);
+        }
+        //TELA DE EXEMPLO
+        if (selectedOption == 2) {
+            JFrame creditos = new JFrame("Créditos");
+            creditos.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
+            creditos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            creditos.setVisible(true);
         }
 
         // Fechar a janela do menu
@@ -79,7 +94,7 @@ public class Main extends JComponent implements KeyListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                String[] options = {"Jogar", "Configurações","Creditos"};
+                String[] options = {"JOGAR", "CONFIGURAÇÕES","CRÉDITOS"};
                 JFrame frame = new JFrame("Menu");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(300, 200);

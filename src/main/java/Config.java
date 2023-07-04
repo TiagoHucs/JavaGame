@@ -1,16 +1,19 @@
+import java.awt.*;
+
 public class Config {
 
 	private static final String PATH = ".\\src\\main\\resources";
 
 	public Config(){};
 	
-	private int resolution = 900;
-	private int larguraTela = resolution;
-	private int alturaTela = ((resolution/100)*75);
+	//private int resolution = 900;
+	//private int larguraTela = resolution;
+	//private int alturaTela = ((resolution/100)*75);
 	
-	//private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	//private int larguraTela = (int) screenSde.getWidth();
-	//private int alturaTela = (int) screenSize.getHeight();
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private int larguraTela = (int) screenSize.getWidth();
+	private int alturaTela = (int) screenSize.getHeight();
+	private int resolution = (int) screenSize.getWidth();
 
 	public int getResolution(){
 		return this.resolution;
