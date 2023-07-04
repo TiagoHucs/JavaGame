@@ -1,3 +1,4 @@
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,7 +19,12 @@ public class Game extends JComponent implements KeyListener {
     private Random r = new Random();
     private Colisor colisor = new Colisor();
     private boolean paused = false;
+    private boolean muted = true;
     private int level = 1;
+
+    private boolean left = false;
+    private boolean right = false;
+
 
     public Game() {
         addKeyListener(this);
@@ -65,9 +71,10 @@ public class Game extends JComponent implements KeyListener {
 
         g.setColor(Color.YELLOW);
         g.drawString("Level: " + level, 10, 20);
-        g.drawString("Energia: " + nave.getEnergia(), 10, 40);
-        g.drawString("Inimigos: " + listaInimigos.size(), 10, 60);
-        g.drawString("Pausado: " + paused, 10, 80);
+        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
+        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
+        g.drawString("Paused: " + paused, 10, 80);
+        g.drawString("Muted: " + muted, 10, 100);
 
     }
 
@@ -75,12 +82,15 @@ public class Game extends JComponent implements KeyListener {
         for (int i = 0; i < 10; i++) {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
-        nave.playSound("fighters-coming.wav");
+
+        playSound("fighters-coming.wav");
+
+
     }
 
     private void loop() {
 
-        nave.move();
+        moveShip();
 
         //se acabarem os inimigos gere mais
         if (listaInimigos.size() < 1) {
@@ -116,6 +126,7 @@ public class Game extends JComponent implements KeyListener {
             if (colisor.detectaColisao(nave, inimigo)) {
                 listaInimigosDestruidos.add(inimigo);
                 nave.sofreDano(25);
+                playSound("im-hit.wav");
             }
 
         }
@@ -124,9 +135,32 @@ public class Game extends JComponent implements KeyListener {
         listaTiros.removeAll(listaTirosDestruidos);
     }
 
+    private void moveShip() {
+        if(left == right){
+            nave.slowDown();
+        } else if(left){
+            nave.decreaseXVelocity();
+        } else if (right) {
+            nave.increaseXVelocity();
+        }
+        nave.move();
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
+    }
+
+    private void playSound(String filename) {
+        if (!muted) {
+            try {
+                Clip sound = ResourceManager.get().getAudio(filename);
+                sound.start();
+            } catch (Exception ex) {
+                System.out.println("Error with playing sound.");
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -134,6 +168,11 @@ public class Game extends JComponent implements KeyListener {
 
         if (e.getKeyCode() == KeyEvent.VK_P) {
             this.paused = !this.paused;
+        }
+
+
+        if (e.getKeyCode() == KeyEvent.VK_M) {
+            this.muted = !this.muted;
         }
 
         if (!paused) {
@@ -145,15 +184,20 @@ public class Game extends JComponent implements KeyListener {
                 nave.setVelocidadeY(speedDefault);
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                nave.setVelocidadeX(-speedDefault);
+                //nave.setVelocidadeX(-speedDefault);
+                //nave.decreaseXVelocity();
+                left = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                nave.setVelocidadeX(speedDefault);
+                //nave.setVelocidadeX(speedDefault);
+                //nave.increaseXVelocity();
+                right = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 System.exit(0);
             }
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                playSound("bling.wav");
                 listaTiros.add(nave.atirar());
             }
         }
@@ -169,10 +213,12 @@ public class Game extends JComponent implements KeyListener {
             nave.setVelocidadeY(0);
         }
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            nave.setVelocidadeX(0);
+            //nave.setVelocidadeX(0);
+            left = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            nave.setVelocidadeX(0);
+            //nave.setVelocidadeX(0);
+            right = false;
         }
 
     }

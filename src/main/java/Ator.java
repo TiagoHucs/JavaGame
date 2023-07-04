@@ -38,14 +38,19 @@ public class Ator {
         }
     }
 
-    public void playSound(String filename) {
-        try {
-            Clip sound = ResourceManager.get().getAudio(filename);
-            sound.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
-        }
+    public void increaseXVelocity(){
+        this.velocidadeX = velocidadeX >= 20 ? velocidadeX : velocidadeX+1;
     }
 
+    public void decreaseXVelocity(){
+        this.velocidadeX = velocidadeX <= -20 ? velocidadeX : velocidadeX-1;
+    }
+
+    public void slowDown(){
+        if(this.velocidadeX > 0){
+            this.velocidadeX--;
+        } else if (this.velocidadeX < 0){
+            this.velocidadeX++;
+        }
+    }
 }
