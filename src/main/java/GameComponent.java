@@ -8,14 +8,13 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class Game extends JComponent implements KeyListener {
+public class GameComponent extends JComponent implements KeyListener {
 
-    Config cfg = new Config();
+    private Config cfg;
 
     private Ship nave = new Ship();
     private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
     private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
-    private int speedDefault = cfg.getResolution() / 200;
     private Random r = new Random();
     private Colisor colisor = new Colisor();
     private boolean paused = false;
@@ -27,7 +26,8 @@ public class Game extends JComponent implements KeyListener {
     private boolean up = false;
     private boolean down = false;
 
-    public Game() {
+    public GameComponent(Config cfg) {
+        this.cfg = cfg;
         addKeyListener(this);
         setFocusable(true);
 
