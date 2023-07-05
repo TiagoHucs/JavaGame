@@ -1,3 +1,6 @@
+import game.GameComponent;
+import utilities.Config;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;

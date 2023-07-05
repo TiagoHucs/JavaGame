@@ -1,3 +1,11 @@
+package game;
+
+import entities.Enemy;
+import entities.Ship;
+import entities.Shot;
+import utilities.Config;
+import utilities.ResourceManager;
+
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +111,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             if (colisor.detectaColisao(nave, inimigo)) {
                 listaInimigosDestruidos.add(inimigo);
                 nave.sofreDano(25);
-                playSound("audio/im-hit.wav");
+                playSound("/audio/im-hit.wav");
             }
 
         }
@@ -128,7 +136,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
 
-        playSound("audio/fighters-coming.wav");
+        playSound("/audio/fighters-coming.wav");
     }
 
     private void moveShip() {
@@ -205,11 +213,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.paused = !this.paused;
-            playSound("audio/changing-tab.wav");
+            playSound("/audio/changing-tab.wav");
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if(!this.paused){
-                playSound("audio/bling.wav");
+                playSound("/audio/bling.wav");
                 listaTiros.add(nave.atirar());
             }
         }

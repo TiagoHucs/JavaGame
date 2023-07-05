@@ -1,3 +1,5 @@
+package entities;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +10,7 @@ public class Ship extends Ator{
 	private int energia = 100;
 
 	public Ship(){
-		this.setImage("image/ships/spaceShips_003.PNG");
+		this.setImage("/image/ships/spaceShips_003.PNG");
 	}
 
 	public Shot atirar() {

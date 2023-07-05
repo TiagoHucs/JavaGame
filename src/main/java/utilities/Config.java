@@ -1,3 +1,5 @@
+package utilities;
+
 import java.awt.*;
 
 public class Config {

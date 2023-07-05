@@ -1,7 +1,11 @@
+package entities;
+
+import game.GameUtil;
+
 public class Enemy extends Ator{
 		
 	public Enemy(int x, int y){
-		this.setImage("image/meteors/spaceMeteors_00"+
+		this.setImage("/image/meteors/spaceMeteors_00"+
 				GameUtil.getRandomNumber(1,4)
 				+".PNG");
 		this.setVelocidadeY(2);

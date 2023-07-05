@@ -1,3 +1,5 @@
+package game;
+
 public class GameUtil {
 
     public static int getRandomNumber(int min, int max) {
