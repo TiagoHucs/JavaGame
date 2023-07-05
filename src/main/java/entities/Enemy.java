@@ -1,6 +1,6 @@
 package entities;
 
-import game.GameUtil;
+import utilities.GameUtil;
 
 public class Enemy extends Ator{
 		

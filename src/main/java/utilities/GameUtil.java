@@ -1,4 +1,4 @@
-package game;
+package utilities;
 
 public class GameUtil {
 
