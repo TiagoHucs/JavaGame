@@ -12,6 +12,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
     private Config cfg;
 
+    private PauseMenu pauseMenu = new PauseMenu();
+
     private Ship nave = new Ship();
     private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
     private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
@@ -35,43 +37,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         animationThread.start();
     }
 
-    public void paintComponent(Graphics g) {
-
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
-
-        g.setColor(Color.gray);
-        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
-
-        for (Enemy i : listaInimigos) {
-            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
-        }
-
-        g.setColor(Color.RED);
-        for (Shot tiro : listaTiros) {
-            g.fillRect(tiro.getX(), tiro.getY(), tiro.getLargura(), tiro.getAltura());
-        }
-
-        g.setColor(Color.YELLOW);
-        g.drawString("Level: " + level, 10, 20);
-        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
-        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
-        g.drawString("Paused: " + paused, 10, 80);
-        g.drawString("Muted: " + muted, 10, 100);
-
-        g.dispose();
-    }
-
-    private void geraInimigos() {
-
-        for (int i = 0; i < 10; i++) {
-            listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
-        }
-
-        playSound("fighters-coming.wav");
-    }
-
-    private void loop() {
+    private void update() {
 
         moveShip();
 
@@ -116,6 +82,47 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         listaInimigos.removeAll(listaInimigosDestruidos);
         listaTiros.removeAll(listaTirosDestruidos);
+    }
+
+    public void paintComponent(Graphics g) {
+        paintGame(g);
+        if(paused){
+            pauseMenu.paintMenu(g);
+        }
+        g.dispose();
+    }
+
+    private void paintGame(Graphics g){
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
+
+        g.setColor(Color.gray);
+        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
+
+        for (Enemy i : listaInimigos) {
+            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
+        }
+
+        g.setColor(Color.RED);
+        for (Shot tiro : listaTiros) {
+            g.fillRect(tiro.getX(), tiro.getY(), tiro.getLargura(), tiro.getAltura());
+        }
+
+        g.setColor(Color.YELLOW);
+        g.drawString("Level: " + level, 10, 20);
+        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
+        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
+        g.drawString("Paused: " + paused, 10, 80);
+        g.drawString("Muted: " + muted, 10, 100);
+    }
+
+    private void geraInimigos() {
+
+        for (int i = 0; i < 10; i++) {
+            listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
+        }
+
+        playSound("fighters-coming.wav");
     }
 
     private void moveShip() {
@@ -190,11 +197,19 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             right = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            System.exit(0);
+            this.paused = !this.paused;
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             playSound("bling.wav");
             listaTiros.add(nave.atirar());
+        }
+
+        //TODO: melhorar
+        if(paused){
+            Integer selectedOption = pauseMenu.control(e);
+            if(selectedOption != null && 0 == selectedOption){
+                paused = false;
+            }
         }
     }
 
@@ -230,7 +245,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
             if (delta >= 1) {
                 if (!paused) {
-                    loop();
+                    update();
                 }
                 repaint();
                 delta--;

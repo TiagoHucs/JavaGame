@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Main {
 
@@ -7,7 +9,24 @@ public class Main {
         Config cfg = new Config();
         JFrame frame = new JFrame();
         defaultSetup(frame, cfg);
-        frame.add(new MenuComponent(cfg));
+        GameComponent game = new GameComponent(cfg);
+        frame.add(game);
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                game.keyTyped(e);
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                game.keyPressed(e);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                game.keyReleased(e);
+            }
+        });
         frame.setVisible(true);
     }
 
