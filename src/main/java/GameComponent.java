@@ -37,6 +37,36 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         animationThread.start();
     }
 
+    public void paintGame(Graphics g) {
+        super.paintComponent(g);
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
+
+        g.setColor(Color.gray);
+        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
+
+        for (Enemy i : listaInimigos) {
+            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
+        }
+
+        g.setColor(Color.RED);
+        for (Shot tiro : listaTiros) {
+            g.fillRect(tiro.getX(), tiro.getY(), tiro.getLargura(), tiro.getAltura());
+        }
+
+        g.setColor(Color.YELLOW);
+        g.drawString("Level: " + level, 10, 20);
+        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
+        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
+        g.drawString("Paused: " + paused, 10, 80);
+        g.drawString("Muted: " + muted, 10, 100);
+
+
+    }
+
+
+
     private void update() {
 
         moveShip();
@@ -90,31 +120,9 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             pauseMenu.paintMenu(g);
         }
         g.dispose();
+        Toolkit.getDefaultToolkit().sync();
     }
 
-    private void paintGame(Graphics g){
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
-
-        g.setColor(Color.gray);
-        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
-
-        for (Enemy i : listaInimigos) {
-            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
-        }
-
-        g.setColor(Color.RED);
-        for (Shot tiro : listaTiros) {
-            g.fillRect(tiro.getX(), tiro.getY(), tiro.getLargura(), tiro.getAltura());
-        }
-
-        g.setColor(Color.YELLOW);
-        g.drawString("Level: " + level, 10, 20);
-        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
-        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
-        g.drawString("Paused: " + paused, 10, 80);
-        g.drawString("Muted: " + muted, 10, 100);
-    }
 
     private void geraInimigos() {
 
