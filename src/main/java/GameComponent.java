@@ -13,7 +13,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private Config cfg;
 
     private PauseMenu pauseMenu;
-
+    private StarFieldEffect starFieldEffect;
     private Ship nave = new Ship();
     private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
     private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
@@ -33,6 +33,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         setDoubleBuffered(true);
         setFocusable(true);
         geraInimigos();
+        this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
         animationThread = new Thread(this);
         animationThread.start();
     }
@@ -42,6 +43,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
+
+        starFieldEffect.draw(g);
 
         g.setColor(Color.gray);
         g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
