@@ -8,7 +8,7 @@ public class Ship extends Ator{
 	private int energia = 100;
 
 	public Ship(){
-		this.setImage("hero.png");
+		this.setImage("image/ships/spaceShips_003.PNG");
 	}
 
 	public Shot atirar() {

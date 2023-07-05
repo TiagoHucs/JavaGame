@@ -12,15 +12,14 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
     private Config cfg;
 
-    private PauseMenu pauseMenu = new PauseMenu();
+    private PauseMenu pauseMenu;
 
     private Ship nave = new Ship();
     private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
     private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
     private Random r = new Random();
     private Colisor colisor = new Colisor();
-    private boolean paused = false;
-    private boolean muted = true;
+    private boolean paused = true;
     private int level = 1;
     private boolean left = false;
     private boolean right = false;
@@ -29,6 +28,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     public GameComponent(Config cfg) {
         this.cfg = cfg;
+        this.pauseMenu = new PauseMenu(cfg);
         addKeyListener(this);
         setDoubleBuffered(true);
         setFocusable(true);
@@ -60,12 +60,10 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         g.drawString("Energy: " + nave.getEnergia(), 10, 40);
         g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
         g.drawString("Paused: " + paused, 10, 80);
-        g.drawString("Muted: " + muted, 10, 100);
+        g.drawString("Muted: " + cfg.isMuted(), 10, 100);
 
 
     }
-
-
 
     private void update() {
 
@@ -105,7 +103,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             if (colisor.detectaColisao(nave, inimigo)) {
                 listaInimigosDestruidos.add(inimigo);
                 nave.sofreDano(25);
-                playSound("im-hit.wav");
+                playSound("audio/im-hit.wav");
             }
 
         }
@@ -130,7 +128,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
 
-        playSound("fighters-coming.wav");
+        playSound("audio/fighters-coming.wav");
     }
 
     private void moveShip() {
@@ -158,8 +156,9 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     }
 
+    //TODO: reusar de outro lugar
     private void playSound(String filename) {
-        if (!muted) {
+        if (!cfg.isMuted()) {
             try {
                 Clip sound = ResourceManager.get().getAudio(filename);
                 sound.start();
@@ -171,7 +170,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     }
 
     private void playMusic(String filename) {
-        if (!muted) {
+        if (!cfg.isMuted()) {
             try {
                 Clip sound = ResourceManager.get().getAudio(filename);
                 sound.start();
@@ -190,7 +189,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             this.paused = !this.paused;
         }
         if (e.getKeyCode() == KeyEvent.VK_M) {
-            this.muted = !this.muted;
+            cfg.setMuted(!cfg.isMuted());
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
@@ -206,10 +205,13 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.paused = !this.paused;
+            playSound("audio/changing-tab.wav");
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            playSound("bling.wav");
-            listaTiros.add(nave.atirar());
+            if(!this.paused){
+                playSound("audio/bling.wav");
+                listaTiros.add(nave.atirar());
+            }
         }
 
         //TODO: melhorar

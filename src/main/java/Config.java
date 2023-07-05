@@ -13,6 +13,8 @@ public class Config {
 	private int alturaTela = (int) screenSize.getHeight();
 	private int resolution = (int) screenSize.getWidth();
 
+	private boolean muted = true;
+
 	public int getResolution(){
 		return this.resolution;
 	}
@@ -22,5 +24,12 @@ public class Config {
 	public int getAlturaTela(){
 		return this.alturaTela;
 	}
-	
+
+	public boolean isMuted() {
+		return muted;
+	}
+
+	public void setMuted(boolean muted) {
+		this.muted = muted;
+	}
 }
