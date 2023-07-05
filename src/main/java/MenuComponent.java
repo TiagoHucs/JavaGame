@@ -61,11 +61,7 @@ public class MenuComponent extends JComponent implements KeyListener {
 
         if (selectedOption == 0) {
             JFrame gameFrame = new JFrame();
-            gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            gameFrame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
-            gameFrame.setLocationRelativeTo(null);
-            gameFrame.setBackground(Color.BLACK);
-            gameFrame.setUndecorated(true);
+            Main.defaultSetup(gameFrame, cfg);
             gameFrame.add(new GameComponent(cfg));
             gameFrame.setVisible(true);
         }
@@ -73,22 +69,14 @@ public class MenuComponent extends JComponent implements KeyListener {
         //TELA DE EXEMPLO
         if (selectedOption == 1) {
             JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
-            frame.setLocationRelativeTo(null);
-            frame.setBackground(Color.BLACK);
-            frame.setUndecorated(true);
+            Main.defaultSetup(frame, cfg);
             frame.add(new ConfigComponent(cfg));
             frame.setVisible(true);
         }
         //TELA DE EXEMPLO
         if (selectedOption == 2) {
             JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
-            frame.setLocationRelativeTo(null);
-            frame.setBackground(Color.BLACK);
-            frame.setUndecorated(true);
+            Main.defaultSetup(frame, cfg);
             frame.add(new CreditsComponent(cfg));
             frame.setVisible(true);
         }

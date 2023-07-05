@@ -15,7 +15,7 @@ public class ConfigComponent extends JComponent implements KeyListener {
     public ConfigComponent(Config cfg) {
         this.cfg = cfg;
         addKeyListener(this);
-        setFocusable(true);
+        setDoubleBuffered(true);
 
         Thread animationThread = new Thread(new Runnable() {
             public void run() {
