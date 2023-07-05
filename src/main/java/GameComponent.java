@@ -36,6 +36,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     }
 
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
@@ -60,6 +61,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         g.drawString("Muted: " + muted, 10, 100);
 
         g.dispose();
+
+        Toolkit.getDefaultToolkit().sync();
     }
 
     private void geraInimigos() {

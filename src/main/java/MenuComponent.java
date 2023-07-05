@@ -61,24 +61,18 @@ public class MenuComponent extends JComponent implements KeyListener {
 
         if (selectedOption == 0) {
             JFrame gameFrame = new JFrame();
-            Main.defaultSetup(gameFrame, cfg);
-            gameFrame.add(new GameComponent(cfg));
-            gameFrame.setVisible(true);
+            Main.defaultSetup(gameFrame, cfg, new GameComponent(cfg));
         }
 
         //TELA DE EXEMPLO
         if (selectedOption == 1) {
             JFrame frame = new JFrame();
-            Main.defaultSetup(frame, cfg);
-            frame.add(new ConfigComponent(cfg));
-            frame.setVisible(true);
+            Main.defaultSetup(frame, cfg, new ConfigComponent(cfg));
         }
         //TELA DE EXEMPLO
         if (selectedOption == 2) {
             JFrame frame = new JFrame();
-            Main.defaultSetup(frame, cfg);
-            frame.add(new CreditsComponent(cfg));
-            frame.setVisible(true);
+            Main.defaultSetup(frame, cfg, new CreditsComponent(cfg));
         }
 
         // Fechar a janela do menu
