@@ -4,8 +4,18 @@ import java.awt.event.KeyEvent;
 
 public class PauseMenu {
 
+    private static final String OPT_RETOMAR_PARTIDA = "RETOMAR PARTIDA";
+    private static final String OPT_CONFIGURACOES = "CONFIGURAÇÕES";
+    private static final String OPT_SAIR_DESKTOP = "SAIR PARA DESKTOP";
+    private static final String OPT_SOM = "CONFIGURAÇÕES SOM";
+    private static final String OPT_DIFICULDADE = "DIFICULDADE DO JOGO";
+    private static final String OPT_CONTROLE = "CONFIGURAÇÕES DE CONTROLE";
+    private static final String OPT_VOLTA_PRINCIPAL = "VOLTAR PARA O MENU PRINCIPAL";
+
     private Config cfg;
-    private String[] options = {"RETOMAR PARTIDA","SAIR"};
+    private String[] defaultOptions = {OPT_RETOMAR_PARTIDA,OPT_CONFIGURACOES,OPT_SAIR_DESKTOP};
+    private String[] configOptions = {OPT_SOM,OPT_DIFICULDADE,OPT_CONTROLE,OPT_VOLTA_PRINCIPAL};
+    private String[] options = defaultOptions;
     private int selectedOption = 0;
     private int width;
     private int height;
@@ -27,7 +37,7 @@ public class PauseMenu {
 
         for(int i = 0; i < options.length; i++) {
             g.setColor(i == selectedOption ? Color.YELLOW : Color.WHITE);
-            g.drawString(options[i] , width + 10, height + ((i+1)*20));
+            g.drawString(options[i] , width + (i == selectedOption ? 20 : 10), height + ((i+1)*20));
         }
     }
 
@@ -49,12 +59,22 @@ public class PauseMenu {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(selectedOption == 0){
-                return selectedOption;
+            switch (options[selectedOption]){
+                case OPT_RETOMAR_PARTIDA:
+                    return 0;
+                case OPT_CONFIGURACOES:
+                    options = configOptions;
+                    selectedOption = 0;
+                    break;
+                case OPT_VOLTA_PRINCIPAL:
+                    options = defaultOptions;
+                    selectedOption = 0;
+                    break;
+                case OPT_SAIR_DESKTOP:
+                    System.exit(0);
+
             }
-            if(selectedOption == 1){
-                System.exit(0);
-            }
+
         }
 
         return null;
