@@ -41,10 +41,10 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
 
         g.setColor(Color.gray);
-        g.drawImage(nave.getImage(), nave.getX(), nave.getY(), nave.getLargura(), nave.getAltura(), this);
+        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
 
         for (Enemy i : listaInimigos) {
-            g.drawImage(i.getImage(), i.getX(), i.getY(), i.getLargura(), i.getLargura(), this);
+            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
         }
 
         g.setColor(Color.RED);

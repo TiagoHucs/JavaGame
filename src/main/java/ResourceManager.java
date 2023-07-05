@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -26,6 +27,23 @@ public class ResourceManager {
         }
 
         images.put(resourceName, ImageIO.read(getResource(resourceName)));
+
+        return getImage(resourceName);
+    }
+
+    public synchronized BufferedImage getImage(String resourceName, int w, int h) throws IOException {
+
+        if (images.containsKey(resourceName)) {
+            return images.get(resourceName);
+        }
+
+        BufferedImage bufferedImage = ImageIO.read(getResource(resourceName));
+        BufferedImage bufferedImageResized = new BufferedImage(w, h, bufferedImage.getType());
+        Graphics2D graphics2D = bufferedImageResized.createGraphics();
+        graphics2D.drawImage(bufferedImage, 0, 0, w, h, null);
+        graphics2D.dispose();
+
+        images.put(resourceName, bufferedImageResized);
 
         return getImage(resourceName);
     }

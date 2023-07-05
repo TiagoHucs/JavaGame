@@ -26,7 +26,7 @@ public class Ator {
 
     public void setImage(String filename) {
         try {
-            image = ResourceManager.get().getImage(filename);
+            image = ResourceManager.get().getImage(filename, getLargura(), getAltura());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
