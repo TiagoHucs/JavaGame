@@ -1,6 +1,12 @@
+package game;
+
+import entities.Enemy;
+import entities.Ship;
+import entities.Shot;
+
 public class Colisor{
 
-	public boolean detectaColisao(Ship a,Enemy b){
+	public boolean detectaColisao(Ship a, Enemy b){
 
         int myleft = a.getX();
         int myright = a.getX() + a.getLargura();
@@ -22,7 +28,7 @@ public class Colisor{
         }
 	}
 
-	public boolean detectaColisao(Shot a,Enemy b){
+	public boolean detectaColisao(Shot a, Enemy b){
 
         int myleft = a.getX();
         int myright = a.getX() + a.getLargura();

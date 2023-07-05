@@ -1,3 +1,7 @@
+package entities;
+
+import utilities.Config;
+
 public class Shot extends Ator{
 
 	private Config cfg = new Config();

@@ -1,3 +1,8 @@
+package game;
+
+import utilities.Config;
+import utilities.ResourceManager;
+
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -47,14 +52,14 @@ public class PauseMenu {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
            if(selectedOption>0){
                selectedOption--;
-               playSound("audio/tap.wav");
+               playSound("/audio/tap.wav");
            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             if(selectedOption < options.length-1){
                 selectedOption++;
-                playSound("audio/tap.wav");
+                playSound("/audio/tap.wav");
             }
         }
 
