@@ -1,3 +1,5 @@
+package effects;
+
 import lombok.Builder;
 import lombok.Getter;
 

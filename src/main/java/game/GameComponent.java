@@ -1,5 +1,6 @@
 package game;
 
+import effects.StarFieldEffect;
 import entities.Enemy;
 import entities.Ship;
 import entities.Shot;
@@ -41,7 +42,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         setDoubleBuffered(true);
         setFocusable(true);
         geraInimigos();
-        this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
+        starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
         animationThread = new Thread(this);
         animationThread.start();
     }

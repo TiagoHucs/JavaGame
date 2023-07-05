@@ -1,4 +1,4 @@
-import lombok.Builder;
+package effects;
 
 import java.awt.*;
 import java.util.ArrayList;
