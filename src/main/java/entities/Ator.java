@@ -1,5 +1,6 @@
 package entities;
 
+import effects.Effect;
 import lombok.Getter;
 import lombok.Setter;
 import utilities.Config;
@@ -7,6 +8,8 @@ import utilities.ResourceManager;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -25,9 +28,25 @@ public class Ator {
 
     private BufferedImage image = null;
 
+    private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
+
+    public void addEffect(Effect ...effects) {
+        for (Effect effect : effects) {
+            this.effectList.put(effect.getClass(), effect);
+        }
+    }
+
+    public <T> T getEffect(Class<T> type) {
+        return (T) this.effectList.get(type);
+    }
+
     public void move() {
         this.x += this.velocidadeX;
         this.y += this.velocidadeY;
+
+        for (Effect effect: effectList.values()) {
+            effect.update(1.0f / 60.0f, this);
+        }
     }
 
     public void setImage(String filename) {
