@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class Star {
 
-    private int x, y, size, speed;
+    private float x, y, size, speed;
 
     public void move(int w, int h) {
 
@@ -15,7 +15,7 @@ public class Star {
 
         if (y + size > h) {
             this.y -= h + size;
-            this.x = (int) (Math.random() * w);
+            this.x = (float) (Math.random() * w);
         }
     }
 }

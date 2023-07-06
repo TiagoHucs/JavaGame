@@ -19,10 +19,10 @@ public class StarFieldEffect {
         starList = new ArrayList<Star>(starCount);
 
         for (int i = 0; i < starCount; i++) {
-            int x = (int) (Math.random() * w);
-            int y = (int) (Math.random() * h);
-            int size = (int) (0.1 + Math.random() * 5);
-            int speed = (int)(0.1 + Math.random() * 3);
+            float x = (float) (Math.random() * w);
+            float y = (float) (Math.random() * h);
+            float size = (float) (0.1 + Math.random() * 4.0);
+            float speed = (float)(0.1 + Math.random() * 0.8);
 
             starList.add(Star.builder()
                     .x(x)
@@ -37,7 +37,11 @@ public class StarFieldEffect {
         graphics.setColor(Color.WHITE);
 
         for (Star star : starList) {
-            graphics.fillOval(star.getX(), star.getY(), star.getSize(),star.getSize());
+            graphics.fillOval(
+                    (int) star.getX(),
+                    (int) star.getY(),
+                    (int) star.getSize(),
+                    (int) star.getSize());
             star.move(w, h);
         }
     }
