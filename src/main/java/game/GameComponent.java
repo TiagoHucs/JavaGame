@@ -56,15 +56,19 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         starFieldEffect.draw(g);
 
         g.setColor(Color.gray);
-        g.drawImage(nave.getImage(), nave.getX(), nave.getY(),this);
+        g.drawImage(nave.getImage(),
+                nave.getX() + nave.getOffSetX(),
+                nave.getY() + nave.getOffSetY(),this);
 
         for (Enemy i : listaInimigos) {
-            g.drawImage(i.getImage(), i.getX(), i.getY(),this);
+            g.drawImage(i.getImage(),
+                    i.getX() + i.getOffSetX(),
+                    i.getY() + i.getOffSetY(),this);
         }
 
         g.setColor(Color.RED);
         for (Shot tiro : listaTiros) {
-            g.fillRect(tiro.getX(), tiro.getY(), tiro.getLargura(), tiro.getAltura());
+            g.fillRect(tiro.getX() + tiro.getOffSetX(),tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
         }
 
         g.setColor(Color.YELLOW);
@@ -160,6 +164,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         } else if (down) {
             nave.increaseYVelocity();
         }
+
         nave.move();
     }
 

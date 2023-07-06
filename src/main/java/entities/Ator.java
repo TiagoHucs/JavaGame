@@ -21,11 +21,13 @@ public class Ator {
     private int velocidadeY = 0;
     private int maxVelocity = 15;
 
+    private int offSetX, offSetY = 0;
+
     private BufferedImage image = null;
 
     public void move() {
-        this.x = this.x + this.velocidadeX;
-        this.y = this.y + this.velocidadeY;
+        this.x += this.velocidadeX;
+        this.y += this.velocidadeY;
     }
 
     public void setImage(String filename) {
