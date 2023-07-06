@@ -246,10 +246,9 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             }
         }
 
-        //TODO: melhorar
+        //CONTROLE VIA MENU
         if(paused){
-            Integer selectedOption = pauseMenu.control(e);
-            if(selectedOption != null && 0 == selectedOption){
+            if(PauseMenu.OPT_RETOMAR_PARTIDA.equals(pauseMenu.control(e))){
                 paused = false;
             }
         }

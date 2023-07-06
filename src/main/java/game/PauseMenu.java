@@ -9,13 +9,16 @@ import java.awt.event.KeyEvent;
 
 public class PauseMenu {
 
-    private static final String OPT_RETOMAR_PARTIDA = "RETOMAR PARTIDA";
+    public static final String OPT_RETOMAR_PARTIDA = "RETOMAR PARTIDA";
     private static final String OPT_CONFIGURACOES = "CONFIGURAÇÕES";
     private static final String OPT_SAIR_DESKTOP = "SAIR PARA DESKTOP";
     private static final String OPT_SOM = "CONFIGURAÇÕES SOM";
     private static final String OPT_DIFICULDADE = "DIFICULDADE DO JOGO";
     private static final String OPT_CONTROLE = "CONFIGURAÇÕES DE CONTROLE";
     private static final String OPT_VOLTA_PRINCIPAL = "VOLTAR PARA O MENU PRINCIPAL";
+
+    public static final String SND_TAB = "/audio/changing-tab.wav";
+    public static final String SND_TIC = "/audio/tap.wav";
 
     private Config cfg;
     private String[] defaultOptions = {OPT_RETOMAR_PARTIDA,OPT_CONFIGURACOES,OPT_SAIR_DESKTOP};
@@ -49,45 +52,40 @@ public class PauseMenu {
     }
 
 
-    public Integer control(KeyEvent e){
+    public String control(KeyEvent e){
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
            if(selectedOption>0){
                selectedOption--;
-               playSound("/audio/tap.wav");
+               playSound(SND_TIC);
            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             if(selectedOption < options.length-1){
                 selectedOption++;
-                playSound("/audio/tap.wav");
+                playSound(SND_TIC);
             }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            playSound(SND_TAB);
             switch (options[selectedOption]){
                 case OPT_RETOMAR_PARTIDA:
-                    playSound("/audio/changing-tab.wav");
-                    return 0;
+                    return OPT_RETOMAR_PARTIDA;
                 case OPT_CONFIGURACOES:
                     options = configOptions;
-                    playSound("/audio/changing-tab.wav");
                     selectedOption = 0;
                     break;
                 case OPT_VOLTA_PRINCIPAL:
                     options = defaultOptions;
-                    playSound("/audio/changing-tab.wav");
                     selectedOption = 0;
                     break;
                 case OPT_SAIR_DESKTOP:
-                    playSound("/audio/changing-tab.wav");
                     System.exit(0);
-
             }
 
         }
-
         return null;
 
     }

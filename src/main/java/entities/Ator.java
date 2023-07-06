@@ -16,7 +16,7 @@ import java.util.Map;
 public class Ator {
 
 	private Config cfg = new Config();
-    private int altura = cfg.getResolution() / 20;
+    private int altura = cfg.getResolution() / 30;
     private int largura = altura;
     private int x = (cfg.getLarguraTela() / 2) + (largura / 2);
     private int y = (cfg.getAlturaTela() / 2) - (altura / 2);

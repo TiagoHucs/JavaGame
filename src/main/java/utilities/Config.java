@@ -15,7 +15,7 @@ public class Config {
 	private int alturaTela = (int) screenSize.getHeight();
 	private int resolution = (int) screenSize.getWidth();
 
-	private boolean muted = true;
+	private boolean muted = false;
 
 	public int getResolution(){
 		return this.resolution;
