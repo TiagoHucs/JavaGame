@@ -4,7 +4,7 @@ import utilities.ResourceManager;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public class SoundManager {
     private static SoundManager instance;
     private float globalVolume = 1.0f;
-    private List<Clip> sounds = new LinkedList<Clip>();
+    private LinkedList<Clip> sounds = new LinkedList<Clip>();
     private SoundManager() {
 
     }
@@ -61,23 +61,12 @@ public class SoundManager {
     }
 
     public void checkSounds(float globalVolume) {
-
         this.globalVolume = globalVolume;
-
-        List<Clip> destroySounds = new LinkedList<Clip>();
-
-        // Thread-safe, fazendo uma cópia antes
-        for (Clip sound: new LinkedList<Clip>(sounds)) {
-            if (sound.isRunning()) {
+        for (Clip sound: sounds) {
+            if (sound.isActive()) {
                 setVolume(sound, globalVolume);
-                continue;
-            } else {
-                sound.close();
-                destroySounds.add(sound);
             }
         }
-
-        sounds.removeAll(destroySounds);
     }
 
     private static void setVolume(Clip sound, float volume) {
