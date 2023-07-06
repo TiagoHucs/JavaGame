@@ -55,7 +55,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
         animationThread = new Thread(this);
         animationThread.start();
-        playMusic("/audio/level-music.wav");
+        playMusic("/audio/typical-trap-loop_2.wav");
     }
 
     public void paintGame(Graphics g) {
