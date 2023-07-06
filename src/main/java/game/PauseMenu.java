@@ -34,6 +34,8 @@ public class PauseMenu {
 
     public void paintMenu(Graphics g){
 
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+
         g.setColor(Color.BLACK);
         g.fillRect(width, height, width, height);
 
@@ -42,7 +44,7 @@ public class PauseMenu {
 
         for(int i = 0; i < options.length; i++) {
             g.setColor(i == selectedOption ? Color.YELLOW : Color.WHITE);
-            g.drawString(options[i] , width + (i == selectedOption ? 20 : 10), height + ((i+1)*20));
+            g.drawString(options[i] , width + 10, height + ((i+1)*30));
         }
     }
 
@@ -66,16 +68,20 @@ public class PauseMenu {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             switch (options[selectedOption]){
                 case OPT_RETOMAR_PARTIDA:
+                    playSound("/audio/changing-tab.wav");
                     return 0;
                 case OPT_CONFIGURACOES:
                     options = configOptions;
+                    playSound("/audio/changing-tab.wav");
                     selectedOption = 0;
                     break;
                 case OPT_VOLTA_PRINCIPAL:
                     options = defaultOptions;
+                    playSound("/audio/changing-tab.wav");
                     selectedOption = 0;
                     break;
                 case OPT_SAIR_DESKTOP:
+                    playSound("/audio/changing-tab.wav");
                     System.exit(0);
 
             }
