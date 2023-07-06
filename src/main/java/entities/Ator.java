@@ -24,7 +24,7 @@ public class Ator {
     private int velocidadeY = 0;
     private int maxVelocity = 15;
 
-    private int offSetX, offSetY = 0;
+    private int offSetX = 0, offSetY = 0;
 
     private BufferedImage image = null;
 

@@ -57,19 +57,19 @@ public class PauseMenu {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
            if(selectedOption>0){
                selectedOption--;
-               playSound(SND_TIC);
+               SoundManager.get().playSound(SND_TIC);
            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             if(selectedOption < options.length-1){
                 selectedOption++;
-                playSound(SND_TIC);
+                SoundManager.get().playSound(SND_TIC);
             }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            playSound(SND_TAB);
+            SoundManager.get().playSound(SND_TAB);
             switch (options[selectedOption]){
                 case OPT_RETOMAR_PARTIDA:
                     return OPT_RETOMAR_PARTIDA;
@@ -88,18 +88,5 @@ public class PauseMenu {
         }
         return null;
 
-    }
-
-
-    private void playSound(String filename) {
-        if (!cfg.isMuted()) {
-            try {
-                Clip sound = ResourceManager.get().getAudio(filename);
-                sound.start();
-            } catch (Exception ex) {
-                System.err.println("Erro ao tocar o som = " + filename);
-                ex.printStackTrace();
-            }
-        }
     }
 }

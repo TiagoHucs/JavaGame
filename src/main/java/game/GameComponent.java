@@ -55,7 +55,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
         animationThread = new Thread(this);
         animationThread.start();
-        playMusic("/audio/typical-trap-loop_2.wav");
+        SoundManager.get().playMusic("/audio/typical-trap-loop_2.wav");
     }
 
     public void paintGame(Graphics g) {
@@ -128,13 +128,15 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             if (colisor.detectaColisao(nave, inimigo)) {
                 listaInimigosDestruidos.add(inimigo);
                 nave.sofreDano(25);
-                playSound("/audio/im-hit.wav");
+                SoundManager.get().playSound("/audio/im-hit.wav");
             }
 
         }
 
         listaInimigos.removeAll(listaInimigosDestruidos);
         listaTiros.removeAll(listaTirosDestruidos);
+
+        SoundManager.get().checkSounds(cfg.isMuted() ? 0.0f : 1.0f);
     }
 
     public void paintComponent(Graphics g) {
@@ -153,7 +155,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
 
-        playSound("/audio/fighters-coming.wav");
+        SoundManager.get().playSound("/audio/fighters-coming.wav");
     }
 
     private void moveShip() {
@@ -182,38 +184,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     }
 
-    //TODO: reusar de outro lugar
-    private Clip playSound(String filename) {
-
-        Clip sound = null;
-
-        try {
-            sound = ResourceManager.get().getAudio(filename);
-            sound.start();
-        } catch (Exception ex) {
-            System.err.println("Erro ao tocar o som = " + filename);
-            ex.printStackTrace();
-        }
-
-        return sound;
-    }
-
-    private Clip playMusic(String filename) {
-
-        Clip sound = null;
-
-        try {
-            sound = ResourceManager.get().getAudio(filename);
-            sound.start();
-            sound.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception ex) {
-            System.err.println("Erro ao tocar a música = " + filename);
-            ex.printStackTrace();
-        }
-
-        return sound;
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
 
@@ -237,11 +207,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.paused = !this.paused;
-            playSound("/audio/changing-tab.wav");
+            SoundManager.get().playSound("/audio/changing-tab.wav");
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if(!this.paused){
-                playSound("/audio/bling.wav");
+                SoundManager.get().playSound("/audio/bling.wav");
                 listaTiros.add(nave.atirar());
             }
         }
