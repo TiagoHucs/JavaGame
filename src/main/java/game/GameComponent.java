@@ -36,6 +36,16 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private boolean down = false;
 
     public GameComponent(Config cfg) {
+
+        // Pre-Load dos audios
+        ResourceManager.get().loadResources(
+                "/audio/bling.wav",
+                "/audio/changing-tab.wav",
+                "/audio/fighters-coming.wav",
+                "/audio/im-hit.wav",
+                "/audio/level-music.wav",
+                "/audio/tap.wav");
+
         this.cfg = cfg;
         this.pauseMenu = new PauseMenu(cfg);
         addKeyListener(this);
@@ -45,6 +55,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
         animationThread = new Thread(this);
         animationThread.start();
+        playMusic("/audio/level-music.wav");
     }
 
     public void paintGame(Graphics g) {
@@ -77,8 +88,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
         g.drawString("Paused: " + paused, 10, 80);
         g.drawString("Muted: " + cfg.isMuted(), 10, 100);
-
-
     }
 
     private void update() {
@@ -174,29 +183,35 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     }
 
     //TODO: reusar de outro lugar
-    private void playSound(String filename) {
-        if (!cfg.isMuted()) {
-            try {
-                Clip sound = ResourceManager.get().getAudio(filename);
-                sound.start();
-            } catch (Exception ex) {
-                System.err.println("Erro ao tocar o som = " + filename);
-                ex.printStackTrace();
-            }
+    private Clip playSound(String filename) {
+
+        Clip sound = null;
+
+        try {
+            sound = ResourceManager.get().getAudio(filename);
+            sound.start();
+        } catch (Exception ex) {
+            System.err.println("Erro ao tocar o som = " + filename);
+            ex.printStackTrace();
         }
+
+        return sound;
     }
 
-    private void playMusic(String filename) {
-        if (!cfg.isMuted()) {
-            try {
-                Clip sound = ResourceManager.get().getAudio(filename);
-                sound.start();
-                sound.loop(Clip.LOOP_CONTINUOUSLY);
-            } catch (Exception ex) {
-                System.err.println("Erro ao tocar a música = " + filename);
-                ex.printStackTrace();
-            }
+    private Clip playMusic(String filename) {
+
+        Clip sound = null;
+
+        try {
+            sound = ResourceManager.get().getAudio(filename);
+            sound.start();
+            sound.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception ex) {
+            System.err.println("Erro ao tocar a música = " + filename);
+            ex.printStackTrace();
         }
+
+        return sound;
     }
 
     @Override

@@ -61,4 +61,9 @@ public class ResourceManager {
         return getResource(resourceName);
     }
 
+    public void loadResources(String ...resources) {
+        for (String resource : resources) {
+            getResource(resource);
+        }
+    }
 }
