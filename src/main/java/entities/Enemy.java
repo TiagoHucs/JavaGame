@@ -1,8 +1,14 @@
 package entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import utilities.GameUtil;
 
+@Getter
+@Setter
 public class Enemy extends Ator {
+
+    private int lifes = 2;
 
     public Enemy(int x, int y) {
         this.setImage("/image/ships/spaceShips_00" +

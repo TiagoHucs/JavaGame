@@ -127,7 +127,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                     listaTirosDestruidos.add(tiro);
                 } else if (colisor.detectaColisao(tiro, inimigo)) {
                     listaTirosDestruidos.add(tiro);
-                    listaInimigosDestruidos.add(inimigo);
+                    if(inimigo.getLifes() == 0){
+                        listaInimigosDestruidos.add(inimigo);
+                    } else {
+                        inimigo.setLifes(inimigo.getLifes()-1);
+                    }
                     score = score + 100;
                 }
             }
@@ -154,7 +158,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     private void geraInimigos() {
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
 
