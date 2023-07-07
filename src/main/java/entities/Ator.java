@@ -15,7 +15,7 @@ import java.util.Map;
 @Setter
 public class Ator {
 
-	private Config cfg = new Config();
+    private Config cfg = new Config();
     private int altura = cfg.getResolution() / 30;
     private int largura = altura;
     private int x = (cfg.getLarguraTela() / 2) + (largura / 2);
@@ -30,7 +30,7 @@ public class Ator {
 
     private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
 
-    public void addEffect(Effect ...effects) {
+    public void addEffect(Effect... effects) {
         for (Effect effect : effects) {
             this.effectList.put(effect.getClass(), effect);
         }
@@ -44,7 +44,7 @@ public class Ator {
         this.x += this.velocidadeX;
         this.y += this.velocidadeY;
 
-        for (Effect effect: effectList.values()) {
+        for (Effect effect : effectList.values()) {
             effect.update(1.0f / 60.0f, this);
         }
     }
@@ -57,34 +57,34 @@ public class Ator {
         }
     }
 
-    public void increaseXVelocity(){
-        this.velocidadeX = velocidadeX >= maxVelocity ? velocidadeX : velocidadeX+1;
+    public void increaseXVelocity() {
+        this.velocidadeX = velocidadeX >= maxVelocity ? velocidadeX : velocidadeX + 1;
     }
 
-    public void decreaseXVelocity(){
-        this.velocidadeX = velocidadeX <= -maxVelocity ? velocidadeX : velocidadeX-1;
+    public void decreaseXVelocity() {
+        this.velocidadeX = velocidadeX <= -maxVelocity ? velocidadeX : velocidadeX - 1;
     }
 
-    public void increaseYVelocity(){
-        this.velocidadeY = velocidadeY >= maxVelocity ? velocidadeY : velocidadeY+1;
+    public void increaseYVelocity() {
+        this.velocidadeY = velocidadeY >= maxVelocity ? velocidadeY : velocidadeY + 1;
     }
 
-    public void decreaseYVelocity(){
-        this.velocidadeY = velocidadeY <= -maxVelocity ? velocidadeY : velocidadeY-1;
+    public void decreaseYVelocity() {
+        this.velocidadeY = velocidadeY <= -maxVelocity ? velocidadeY : velocidadeY - 1;
     }
 
-    public void slowDownX(){
-        if(this.velocidadeX > 0){
+    public void slowDownX() {
+        if (this.velocidadeX > 0) {
             this.velocidadeX--;
-        } else if (this.velocidadeX < 0){
+        } else if (this.velocidadeX < 0) {
             this.velocidadeX++;
         }
     }
 
-    public void slowDownY(){
-        if(this.velocidadeY > 0){
+    public void slowDownY() {
+        if (this.velocidadeY > 0) {
             this.velocidadeY--;
-        } else if (this.velocidadeY < 0){
+        } else if (this.velocidadeY < 0) {
             this.velocidadeY++;
         }
     }

@@ -14,24 +14,25 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+
 public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
-    private Config cfg;
+    private final Config cfg;
 
-    private PauseMenu pauseMenu;
-    private StarFieldEffect starFieldEffect;
-    private Ship nave = new Ship();
-    private ArrayList<Shot> listaTiros = new ArrayList<Shot>();
-    private ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
-    private Random r = new Random();
-    private Colisor colisor = new Colisor();
+    private final PauseMenu pauseMenu;
+    private final StarFieldEffect starFieldEffect;
+    private final Ship nave = new Ship();
+    private final ArrayList<Shot> listaTiros = new ArrayList<Shot>();
+    private final ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
+    private final Random r = new Random();
+    private final Colisor colisor = new Colisor();
     private boolean paused = true;
     private int level = 1;
     private boolean left = false;
     private boolean right = false;
     private boolean up = false;
     private boolean down = false;
-    private SoundManager soundManager;
+    private final SoundManager soundManager;
 
     public GameComponent(Config cfg) {
 
@@ -54,12 +55,15 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         soundManager.playMusic("typical-trap-loop_2.wav");
     }
+
     public final SoundManager getSoundManager() {
         return soundManager;
     }
+
     public final Config getCfg() {
         return cfg;
     }
+
     public void paintGame(Graphics g) {
         super.paintComponent(g);
 
@@ -71,17 +75,17 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         g.setColor(Color.gray);
         g.drawImage(nave.getImage(),
                 nave.getX() + nave.getOffSetX(),
-                nave.getY() + nave.getOffSetY(),this);
+                nave.getY() + nave.getOffSetY(), this);
 
         for (Enemy i : listaInimigos) {
             g.drawImage(i.getImage(),
                     i.getX() + i.getOffSetX(),
-                    i.getY() + i.getOffSetY(),this);
+                    i.getY() + i.getOffSetY(), this);
         }
 
         g.setColor(Color.RED);
         for (Shot tiro : listaTiros) {
-            g.fillRect(tiro.getX() + tiro.getOffSetX(),tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
+            g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
         }
 
         g.setColor(Color.YELLOW);
@@ -140,7 +144,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     public void paintComponent(Graphics g) {
         paintGame(g);
-        if(paused){
+        if (paused) {
             pauseMenu.paintMenu(g);
         }
         g.dispose();
@@ -178,7 +182,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -206,7 +211,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             soundManager.playSound("changing-tab.wav");
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if(!this.paused){
+            if (!this.paused) {
                 soundManager.playSound("bling.wav");
                 listaTiros.add(nave.atirar());
             }

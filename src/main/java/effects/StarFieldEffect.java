@@ -6,7 +6,8 @@ import java.util.List;
 
 public class StarFieldEffect {
     private List<Star> starList;
-    private int w, h;
+    private final int w;
+    private final int h;
 
     public StarFieldEffect(int w, int h, int starCount) {
         this.w = w;
@@ -22,7 +23,7 @@ public class StarFieldEffect {
             float x = (float) (Math.random() * w);
             float y = (float) (Math.random() * h);
             float size = (float) (0.1 + Math.random() * 4.0);
-            float speed = (float)(0.1 + Math.random() * 0.8);
+            float speed = (float) (0.1 + Math.random() * 0.8);
 
             starList.add(Star.builder()
                     .x(x)
@@ -32,6 +33,7 @@ public class StarFieldEffect {
         }
 
     }
+
     public void draw(Graphics graphics) {
 
         graphics.setColor(Color.WHITE);

@@ -1,9 +1,6 @@
 package game;
 
-import utilities.ResourceManager;
-
 import javax.sound.sampled.*;
-
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -20,7 +17,7 @@ public class SoundManager {
         try {
             URL folderURL = getClass().getResource(folder);
             File file = new File(folderURL.toURI());
-            File files[] = file.listFiles();
+            File[] files = file.listFiles();
 
             this.sounds = new Clip[files.length];
             this.soundIds = new HashMap<String, Integer>(files.length);
@@ -72,7 +69,7 @@ public class SoundManager {
     }
 
     public void toogleMute(boolean mute) {
-        for (Clip sound: sounds) {
+        for (Clip sound : sounds) {
             BooleanControl booleanControl = (BooleanControl) sound.getControl(BooleanControl.Type.MUTE);
             booleanControl.setValue(mute);
         }
@@ -81,7 +78,7 @@ public class SoundManager {
     public void setGlobalVolume(float globalVolume) {
         this.globalVolume = globalVolume;
 
-        for (Clip sound: sounds) {
+        for (Clip sound : sounds) {
             setVolume(sound, globalVolume);
         }
     }

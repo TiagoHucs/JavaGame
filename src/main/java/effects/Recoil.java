@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class Recoil implements Effect {
     float size = 0.0f;
+
     @Override
     public void update(float delta, Ator ator) {
         size = Math.max(0.0f, size - 1.0f);
