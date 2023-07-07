@@ -20,6 +20,10 @@ public class PlayerState {
     private final Ship ship = new Ship();
     private final List<Shot> bullets = new LinkedList<Shot>();
 
+    private boolean blink = false;
+    private boolean invencible = true;
+    private int blinkTimer = 20;
+
     PlayerState(int id) {
         this.id = id;
         ship.setImage("/image/ships/spaceShips_00" + (id + 3) + ".PNG");
@@ -33,9 +37,24 @@ public class PlayerState {
             g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
         }
 
-        g.drawImage(ship.getImage(),
-                ship.getX() + ship.getOffSetX(),
-                ship.getY() + ship.getOffSetY(), game);
+        if (invencible && blinkTimer > 0) {
+            blinkTimer--;
+            blink = !blink;
+        } else {
+            blinkTimer = 0;
+            invencible = false;
+        }
+
+        if (blink) {
+            g.drawArc(ship.getX() + ship.getOffSetX(),
+                    ship.getY() + ship.getOffSetY(),
+                    ship.getAltura(),ship.getLargura(),
+                    0, 360);
+        } else {
+            g.drawImage(ship.getImage(),
+                    ship.getX() + ship.getOffSetX(),
+                    ship.getY() + ship.getOffSetY(), game);
+        }
 
         int lifeStartX = 50;
         int lifeStartY = 20 * (5 * id);

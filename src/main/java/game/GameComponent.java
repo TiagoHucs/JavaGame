@@ -10,10 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
@@ -21,7 +18,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final PauseMenu newPauseMenu;
     private final StarFieldEffect starFieldEffect;
     private final ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
-    private final Random r = new Random();
     private final Colisor colisor = new Colisor();
     private final Font font;
     private boolean paused = true;
@@ -43,27 +39,14 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
-        geraInimigos();
-
-        // Jogador 1
-        PlayerState p1 = new PlayerState(players.size());
-        p1.getShip().setX(p1.getShip().getX() - 40);
-        players.add(p1);
-
-        // Jogador 2
-        PlayerState p2 = new PlayerState(players.size());
-        p2.getShip().setY(p2.getShip().getY() - 20);
-        players.add(p2);
-
-        // Jogador 3
-        PlayerState p3 = new PlayerState(players.size());
-        p3.getShip().setX(p3.getShip().getX() + 40);
-        players.add(p3);
-
         animationThread = new Thread(this);
         animationThread.start();
+    }
 
-        soundManager.playMusic("typical-trap-loop_2.wav");
+    public void initPlayers() {
+        if (players.size() < 7) {
+            players.add(new PlayerState(players.size()));
+        }
     }
 
     public final SoundManager getSoundManager() {
@@ -95,24 +78,26 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     private void update() {
 
-        Set<Enemy> listaInimigosDestruidos = new HashSet<Enemy>();
-
-        //se acabarem os inimigos gere mais
-        if (listaInimigos.size() < 1) {
+        // Se acabarem os inimigos gere mais
+        if (listaInimigos.isEmpty()) {
             geraInimigos();
         }
 
         for (Enemy inimigo : listaInimigos) {
             inimigo.move();
-            if (inimigo.getY() > cfg.getAlturaTela()) {
-                inimigo.setY(-100);
-                inimigo.setX(r.nextInt(cfg.getResolution()));
-            }
+            inimigo.clampMove(cfg);
         }
 
         for (PlayerState playerState : players) {
             playerState.update(this);
         }
+
+        checkCollisions();
+    }
+
+    private void checkCollisions() {
+
+        Set<Enemy> listaInimigosDestruidos = new LinkedHashSet<Enemy>(listaInimigos.size());
 
         for (Enemy inimigo : listaInimigos) {
 
@@ -155,13 +140,12 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             newPauseMenu.paintMenu(g);
         }
         g.dispose();
-        Toolkit.getDefaultToolkit().sync();
     }
 
     private void geraInimigos() {
 
         for (int i = 0; i < 20; i++) {
-            listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
+            listaInimigos.add(new Enemy(cfg.getRandomGenerator().nextInt(cfg.getResolution()), i * -50));
         }
 
         soundManager.playSound("fighters-coming.wav");
@@ -173,6 +157,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        for (PlayerState playerState : players)
+            playerState.getActions().keyPressed(e);
     }
 
     @Override

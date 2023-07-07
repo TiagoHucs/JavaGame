@@ -28,6 +28,7 @@ public class PauseMenu extends AbstractGameMenu {
         switch (action) {
             case OPT_RETOMAR_PARTIDA:
                 gameComponent.pause();
+                gameComponent.initPlayers();
             case OPT_CONFIGURACOES:
                 options = configOptions;
                 break;

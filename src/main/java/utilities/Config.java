@@ -1,6 +1,7 @@
 package utilities;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Config {
 
@@ -10,6 +11,7 @@ public class Config {
     private final int alturaTela = (int) screenSize.getHeight();
     private final int resolution = (int) screenSize.getWidth();
     private boolean muted = false;
+    private final Random randomGenerator = new Random();
 
     public Config() {
     }
@@ -32,5 +34,9 @@ public class Config {
 
     public void setMuted(boolean muted) {
         this.muted = muted;
+    }
+
+    public Random getRandomGenerator() {
+        return randomGenerator;
     }
 }
