@@ -19,8 +19,8 @@ public class PauseMenu extends AbstractGameMenu {
 
     public PauseMenu(GameComponent gameComponent) {
         super(gameComponent);
-        this.options = defaultOptions;
         this.gameComponent = gameComponent;
+        this.setOptions(defaultOptions);
     }
 
     @Override
@@ -29,12 +29,12 @@ public class PauseMenu extends AbstractGameMenu {
             case OPT_RETOMAR_PARTIDA:
                 gameComponent.pause();
                 gameComponent.initPlayers();
+                break;
             case OPT_CONFIGURACOES:
-                options = configOptions;
+                setOptions(configOptions);
                 break;
             case OPT_VOLTA_PRINCIPAL:
-                options = defaultOptions;
-                selectedOption = 0;
+                setOptions(defaultOptions);
                 break;
             case OPT_SAIR_DESKTOP:
                 System.exit(0);

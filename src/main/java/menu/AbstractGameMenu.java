@@ -12,7 +12,7 @@ public abstract class AbstractGameMenu {
 
     private final GameComponent gameComponent;
 
-    protected String[] options = new String[]{};
+    private String[] options = new String[]{};
     protected int selectedOption = 0;
     private final int width;
     private final int height;
@@ -58,9 +58,15 @@ public abstract class AbstractGameMenu {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             gameComponent.getSoundManager().playSound(SND_TAB);
             executeAction(options[selectedOption]);
+            System.out.println("selecionou: " + options[selectedOption]);
         }
 
     }
 
     public abstract void executeAction(String action);
+
+    public void setOptions(String[] options){
+        this.options = options;
+        this.selectedOption = 0;
+    };
 }
