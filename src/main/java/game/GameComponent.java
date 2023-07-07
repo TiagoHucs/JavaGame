@@ -5,9 +5,7 @@ import entities.Enemy;
 import entities.Ship;
 import entities.Shot;
 import utilities.Config;
-import utilities.ResourceManager;
 
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
 public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
     private Config cfg;
@@ -34,30 +31,35 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private boolean right = false;
     private boolean up = false;
     private boolean down = false;
+    private SoundManager soundManager;
 
     public GameComponent(Config cfg) {
 
-        // Pre-Load dos audios
-        ResourceManager.get().loadResources(
-                "/audio/bling.wav",
-                "/audio/changing-tab.wav",
-                "/audio/fighters-coming.wav",
-                "/audio/im-hit.wav",
-                "/audio/level-music.wav",
-                "/audio/tap.wav");
-
         this.cfg = cfg;
-        this.pauseMenu = new PauseMenu(cfg);
+        this.soundManager = new SoundManager();
+        this.soundManager.loadSounds("/audio");
+
+        this.pauseMenu = new PauseMenu(this);
+
         addKeyListener(this);
         setDoubleBuffered(true);
         setFocusable(true);
-        geraInimigos();
+
         starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
+
+        geraInimigos();
+
         animationThread = new Thread(this);
         animationThread.start();
-        SoundManager.get().playMusic("/audio/typical-trap-loop_2.wav");
-    }
 
+        soundManager.playMusic("typical-trap-loop_2.wav");
+    }
+    public final SoundManager getSoundManager() {
+        return soundManager;
+    }
+    public final Config getCfg() {
+        return cfg;
+    }
     public void paintGame(Graphics g) {
         super.paintComponent(g);
 
@@ -128,15 +130,12 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             if (colisor.detectaColisao(nave, inimigo)) {
                 listaInimigosDestruidos.add(inimigo);
                 nave.sofreDano(25);
-                SoundManager.get().playSound("/audio/im-hit.wav");
+                soundManager.playSound("im-hit.wav");
             }
-
         }
 
         listaInimigos.removeAll(listaInimigosDestruidos);
         listaTiros.removeAll(listaTirosDestruidos);
-
-        SoundManager.get().checkSounds(cfg.isMuted() ? 0.0f : 1.0f);
     }
 
     public void paintComponent(Graphics g) {
@@ -155,7 +154,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             listaInimigos.add(new Enemy(r.nextInt(cfg.getResolution()), i * -50));
         }
 
-        SoundManager.get().playSound("/audio/fighters-coming.wav");
+        soundManager.playSound("fighters-coming.wav");
     }
 
     private void moveShip() {
@@ -175,23 +174,20 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         } else if (down) {
             nave.increaseYVelocity();
         }
-
         nave.move();
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
-
         if (e.getKeyCode() == KeyEvent.VK_P) {
             this.paused = !this.paused;
         }
         if (e.getKeyCode() == KeyEvent.VK_M) {
             cfg.setMuted(!cfg.isMuted());
+            soundManager.toogleMute(cfg.isMuted());
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             up = true;
@@ -207,20 +203,18 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.paused = !this.paused;
-            SoundManager.get().playSound("/audio/changing-tab.wav");
+            soundManager.playSound("changing-tab.wav");
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if(!this.paused){
-                SoundManager.get().playSound("/audio/bling.wav");
+                soundManager.playSound("bling.wav");
                 listaTiros.add(nave.atirar());
             }
         }
 
         //CONTROLE VIA MENU
-        if(paused){
-            if(PauseMenu.OPT_RETOMAR_PARTIDA.equals(pauseMenu.control(e))){
-                paused = false;
-            }
+        if (paused && PauseMenu.OPT_RETOMAR_PARTIDA.equals(pauseMenu.control(e))) {
+            paused = false;
         }
     }
 

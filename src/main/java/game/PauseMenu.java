@@ -17,10 +17,9 @@ public class PauseMenu {
     private static final String OPT_CONTROLE = "CONFIGURAÇÕES DE CONTROLE";
     private static final String OPT_VOLTA_PRINCIPAL = "VOLTAR PARA O MENU PRINCIPAL";
 
-    public static final String SND_TAB = "/audio/changing-tab.wav";
-    public static final String SND_TIC = "/audio/tap.wav";
-
-    private Config cfg;
+    public static final String SND_TAB = "changing-tab.wav";
+    public static final String SND_TIC = "tap.wav";
+    private final GameComponent gameComponent;
     private String[] defaultOptions = {OPT_RETOMAR_PARTIDA,OPT_CONFIGURACOES,OPT_SAIR_DESKTOP};
     private String[] configOptions = {OPT_SOM,OPT_DIFICULDADE,OPT_CONTROLE,OPT_VOLTA_PRINCIPAL};
     private String[] options = defaultOptions;
@@ -28,11 +27,10 @@ public class PauseMenu {
     private int width;
     private int height;
 
-    public PauseMenu(Config cfg) {
-        this.cfg = cfg;
-        this.width = cfg.getLarguraTela()/3;
-        this.height = cfg.getAlturaTela()/3;
-
+    public PauseMenu(GameComponent gameComponent) {
+        this.gameComponent = gameComponent;
+        this.width = gameComponent.getCfg().getLarguraTela()/3;
+        this.height = gameComponent.getCfg().getAlturaTela()/3;
     }
 
     public void paintMenu(Graphics g){
@@ -57,19 +55,19 @@ public class PauseMenu {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
            if(selectedOption>0){
                selectedOption--;
-               SoundManager.get().playSound(SND_TIC);
+               gameComponent.getSoundManager().playSound(SND_TIC);
            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             if(selectedOption < options.length-1){
                 selectedOption++;
-                SoundManager.get().playSound(SND_TIC);
+                gameComponent.getSoundManager().playSound(SND_TIC);
             }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            SoundManager.get().playSound(SND_TAB);
+            gameComponent.getSoundManager().playSound(SND_TAB);
             switch (options[selectedOption]){
                 case OPT_RETOMAR_PARTIDA:
                     return OPT_RETOMAR_PARTIDA;

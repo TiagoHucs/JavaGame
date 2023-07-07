@@ -2,81 +2,99 @@ package game;
 
 import utilities.ResourceManager;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SoundManager {
-    private static SoundManager instance;
-    private float globalVolume = 1.0f;
-    private LinkedList<Clip> sounds = new LinkedList<Clip>();
-    private SoundManager() {
+    private float globalVolume = 0.8f;
+    private Clip[] sounds;
+    private Map<String, Integer> soundIds;
+    private Integer currentSoundId;
+    private Integer currentMusicId;
 
-    }
-
-    public static synchronized SoundManager get() {
-        if (instance == null) {
-            instance = new SoundManager();
-        }
-        return instance;
-    }
-
-    private Clip loadClip(String filename) {
+    public void loadSounds(String folder) {
         try {
-            Clip sound = ResourceManager.get().getAudio(filename);
-            setVolume(sound, globalVolume);
-            sounds.add(sound);
-            return sound;
-        } catch (Exception ex) {
-            System.err.println("Erro ao carregar o som = " + filename);
-            ex.printStackTrace();
-        }
-        return null;
-    }
+            URL folderURL = getClass().getResource(folder);
+            File file = new File(folderURL.toURI());
+            File files[] = file.listFiles();
 
-    public Clip playSound(String filename) {
+            this.sounds = new Clip[files.length];
+            this.soundIds = new HashMap<String, Integer>(files.length);
 
-        Clip sound = loadClip(filename);
+            for (int i = 0; i < files.length; i++) {
 
-        if (Objects.nonNull(sound)) {
-            sound.start();
-        }
+                AudioInputStream audio = AudioSystem.getAudioInputStream(files[i]);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audio);
 
-        return sound;
-    }
+                setVolume(clip, globalVolume);
 
-    public Clip playMusic(String filename) {
-
-        Clip sound = loadClip(filename);
-
-        if (Objects.nonNull(sound)) {
-            sound.start();
-            sound.loop(Clip.LOOP_CONTINUOUSLY);
-        }
-
-        return sound;
-    }
-
-    public void checkSounds(float globalVolume) {
-        this.globalVolume = globalVolume;
-        for (Clip sound: sounds) {
-            if (sound.isActive()) {
-                setVolume(sound, globalVolume);
+                this.sounds[i] = clip;
+                this.soundIds.put(files[i].getName(), i);
             }
+
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
         }
     }
 
-    private static void setVolume(Clip sound, float volume) {
-
-        if (volume < 0f || volume > 1f) {
-            throw new IllegalArgumentException("Volume informado nao esta no range valido: " + volume);
+    public void stopSound(Integer id) {
+        if (id != null && sounds[id].isActive()) {
+            sounds[id].stop();
         }
+    }
 
-        FloatControl gainControl = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(20f * (float) Math.log10(volume));
+    public void playSound(String filename) {
+
+        // stopSound(currentSoundId);
+
+        currentSoundId = soundIds.get(filename);
+        setVolume(sounds[currentSoundId], globalVolume);
+
+        sounds[currentSoundId].setMicrosecondPosition(0);
+        sounds[currentSoundId].start();
+    }
+
+    public void playMusic(String filename) {
+
+        stopSound(currentMusicId);
+
+        currentMusicId = soundIds.get(filename);
+        setVolume(sounds[currentMusicId], globalVolume);
+
+        sounds[currentMusicId].setMicrosecondPosition(0);
+        sounds[currentMusicId].start();
+        sounds[currentMusicId].loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    public void toogleMute(boolean mute) {
+        for (Clip sound: sounds) {
+            BooleanControl booleanControl = (BooleanControl) sound.getControl(BooleanControl.Type.MUTE);
+            booleanControl.setValue(mute);
+        }
+    }
+
+    public void setGlobalVolume(float globalVolume) {
+        this.globalVolume = globalVolume;
+
+        for (Clip sound: sounds) {
+            setVolume(sound, globalVolume);
+        }
+    }
+
+    private void setVolume(Clip sound, float volume) {
+        try {
+            FloatControl gainControl = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = gainControl.getMaximum() - gainControl.getMinimum();
+            float gain = (range * volume) + gainControl.getMinimum();
+            gainControl.setValue(gain);
+        } catch (Exception exception) {
+            exception.printStackTrace(System.err);
+        }
     }
 
 }

@@ -47,23 +47,11 @@ public class ResourceManager {
 
         return getImage(resourceName);
     }
-    public synchronized Clip getAudio(String resourceName) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        Clip clip = AudioSystem.getClip();
-        clip.open(AudioSystem.getAudioInputStream(getResource(resourceName)));
-        return clip;
-    }
-
     private URL getResource(String resourceName) {
         if (resources.containsKey(resourceName)) {
             return resources.get(resourceName);
         }
         resources.put(resourceName, getClass().getResource(resourceName));
         return getResource(resourceName);
-    }
-
-    public void loadResources(String ...resources) {
-        for (String resource : resources) {
-            getResource(resource);
-        }
     }
 }
