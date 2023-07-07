@@ -57,8 +57,8 @@ public abstract class AbstractGameMenu {
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             gameComponent.getSoundManager().playSound(SND_TAB);
-            executeAction(options[selectedOption]);
             System.out.println("selecionou: " + options[selectedOption]);
+            executeAction(options[selectedOption]);
         }
 
     }
