@@ -66,9 +66,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         starFieldEffect.draw(g);
 
         for (Enemy i : listaInimigos) {
-            g.drawImage(i.getImage(),
-                    i.getX() + i.getOffSetX(),
-                    i.getY() + i.getOffSetY(), this);
+            i.draw(g, this);
         }
 
         for (PlayerState playerState : players) {
@@ -114,6 +112,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
                         if (inimigo.getLifes() == 0){
                             listaInimigosDestruidos.add(inimigo);
+
                         } else {
                             inimigo.setLifes(inimigo.getLifes()-1);
                         }
@@ -121,10 +120,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                     }
                 }
 
-                if (colisor.detectaColisao(playerState.getShip(), inimigo)) {
-                    listaInimigosDestruidos.add(inimigo);
+                if (!playerState.isInvencible() && colisor.detectaColisao(playerState.getShip(), inimigo)) {
                     playerState.getShip().sofreDano(25);
                     soundManager.playSound("im-hit.wav");
+
+                    listaInimigosDestruidos.add(inimigo);
                 }
 
                 playerState.getBullets().removeAll(listaTirosDestruidos);

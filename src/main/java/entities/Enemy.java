@@ -1,12 +1,12 @@
 package entities;
 
-import game.PlayerState;
+import game.GameComponent;
 import lombok.Getter;
 import lombok.Setter;
 import utilities.Config;
 import utilities.GameUtil;
 
-import java.util.Set;
+import java.awt.*;
 
 @Getter
 @Setter
@@ -30,4 +30,20 @@ public class Enemy extends Ator {
         }
     }
 
+    public void draw(Graphics g, GameComponent gameComponent) {
+
+        int px = getX() + getOffSetX();
+        int py = getY() + getOffSetY();
+
+        int sy = getY() + getAltura();
+
+        if (sy < 0) {
+            g.setColor(Color.RED);
+            g.drawString("V", getX(), 10);
+
+        } else {
+            g.drawImage(getImage(), px, py, gameComponent);
+        }
+
+    }
 }

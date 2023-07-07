@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +21,8 @@ public class PlayerState {
 
     private boolean blink = false;
     private boolean invencible = true;
-    private int blinkTimer = 20;
+
+    private int blinkTimer = 30;
 
     PlayerState(int id) {
         this.id = id;
