@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 public class Ship extends Ator {
 
-    private int energia = 100;
-
     private int fireTimer = 0;
     private boolean canFire = true;
 
@@ -21,7 +19,6 @@ public class Ship extends Ator {
 
     public Shot atirar() {
         Shot tiro = new Shot(getX() + (getLargura() / 2), getY());
-        this.energia -= 1;
         this.fireTimer = 10;
         this.canFire = false;
         getEffect(Recoil.class).setSize(10.0f);
@@ -29,7 +26,6 @@ public class Ship extends Ator {
     }
 
     public void sofreDano(int dano) {
-        this.energia -= dano;
         getEffect(Shake.class).addTrauma((float) dano / 10);
     }
 

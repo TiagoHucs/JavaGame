@@ -28,6 +28,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Colisor colisor = new Colisor();
     private boolean paused = true;
     private int level = 1;
+    private int points = 0;
     private boolean left = false;
     private boolean right = false;
     private boolean up = false;
@@ -91,7 +92,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         g.setColor(Color.YELLOW);
         g.drawString("Level: " + level, 10, 20);
-        g.drawString("Energy: " + nave.getEnergia(), 10, 40);
+        g.drawString("Points: " + points, 10, 40);
         g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
         g.drawString("Paused: " + paused, 10, 80);
         g.drawString("Muted: " + cfg.isMuted(), 10, 100);
@@ -129,6 +130,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                 } else if (colisor.detectaColisao(tiro, inimigo)) {
                     listaTirosDestruidos.add(tiro);
                     listaInimigosDestruidos.add(inimigo);
+                    points = points + 100;
                 }
             }
 
