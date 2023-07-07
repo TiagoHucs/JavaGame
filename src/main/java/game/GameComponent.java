@@ -27,8 +27,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Random r = new Random();
     private final Colisor colisor = new Colisor();
     private boolean paused = true;
-    private int level = 1;
-    private int points = 0;
+    private int score = 0;
     private boolean left = false;
     private boolean right = false;
     private boolean up = false;
@@ -91,11 +90,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
 
         g.setColor(Color.YELLOW);
-        g.drawString("Level: " + level, 10, 20);
-        g.drawString("Points: " + points, 10, 40);
-        g.drawString("Enemies: " + listaInimigos.size(), 10, 60);
-        g.drawString("Paused: " + paused, 10, 80);
-        g.drawString("Muted: " + cfg.isMuted(), 10, 100);
+        for (int i = 0 ; i < nave.getLifes();i++) {
+            g.drawImage(nave.getImage(), 50 * i,20,this);
+        }
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+        g.drawString(score + "pts", 5, 100);
     }
 
     private void update() {
@@ -105,7 +104,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         //se acabarem os inimigos gere mais
         if (listaInimigos.size() < 1) {
             geraInimigos();
-            level++;
         }
 
         for (Shot tiro : listaTiros) {
@@ -130,7 +128,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                 } else if (colisor.detectaColisao(tiro, inimigo)) {
                     listaTirosDestruidos.add(tiro);
                     listaInimigosDestruidos.add(inimigo);
-                    points = points + 100;
+                    score = score + 100;
                 }
             }
 

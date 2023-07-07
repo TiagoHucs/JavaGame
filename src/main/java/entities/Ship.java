@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class Ship extends Ator {
 
+    private int lifes = 3;
     private int fireTimer = 0;
     private boolean canFire = true;
 
@@ -27,6 +28,7 @@ public class Ship extends Ator {
 
     public void sofreDano(int dano) {
         getEffect(Shake.class).addTrauma((float) dano / 10);
+        lifes = lifes > 0 ? lifes -1 : 0;
     }
 
     public void checkWeapon() {
