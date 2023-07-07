@@ -47,6 +47,7 @@ public class Ator {
         for (Effect effect : effectList.values()) {
             effect.update(1.0f / 60.0f, this);
         }
+
     }
 
     public void setImage(String filename) {
@@ -88,4 +89,13 @@ public class Ator {
             this.velocidadeY++;
         }
     }
+
+    public int getVerticalLimit(){
+        return cfg.getAlturaTela() - getAltura();
+    }
+
+    public int getHorizonntalLimi(){
+        return cfg.getLarguraTela() - getLargura();
+    }
+
 }

@@ -6,9 +6,6 @@ public class Config {
 
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-	//private int resolution = 900;
-    //private int larguraTela = resolution;
-    //private int alturaTela = ((resolution/100)*75);
     private final int larguraTela = (int) screenSize.getWidth();
     private final int alturaTela = (int) screenSize.getHeight();
     private final int resolution = (int) screenSize.getWidth();

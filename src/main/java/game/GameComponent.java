@@ -169,6 +169,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         } else if (right) {
             nave.increaseXVelocity();
         }
+
         //Verticalmente
         if (up == down) {
             nave.slowDownY();
@@ -178,6 +179,17 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             nave.increaseYVelocity();
         }
         nave.move();
+        if(nave.getX() > nave.getHorizonntalLimi()){
+            nave.setX(nave.getHorizonntalLimi());
+        } else if(nave.getX() < 0){
+            nave.setX(0);
+        }
+        if(nave.getY() > nave.getVerticalLimit()){
+            nave.setY(nave.getVerticalLimit());
+        } else if(nave.getY() < 0){
+            nave.setY(0);
+        }
+
     }
 
     public void pause(){
