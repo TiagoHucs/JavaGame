@@ -14,10 +14,15 @@ import java.util.List;
 @Setter
 public class PlayerState {
 
+    private int id;
     private int score = 0;
     private final PlayerActions actions = new PlayerActions();
     private final Ship ship = new Ship();
     private final List<Shot> bullets = new LinkedList<Shot>();
+
+    PlayerState(int id) {
+        this.id = id;
+    }
 
     public void draw(Graphics g, GameComponent game) {
 
@@ -35,12 +40,15 @@ public class PlayerState {
 
         g.setColor(Color.YELLOW);
 
+        int lifeStartX = 50;
+        int lifeStartY = 20 * (10 * id);
+
         for (int i = 0; i < ship.getLifes(); i++) {
-            g.drawImage(ship.getImage(), 50 * i, 20, game);
+            g.drawImage(ship.getImage(), lifeStartX * i, lifeStartY, game);
         }
 
         g.setFont(game.getFont());
-        g.drawString(score + "pts", 5, 100);
+        g.drawString(score + "pts", 5, lifeStartY + ship.getImage().getHeight() + 20);
     }
 
     public void update(GameComponent game) {

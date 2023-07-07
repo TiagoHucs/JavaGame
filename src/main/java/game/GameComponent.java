@@ -45,7 +45,13 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         geraInimigos();
 
         // Jogador 1
-        players.add(new PlayerState());
+        PlayerState p1 = new PlayerState(players.size());
+        p1.getShip().setX(p1.getShip().getX() - 20);
+        players.add(p1);
+
+        PlayerState p2 = new PlayerState(players.size());
+        p2.getShip().setX(p2.getShip().getX() + 20);
+        players.add(p2);
 
         animationThread = new Thread(this);
         animationThread.start();
