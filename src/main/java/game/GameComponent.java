@@ -3,6 +3,7 @@ package game;
 import effects.StarFieldEffect;
 import entities.Enemy;
 import entities.Shot;
+import menu.PauseMenu;
 import utilities.Config;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ import java.util.Set;
 public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final Thread animationThread;
     private final Config cfg;
-    private final PauseMenu pauseMenu;
+    private final PauseMenu newPauseMenu;
     private final StarFieldEffect starFieldEffect;
     private final ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
     private final Random r = new Random();
@@ -34,7 +35,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
 
-        this.pauseMenu = new PauseMenu(this);
+        this.newPauseMenu = new PauseMenu(this);
 
         addKeyListener(this);
         setDoubleBuffered(true);
@@ -139,7 +140,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     public void paintComponent(Graphics g) {
         paintGame(g);
         if (paused) {
-            pauseMenu.paintMenu(g);
+            newPauseMenu.paintMenu(g);
         }
         g.dispose();
         Toolkit.getDefaultToolkit().sync();
@@ -180,7 +181,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         //CONTROLE VIA MENU
         if (paused) {
-            pauseMenu.control(e);
+            newPauseMenu.control(e);
         }
     }
 
