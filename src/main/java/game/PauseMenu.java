@@ -45,7 +45,7 @@ public class PauseMenu {
     }
 
 
-    public String control(KeyEvent e) {
+    public void control(KeyEvent e) {
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (selectedOption > 0) {
@@ -65,7 +65,7 @@ public class PauseMenu {
             gameComponent.getSoundManager().playSound(SND_TAB);
             switch (options[selectedOption]) {
                 case OPT_RETOMAR_PARTIDA:
-                    return OPT_RETOMAR_PARTIDA;
+                   gameComponent.pause();
                 case OPT_CONFIGURACOES:
                     options = configOptions;
                     selectedOption = 0;
@@ -79,7 +79,5 @@ public class PauseMenu {
             }
 
         }
-        return null;
-
     }
 }

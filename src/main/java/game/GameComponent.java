@@ -151,7 +151,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         Toolkit.getDefaultToolkit().sync();
     }
 
-
     private void geraInimigos() {
 
         for (int i = 0; i < 10; i++) {
@@ -181,6 +180,10 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         nave.move();
     }
 
+    public void pause(){
+        paused = !paused;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -207,8 +210,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             right = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.paused = !this.paused;
             soundManager.playSound("changing-tab.wav");
+            this.pause();
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if (!this.paused) {
@@ -218,8 +221,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
 
         //CONTROLE VIA MENU
-        if (paused && PauseMenu.OPT_RETOMAR_PARTIDA.equals(pauseMenu.control(e))) {
-            paused = false;
+        if (paused) {
+            pauseMenu.control(e);
         }
     }
 
