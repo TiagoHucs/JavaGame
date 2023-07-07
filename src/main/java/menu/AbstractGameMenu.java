@@ -1,9 +1,11 @@
 package menu;
 
 import game.GameComponent;
+import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public abstract class AbstractGameMenu {
 
@@ -27,15 +29,17 @@ public abstract class AbstractGameMenu {
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
-        g.setColor(Color.BLACK);
+        g.drawImage(getImage("/image/hudmanu.JPG"),width,height,gameComponent);
+
+/*        g.setColor(Color.BLACK);
         g.fillRect(width, height, width, height);
 
         g.setColor(Color.RED);
-        g.drawRect(width, height, width, height);
+        g.drawRect(width, height, width, height);*/
 
         for (int i = 0; i < options.length; i++) {
             g.setColor(i == selectedOption ? Color.YELLOW : Color.WHITE);
-            g.drawString(options[i], width + 10, height + ((i + 1) * 30));
+            g.drawString(options[i], width + 60, height + 50 + ((i + 1) * 30));
         }
     }
 
@@ -69,4 +73,13 @@ public abstract class AbstractGameMenu {
         this.options = options;
         this.selectedOption = 0;
     };
+
+    public Image getImage(String filename) {
+        try {
+            return ResourceManager.get().getImage(filename, width, height);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
