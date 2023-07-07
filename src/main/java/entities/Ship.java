@@ -11,6 +11,9 @@ public class Ship extends Ator {
 
     private int energia = 100;
 
+    private int fireTimer = 0;
+    private boolean canFire = true;
+
     public Ship() {
         this.setImage("/image/ships/spaceShips_003.PNG");
         addEffect(new Shake(), new Recoil());
@@ -19,6 +22,8 @@ public class Ship extends Ator {
     public Shot atirar() {
         Shot tiro = new Shot(getX() + (getLargura() / 2), getY());
         this.energia -= 1;
+        this.fireTimer = 10;
+        this.canFire = false;
         getEffect(Recoil.class).setSize(10.0f);
         return tiro;
     }
@@ -28,4 +33,13 @@ public class Ship extends Ator {
         getEffect(Shake.class).addTrauma((float) dano / 10);
     }
 
+    public void checkWeapon() {
+
+        fireTimer--;
+
+        if (fireTimer < 0) {
+            canFire = true;
+            fireTimer = 0;
+        }
+    }
 }

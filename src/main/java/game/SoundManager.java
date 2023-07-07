@@ -39,20 +39,26 @@ public class SoundManager {
         }
     }
 
-    public void stopSound(Integer id) {
+    private void stopSound(Integer id) {
         if (id != null && sounds[id].isActive()) {
             sounds[id].stop();
         }
     }
 
-    public void playSound(String filename) {
+    public boolean isPlaying(String filename) {
+        Clip sound = sounds[soundIds.get(filename)];
+        return sound.isActive();
+    }
 
-        // stopSound(currentSoundId);
+    public void playSound(String filename) {
 
         currentSoundId = soundIds.get(filename);
         setVolume(sounds[currentSoundId], globalVolume);
 
-        sounds[currentSoundId].setMicrosecondPosition(0);
+        if (sounds[currentSoundId].getMicrosecondPosition() > 0) {
+            sounds[currentSoundId].setMicrosecondPosition(0);
+        }
+
         sounds[currentSoundId].start();
     }
 
@@ -64,7 +70,6 @@ public class SoundManager {
         setVolume(sounds[currentMusicId], globalVolume);
 
         sounds[currentMusicId].setMicrosecondPosition(0);
-        sounds[currentMusicId].start();
         sounds[currentMusicId].loop(Clip.LOOP_CONTINUOUSLY);
     }
 

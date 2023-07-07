@@ -32,6 +32,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private boolean right = false;
     private boolean up = false;
     private boolean down = false;
+    private boolean fire = false;
     private final SoundManager soundManager;
 
     public GameComponent(Config cfg) {
@@ -190,6 +191,13 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             nave.setY(0);
         }
 
+        if (fire && nave.isCanFire()) {
+            soundManager.playSound("bling.wav");
+            listaTiros.add(nave.atirar());
+        }
+
+        nave.checkWeapon();
+
     }
 
     public void pause(){
@@ -226,10 +234,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             this.pause();
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (!this.paused) {
-                soundManager.playSound("bling.wav");
-                listaTiros.add(nave.atirar());
-            }
+            fire = true;
         }
 
         //CONTROLE VIA MENU
@@ -251,6 +256,9 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            fire = false;
         }
     }
 
