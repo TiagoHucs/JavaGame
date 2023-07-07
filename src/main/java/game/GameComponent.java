@@ -46,12 +46,18 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         // Jogador 1
         PlayerState p1 = new PlayerState(players.size());
-        p1.getShip().setX(p1.getShip().getX() - 20);
+        p1.getShip().setX(p1.getShip().getX() - 40);
         players.add(p1);
 
+        // Jogador 2
         PlayerState p2 = new PlayerState(players.size());
-        p2.getShip().setX(p2.getShip().getX() + 20);
+        p2.getShip().setY(p2.getShip().getY() - 20);
         players.add(p2);
+
+        // Jogador 3
+        PlayerState p3 = new PlayerState(players.size());
+        p3.getShip().setX(p3.getShip().getX() + 40);
+        players.add(p3);
 
         animationThread = new Thread(this);
         animationThread.start();
@@ -75,14 +81,14 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         starFieldEffect.draw(g);
 
-        for (PlayerState playerState : players) {
-            playerState.draw(g, this);
-        }
-
         for (Enemy i : listaInimigos) {
             g.drawImage(i.getImage(),
                     i.getX() + i.getOffSetX(),
                     i.getY() + i.getOffSetY(), this);
+        }
+
+        for (PlayerState playerState : players) {
+            playerState.draw(g, this);
         }
     }
 
