@@ -11,6 +11,7 @@ public class Config {
     private final int resolution = (int) screenSize.getWidth();
     private boolean muted = false;
     private final Random randomGenerator = new Random();
+    private final Font font = new Font("TimesRoman", Font.PLAIN, 25);
 
     public Config() {
     }
@@ -38,6 +39,11 @@ public class Config {
     public Random getRandomGenerator() {
         return randomGenerator;
     }
+
+    public Font getFont() {
+        return font;
+    }
+
     public void setup(Component gameWindow) {
         gameWindow.setBackground(Color.BLACK);
         gameWindow.setPreferredSize(screenSize);

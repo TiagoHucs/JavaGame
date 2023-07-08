@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         Config cfg = new Config();
+
         GameComponent game = new GameComponent(cfg);
 
         JFrame gameWindow = new JFrame("Java Shooter Game 2D");

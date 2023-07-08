@@ -2,7 +2,6 @@ package game;
 
 import effects.StarFieldEffect;
 
-import lombok.SneakyThrows;
 import menu.PauseMenu;
 import utilities.Config;
 
@@ -13,21 +12,28 @@ import java.awt.event.KeyListener;
 
 public class GameComponent extends JPanel implements KeyListener, Runnable {
     private final int FPS_SET = 60;
-    private final Thread gameThread;
-    private final Config cfg;
-    private final StarFieldEffect starFieldEffect;
-    private final Font font;
-    private final SoundManager soundManager;
-    public final GameLogic currentGameLogic, newPauseMenu;
-    public final GameState gameState;
+    private Config cfg;
+    private SoundManager soundManager;
+    private StarFieldEffect starFieldEffect;
+    private Thread gameThread;
+    public GameState gameState;
+    public GameLogic currentGameLogic, newPauseMenu;
+
+    public final SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public final Config getCfg() {
+        return cfg;
+    }
 
     public GameComponent(Config cfg) {
-
         this.cfg = cfg;
         this.cfg.setup(this);
+        this.init();
+    }
 
-        this.font = new Font("TimesRoman", Font.PLAIN, 25);
-
+    public void init() {
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
 
@@ -43,17 +49,12 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         this.gameThread.start();
     }
 
-    public final SoundManager getSoundManager() {
-        return soundManager;
-    }
-
-    public final Config getCfg() {
-        return cfg;
-    }
-
+    @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
+
+        this.update();
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
@@ -71,11 +72,9 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 break;
         }
 
-        g.dispose();
     }
 
-    @SneakyThrows
-    private void update() {
+    public void update() {
 
         switch (gameState.state) {
 
@@ -95,22 +94,26 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
-        switch (gameState.state) {
-
-            case PLAY:
-                currentGameLogic.keyPressed(e);
-                break;
-
-            case MENU:
-                newPauseMenu.keyPressed(e);
-                break;
-        }
+        // Nao faz nada
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
 
+        switch (e.getKeyCode()) {
+
+            case KeyEvent.VK_M:
+                cfg.setMuted(!cfg.isMuted());
+                soundManager.toogleMute(cfg.isMuted());
+                break;
+
+            case KeyEvent.VK_ESCAPE:
+                gameState.state = GameState.State.MENU;
+                soundManager.playSound("changing-tab.wav");
+                break;
+
+        }
+
         switch (gameState.state) {
 
             case PLAY:
@@ -120,24 +123,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
             case MENU:
                 newPauseMenu.keyPressed(e);
                 break;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-
-            soundManager.playSound("changing-tab.wav");
-
-            if (GameState.State.MENU.equals(gameState.state)) {
-                gameState.state = GameState.State.PLAY;
-
-            } else {
-                gameState.state = GameState.State.MENU;
-            }
-
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_M) {
-            cfg.setMuted(!cfg.isMuted());
-            soundManager.toogleMute(cfg.isMuted());
         }
     }
 
@@ -156,7 +141,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
     }
 
-    @SneakyThrows
     @Override
     public void run() {
 
@@ -174,7 +158,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
             previousTime = currentTime;
 
             if (delta >= 1) {
-                update();
                 repaint();
                 delta--;
             }
