@@ -8,6 +8,7 @@ import utilities.Config;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
+import java.util.List;
 
 public class SinglePlayerGameLogic implements GameLogic {
 
@@ -55,8 +56,20 @@ public class SinglePlayerGameLogic implements GameLogic {
             inimigo.clampMove(gameComponent.getCfg());
         }
 
+        List<PlayerState> playersToRemove = new ArrayList<PlayerState>(players.size());
+
         for (PlayerState playerState : players) {
             playerState.update(gameComponent);
+
+            if (playerState.getShip().getLifes() == 0) {
+                playersToRemove.add(playerState);
+            }
+        }
+
+        players.removeAll(playersToRemove);
+
+        if (players.isEmpty()) {
+            gameComponent.gameState.state = GameState.State.MENU;
         }
 
         checkCollisions(gameComponent);
