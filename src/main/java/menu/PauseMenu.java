@@ -41,6 +41,7 @@ public class PauseMenu extends AbstractGameMenu {
                 break;
             case OPT_SAIR_DESKTOP:
                 gameComponent.gameState.state = GameState.State.QUIT;
+                break;
         }
     }
 

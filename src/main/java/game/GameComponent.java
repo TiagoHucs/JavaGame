@@ -2,6 +2,7 @@ package game;
 
 import effects.StarFieldEffect;
 
+import lombok.SneakyThrows;
 import menu.PauseMenu;
 import utilities.Config;
 
@@ -12,7 +13,7 @@ import java.awt.event.KeyListener;
 
 public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final int FPS_SET = 60;
-    private final int UPS_SET = 59;
+    private final int UPS_SET = 58;
     private final Thread animationThread;
     private final Config cfg;
     private final StarFieldEffect starFieldEffect;
@@ -66,12 +67,18 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             case PLAY:
                 currentGameLogic.draw(g, this);
                 break;
+
+            case QUIT:
+                System.exit(0);
+                break;
         }
 
         g.dispose();
     }
 
+    @SneakyThrows
     private void update() {
+
         switch (gameState.state) {
 
             case PLAY:
@@ -83,13 +90,14 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                 break;
 
             case QUIT:
-                System.exit(0);
+                animationThread.sleep(1);
                 break;
         }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+
         switch (gameState.state) {
 
             case PLAY:
@@ -122,6 +130,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
             if (GameState.State.MENU.equals(gameState.state)) {
                 gameState.state = GameState.State.PLAY;
+
             } else {
                 gameState.state = GameState.State.MENU;
             }
@@ -160,7 +169,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         double deltaU = 0;
         double deltaF = 0;
 
-        while (animationThread != null) {
+        while (gameState.isGameRunning()) {
 
             long currentTime = System.nanoTime();
 
@@ -174,7 +183,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             }
 
             if (deltaF >= 1) {
-                this.repaint();
+                repaint();
                 deltaF--;
             }
 

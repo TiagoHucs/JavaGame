@@ -8,4 +8,8 @@ public class GameState {
     }
 
     public State state = State.MENU;
+
+    public boolean isGameRunning() {
+        return !this.equals(State.QUIT);
+    }
 }

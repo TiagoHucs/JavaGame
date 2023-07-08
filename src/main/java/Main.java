@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 
 public class Main {
 
+    public static boolean DEBUG_MODE = true;
+
     public static void main(String[] args) {
         Config cfg = new Config();
         JFrame frame = new JFrame("Java Shooter Game 2D");
@@ -22,16 +24,18 @@ public class Main {
         frame.add(component);
         frame.addKeyListener(component);
 
-        frame.setUndecorated(true);
+        frame.setUndecorated(!DEBUG_MODE);
         frame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
-        frame.setResizable(false);
+        frame.setResizable(DEBUG_MODE);
 
         frame.setBackground(Color.BLACK);
         frame.setLocationRelativeTo(null);
 
-        GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
-        graphicsDevice.setFullScreenWindow(frame);
+        if (!DEBUG_MODE) {
+            GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
+            graphicsDevice.setFullScreenWindow(frame);
+        }
 
         frame.setVisible(true);
     }
