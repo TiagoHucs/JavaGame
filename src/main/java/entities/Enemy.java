@@ -1,9 +1,9 @@
 package entities;
 
 import game.GameComponent;
+import ia.BehaviorIA;
 import lombok.Getter;
 import lombok.Setter;
-import utilities.Config;
 
 import java.awt.*;
 
@@ -12,35 +12,20 @@ import java.awt.*;
 public class Enemy extends Ator {
 
     private int lifes = 2;
+    private final BehaviorIA behavior;
 
-    public Enemy(int x, int y) {
+    public Enemy(BehaviorIA behavior) {
         this.setImage("/image/enemy-ship.png");
-        this.setVelocidadeY(2);
-        this.setX(x);
-        this.setY(y);
+        this.behavior = behavior;
     }
 
-    public void clampMove(Config cfg) {
-        if (getY() > cfg.getAlturaTela()) {
-            setY(-100);
-            setX(cfg.getRandomGenerator().nextInt(cfg.getResolution()));
-        }
+    public void clampMove(GameComponent gameComponent) {
+        behavior.clampMove(this, gameComponent);
     }
 
     public void draw(Graphics g, GameComponent gameComponent) {
-
         int px = getX() + getOffSetX();
         int py = getY() + getOffSetY();
-
-        int sy = getY() + getAltura();
-
-        if (sy < 0) {
-            g.setColor(Color.RED);
-            g.drawString("V", getX(), 10);
-
-        } else {
-            g.drawImage(getImage(), px, py, gameComponent);
-        }
-
+        g.drawImage(getImage(), px, py, gameComponent);
     }
 }

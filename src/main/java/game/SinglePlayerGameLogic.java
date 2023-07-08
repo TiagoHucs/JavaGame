@@ -2,11 +2,16 @@ package game;
 
 import entities.Enemy;
 import entities.Shot;
+import ia.BehaviorIA;
+import ia.FallDownIA;
+import ia.FallSideIA;
+import ia.LeftRightIA;
 import ps.Explosion;
 import utilities.Config;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.List;
 
@@ -18,6 +23,7 @@ public class SinglePlayerGameLogic implements GameLogic {
     private final Colisor colisor = new Colisor();
     private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
     private final Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
+    private BehaviorIA[] behaviorIA;
 
     @Override
     public void init() {
@@ -29,6 +35,12 @@ public class SinglePlayerGameLogic implements GameLogic {
         for (PlayerState player: players) {
             player.getBlinkEffect().reset();
         }
+
+        // Cria os comportamentos possiveis para os inimigos
+        behaviorIA = new BehaviorIA[3];
+        behaviorIA[0] = new FallDownIA();
+        behaviorIA[1] = new FallSideIA();
+        behaviorIA[2] = new LeftRightIA();
     }
 
     @Override
@@ -88,7 +100,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         for (Enemy inimigo : enemies) {
             inimigo.move();
-            inimigo.clampMove(gameComponent.getCfg());
+            inimigo.clampMove(gameComponent);
         }
 
     }
@@ -144,8 +156,13 @@ public class SinglePlayerGameLogic implements GameLogic {
         Config cfg = gameComponent.getCfg();
         SoundManager soundManager = gameComponent.getSoundManager();
 
+        int typeIA = cfg.getRandomGenerator().nextInt(behaviorIA.length);
+        BehaviorIA enemyIA = behaviorIA[typeIA];
+
         for (int i = 0; i < ENEMY_COUNT; i++) {
-            enemies.add(new Enemy(cfg.getRandomGenerator().nextInt(cfg.getResolution()), i * -50));
+            Enemy enemy = new Enemy(enemyIA);
+            enemyIA.setupEnemy(i, enemy, gameComponent);
+            enemies.add(enemy);
         }
 
         soundManager.playSound("fighters-coming.wav");
