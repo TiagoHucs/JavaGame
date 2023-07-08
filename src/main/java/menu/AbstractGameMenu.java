@@ -21,6 +21,7 @@ public abstract class AbstractGameMenu implements GameLogic {
     private final int height;
     private Font font;
     private FontMetrics metrics;
+    private Image menuImage;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
@@ -32,11 +33,13 @@ public abstract class AbstractGameMenu implements GameLogic {
     @Override
     public void init() {
         this.font = new Font("Arial", Font.PLAIN, 16);
+        this.menuImage = getImage("/image/hudmanu.JPG");
     }
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
 
+        g.drawImage(menuImage, width, height, gameComponent);
         Color myColour = new Color(10, 10, 10, 200);
         g.setColor(myColour);
         g.fillRect(width,height,width,height);
@@ -87,8 +90,6 @@ public abstract class AbstractGameMenu implements GameLogic {
         this.options = options;
         this.selectedOption = 0;
     }
-
-    ;
 
     public Image getImage(String filename) {
         try {

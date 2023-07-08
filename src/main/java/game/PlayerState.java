@@ -54,7 +54,7 @@ public class PlayerState {
         }
 
         g.setColor(Color.YELLOW);
-        g.setFont(game.getFont());
+        g.setFont(game.getCfg().getFont());
         g.drawString(score + " Pts", 5, lifeStartY + ship.getImage().getHeight() + 20);
     }
 
