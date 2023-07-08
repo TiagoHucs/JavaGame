@@ -41,10 +41,48 @@ public class SinglePlayerGameLogic implements GameLogic {
         for (PlayerState playerState : players) {
             playerState.draw(g, gameComponent);
         }
+
+        if (players.isEmpty()) {
+            g.drawString("GAME OVER", gameComponent.getWidth() / 2, gameComponent.getHeight() / 2);
+        }
     }
 
     @Override
     public void update(GameComponent gameComponent) {
+        updateEnimigos(gameComponent);
+        updatePlayers(gameComponent);
+        checkCollisions(gameComponent);
+        checkForGameOver(gameComponent);
+    }
+
+    private void checkForGameOver(GameComponent gameComponent) {
+
+        List<PlayerState> playersToRemove = new ArrayList<PlayerState>(players.size());
+
+        for (PlayerState playerState : players) {
+            if (playerState.getShip().getLifes() == 0) {
+                playersToRemove.add(playerState);
+            }
+        }
+
+        players.removeAll(playersToRemove);
+
+        if (players.isEmpty()) {
+            //TODO: Implementar estado de game over
+            // gameComponent.gameState.state = GameState.State.MENU;
+        }
+
+    }
+
+    private void updatePlayers(GameComponent gameComponent) {
+
+        for (PlayerState playerState : players) {
+            playerState.update(gameComponent);
+        }
+
+    }
+
+    private void updateEnimigos(GameComponent gameComponent) {
 
         // Se acabarem os inimigos gere mais
         if (enemies.isEmpty()) {
@@ -56,23 +94,6 @@ public class SinglePlayerGameLogic implements GameLogic {
             inimigo.clampMove(gameComponent.getCfg());
         }
 
-        List<PlayerState> playersToRemove = new ArrayList<PlayerState>(players.size());
-
-        for (PlayerState playerState : players) {
-            playerState.update(gameComponent);
-
-            if (playerState.getShip().getLifes() == 0) {
-                playersToRemove.add(playerState);
-            }
-        }
-
-        players.removeAll(playersToRemove);
-
-        if (players.isEmpty()) {
-            gameComponent.gameState.state = GameState.State.MENU;
-        }
-
-        checkCollisions(gameComponent);
     }
 
     private void checkCollisions(GameComponent gameComponent) {
