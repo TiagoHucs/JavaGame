@@ -18,28 +18,29 @@ public abstract class AbstractGameMenu {
     protected int selectedOption = 0;
     private final int width;
     private final int height;
+    private final Font font;
+    private FontMetrics metrics;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
         this.width = gameComponent.getCfg().getLarguraTela() / 3;
         this.height = gameComponent.getCfg().getAlturaTela() / 3;
+        font = new Font("Arial", Font.PLAIN, 16);
     }
 
     public void paintMenu(Graphics g) {
-
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-
         g.drawImage(getImage("/image/hudmanu.JPG"),width,height,gameComponent);
 
-/*        g.setColor(Color.BLACK);
-        g.fillRect(width, height, width, height);
-
-        g.setColor(Color.RED);
-        g.drawRect(width, height, width, height);*/
+        g.setFont(font);
+        if(metrics == null){
+            metrics = g.getFontMetrics(font);
+        }
 
         for (int i = 0; i < options.length; i++) {
             g.setColor(i == selectedOption ? Color.YELLOW : Color.WHITE);
-            g.drawString(options[i], width + 60, height + 50 + ((i + 1) * 30));
+            int larguraTexto = metrics.stringWidth(options[i]);
+            int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+            g.drawString(options[i], x, height + 30 + ((i + 1) * 30));
         }
     }
 
@@ -61,7 +62,6 @@ public abstract class AbstractGameMenu {
 
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             gameComponent.getSoundManager().playSound(SND_TAB);
-            System.out.println("selecionou: " + options[selectedOption]);
             executeAction(options[selectedOption]);
         }
 
