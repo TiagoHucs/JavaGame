@@ -32,27 +32,13 @@ public class PlayerState {
     }
 
     public void draw(Graphics g, GameComponent game) {
+        drawBullets(g);
+        drawShip(g, game);
+        drawExplosions(g, game);
+        drawHUD(g, game);
+    }
 
-        g.setColor(Color.RED);
-
-        for (Shot tiro : bullets) {
-            g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
-        }
-
-        if (blinkEffect.isBlink()) {
-            g.drawArc(ship.getX() + ship.getOffSetX(),
-                    ship.getY() + ship.getOffSetY(),
-                    ship.getAltura(),ship.getLargura(),
-                    0, 360);
-        } else {
-            g.drawImage(ship.getImage(),
-                    ship.getX() + ship.getOffSetX(),
-                    ship.getY() + ship.getOffSetY(), game);
-        }
-
-        for (Explosion explosion: explosions) {
-            explosion.update(g);
-        }
+    private void drawHUD(Graphics g, GameComponent game) {
 
         int lifeStartX = 50;
         int lifeStartY = 20 * (5 * id);
@@ -66,16 +52,51 @@ public class PlayerState {
         g.drawString(score + " Pts", 5, lifeStartY + ship.getImage().getHeight() + 20);
     }
 
-    public void update(GameComponent game) {
+    private void drawExplosions(Graphics g, GameComponent game) {
 
-        if (actions.isFire() && ship.isCanFire()) {
-            game.getSoundManager().playSound("bling.wav");
-            bullets.add(ship.atirar());
+        List<Explosion> explosionsToRemove = new ArrayList<Explosion>(explosions.size());
+
+        for (Explosion explosion: explosions) {
+
+            explosion.update(g, game);
+
+            if (explosion.isFinished()) {
+                explosionsToRemove.add(explosion);
+            }
         }
+
+        explosions.removeAll(explosionsToRemove);
+    }
+
+    private void drawShip(Graphics g, GameComponent game) {
+
+        if (blinkEffect.isBlink()) {
+            g.drawArc(ship.getX() + ship.getOffSetX(),
+                    ship.getY() + ship.getOffSetY(),
+                    ship.getAltura(),ship.getLargura(),
+                    0, 360);
+        } else {
+            g.drawImage(ship.getImage(),
+                    ship.getX() + ship.getOffSetX(),
+                    ship.getY() + ship.getOffSetY(), game);
+        }
+    }
+
+    private void drawBullets(Graphics g) {
+
+        g.setColor(Color.RED);
 
         for (Shot tiro : bullets) {
-            tiro.move();
+            g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
         }
+    }
+
+    public void update(GameComponent game) {
+        updateBullets(game);
+        updateShip();
+    }
+
+    private void updateShip() {
 
         //Horizontalmente
         if (actions.isLeft() == actions.isRight()) {
@@ -114,6 +135,18 @@ public class PlayerState {
 
         } else if (ship.getY() < 0) {
             ship.setY(0);
+        }
+    }
+
+    private void updateBullets(GameComponent game) {
+
+        if (actions.isFire() && ship.isCanFire()) {
+            game.getSoundManager().playSound("bling.wav");
+            bullets.add(ship.atirar());
+        }
+
+        for (Shot tiro : bullets) {
+            tiro.move();
         }
     }
 
