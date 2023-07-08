@@ -14,7 +14,7 @@ public class Ship extends Ator {
     private boolean canFire = true;
 
     public Ship() {
-        this.setImage("/image/mainship.PNG");
+        this.setImage("/image/player-ship.png");
         addEffect(new Shake(), new Recoil());
     }
 

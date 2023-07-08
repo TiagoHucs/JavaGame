@@ -14,7 +14,7 @@ public class Enemy extends Ator {
     private int lifes = 2;
 
     public Enemy(int x, int y) {
-        this.setImage("/image/enemy.png");
+        this.setImage("/image/enemy-ship.png");
         this.setVelocidadeY(2);
         this.setX(x);
         this.setY(y);
