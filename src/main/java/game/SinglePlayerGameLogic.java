@@ -49,7 +49,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     @Override
     public void update(GameComponent gameComponent) {
-        updateEnimigos(gameComponent);
+        updateInimigos(gameComponent);
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
@@ -67,11 +67,8 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         players.removeAll(playersToRemove);
 
-        if (players.isEmpty()) {
-            //TODO: Implementar estado de game over
-            // gameComponent.gameState.state = GameState.State.MENU;
-        }
-
+        // TODO: Implementar State com as estatisticas da partida (GameState.State.GAME_OVER)
+        // Ao implementar o novo State, ir na classe GameComponent e adicionar as lógicas nos métodos paintComponent e update
     }
 
     private void updatePlayers(GameComponent gameComponent) {
@@ -82,7 +79,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     }
 
-    private void updateEnimigos(GameComponent gameComponent) {
+    private void updateInimigos(GameComponent gameComponent) {
 
         // Se acabarem os inimigos gere mais
         if (enemies.isEmpty()) {
