@@ -1,13 +1,14 @@
 package menu;
 
 import game.GameComponent;
+import game.GameLogic;
 import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-public abstract class AbstractGameMenu {
+public abstract class AbstractGameMenu implements GameLogic {
 
     public static final String SND_TAB = "changing-tab.wav";
     public static final String SND_TIC = "tap.wav";
@@ -18,21 +19,29 @@ public abstract class AbstractGameMenu {
     protected int selectedOption = 0;
     private final int width;
     private final int height;
-    private final Font font;
+    private Font font;
     private FontMetrics metrics;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
         this.width = gameComponent.getCfg().getLarguraTela() / 3;
         this.height = gameComponent.getCfg().getAlturaTela() / 3;
-        font = new Font("Arial", Font.PLAIN, 16);
+        this.init();
     }
 
-    public void paintMenu(Graphics g) {
-        g.drawImage(getImage("/image/hudmanu.JPG"),width,height,gameComponent);
+    @Override
+    public void init() {
+        this.font = new Font("Arial", Font.PLAIN, 16);
+    }
+
+    @Override
+    public void draw(Graphics g, GameComponent gameComponent) {
+
+        g.drawImage(getImage("/image/hudmanu.JPG"), width, height, gameComponent);
 
         g.setFont(font);
-        if(metrics == null){
+
+        if (metrics == null) {
             metrics = g.getFontMetrics(font);
         }
 
@@ -44,7 +53,8 @@ public abstract class AbstractGameMenu {
         }
     }
 
-    public void control(KeyEvent e) {
+    @Override
+    public void keyPressed(KeyEvent e) {
 
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (selectedOption > 0) {
@@ -69,10 +79,12 @@ public abstract class AbstractGameMenu {
 
     public abstract void executeAction(String action);
 
-    public void setOptions(String[] options){
+    public void setOptions(String[] options) {
         this.options = options;
         this.selectedOption = 0;
-    };
+    }
+
+    ;
 
     public Image getImage(String filename) {
         try {

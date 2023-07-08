@@ -13,18 +13,18 @@ public class Main {
         defaultSetup(frame, cfg, new GameComponent(cfg));
     }
 
-    public static void defaultSetup(JFrame frame, Config cfg, JComponent component) {
+    public static void defaultSetup(JFrame frame, Config cfg, GameComponent component) {
 
         component.setPreferredSize(new Dimension(cfg.getLarguraTela(), cfg.getAlturaTela()));
+        component.requestFocusInWindow();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(component);
-        frame.addKeyListener((KeyListener) component);
+        frame.addKeyListener(component);
 
         frame.setUndecorated(true);
         frame.setSize(cfg.getLarguraTela(), cfg.getAlturaTela());
         frame.setResizable(false);
-        // frame.pack();
 
         frame.setBackground(Color.BLACK);
         frame.setLocationRelativeTo(null);

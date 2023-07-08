@@ -1,8 +1,7 @@
 package game;
 
 import effects.StarFieldEffect;
-import entities.Enemy;
-import entities.Shot;
+
 import menu.PauseMenu;
 import utilities.Config;
 
@@ -10,47 +9,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
 
 public class GameComponent extends JComponent implements KeyListener, Runnable {
+    private final int FPS_SET = 60;
+    private final int UPS_SET = 59;
     private final Thread animationThread;
     private final Config cfg;
     private final PauseMenu newPauseMenu;
     private final StarFieldEffect starFieldEffect;
-    private final ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
-    private final Colisor colisor = new Colisor();
     private final Font font;
-    private boolean paused = true;
     private final SoundManager soundManager;
-    private Set<PlayerState> players = new HashSet<PlayerState>(4);
+    public final GameLogic currentGameLogic;
+    public GameState gameState = new GameState();
 
     public GameComponent(Config cfg) {
-
-        this.font = new Font("TimesRoman", Font.PLAIN, 25);
         this.cfg = cfg;
+        this.font = new Font("TimesRoman", Font.PLAIN, 25);
+
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
 
+        this.gameState.state = GameState.State.MENU;
         this.newPauseMenu = new PauseMenu(this);
+        this.currentGameLogic = new SinglePlayerGameLogic();
 
-        addKeyListener(this);
-        setDoubleBuffered(true);
-        setFocusable(true);
+        this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
-        starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
-
-        animationThread = new Thread(this);
-        animationThread.start();
-    }
-
-    public void initPlayers() {
-        if (players.size() < 7) {
-            players.add(new PlayerState(players.size()));
-        }
-
-        for (PlayerState player: players) {
-            player.getBlinkEffect().reset();
-        }
+        this.animationThread = new Thread(this);
+        this.animationThread.start();
     }
 
     public final SoundManager getSoundManager() {
@@ -61,7 +47,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         return cfg;
     }
 
-    public void paintGame(Graphics g) {
+    public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
         g.setColor(Color.BLACK);
@@ -69,151 +56,125 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         starFieldEffect.draw(g);
 
-        for (Enemy i : listaInimigos) {
-            i.draw(g, this);
+        switch (gameState.state) {
+
+            case MENU:
+                newPauseMenu.draw(g, this);
+                break;
+
+            case PLAY:
+                currentGameLogic.draw(g, this);
+                break;
         }
 
-        for (PlayerState playerState : players) {
-            playerState.draw(g, this);
-        }
-    }
-
-    private void update() {
-
-        // Se acabarem os inimigos gere mais
-        if (listaInimigos.isEmpty()) {
-            geraInimigos();
-        }
-
-        for (Enemy inimigo : listaInimigos) {
-            inimigo.move();
-            inimigo.clampMove(cfg);
-        }
-
-        for (PlayerState playerState : players) {
-            playerState.update(this);
-        }
-
-        checkCollisions();
-    }
-
-    private void checkCollisions() {
-
-        Set<Enemy> listaInimigosDestruidos = new LinkedHashSet<Enemy>(listaInimigos.size());
-
-        for (Enemy inimigo : listaInimigos) {
-
-            for (PlayerState playerState : players) {
-
-                Set<Shot> listaTirosDestruidos = new HashSet<Shot>();
-
-                for (Shot tiro : playerState.getBullets()) {
-                    if (tiro.getY() < -10) {
-                        listaTirosDestruidos.add(tiro);
-
-                    } else if (colisor.detectaColisao(tiro, inimigo)) {
-                        listaTirosDestruidos.add(tiro);
-
-                        if (inimigo.getLifes() == 0){
-                            listaInimigosDestruidos.add(inimigo);
-
-                        } else {
-                            inimigo.setLifes(inimigo.getLifes()-1);
-                        }
-                        playerState.addScore(100);
-                    }
-                }
-
-                if (!playerState.getBlinkEffect().isInvencible() && colisor.detectaColisao(playerState.getShip(), inimigo)) {
-                    playerState.getShip().sofreDano(25);
-                    soundManager.playSound("im-hit.wav");
-
-                    listaInimigosDestruidos.add(inimigo);
-                }
-
-                playerState.getBullets().removeAll(listaTirosDestruidos);
-            }
-        }
-
-        listaInimigos.removeAll(listaInimigosDestruidos);
-    }
-
-    public void paintComponent(Graphics g) {
-        paintGame(g);
-        if (paused) {
-            newPauseMenu.paintMenu(g);
-        }
         g.dispose();
     }
 
-    private void geraInimigos() {
+    private void update() {
+        switch (gameState.state) {
 
-        for (int i = 0; i < 20; i++) {
-            listaInimigos.add(new Enemy(cfg.getRandomGenerator().nextInt(cfg.getResolution()), i * -50));
+            case PLAY:
+                currentGameLogic.update(this);
+                break;
+
+            case MENU:
+                newPauseMenu.update(this);
+                break;
+
+            case QUIT:
+                System.exit(0);
+                break;
         }
-
-        soundManager.playSound("fighters-coming.wav");
-    }
-
-    public void pause(){
-        paused = !paused;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        for (PlayerState playerState : players)
-            playerState.getActions().keyPressed(e);
+        switch (gameState.state) {
+
+            case PLAY:
+                currentGameLogic.keyPressed(e);
+                break;
+
+            case MENU:
+                newPauseMenu.keyPressed(e);
+                break;
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_P) {
-            this.paused = !this.paused;
+
+        switch (gameState.state) {
+
+            case PLAY:
+                currentGameLogic.keyPressed(e);
+                break;
+
+            case MENU:
+                newPauseMenu.keyPressed(e);
+                break;
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+
+            soundManager.playSound("changing-tab.wav");
+
+            if (GameState.State.MENU.equals(gameState.state)) {
+                gameState.state = GameState.State.PLAY;
+            } else {
+                gameState.state = GameState.State.MENU;
+            }
+
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_M) {
             cfg.setMuted(!cfg.isMuted());
             soundManager.toogleMute(cfg.isMuted());
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            soundManager.playSound("changing-tab.wav");
-            this.pause();
-        }
-        for (PlayerState playerState : players) {
-            playerState.getActions().keyPressed(e);
-        }
-        //CONTROLE VIA MENU
-        if (paused) {
-            newPauseMenu.control(e);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        for (PlayerState playerState : players) {
-            playerState.getActions().keyReleased(e);
+
+        switch (gameState.state) {
+            case PLAY:
+                currentGameLogic.keyReleased(e);
+                break;
+
+            case MENU:
+                newPauseMenu.keyReleased(e);
+                break;
         }
+
     }
 
     @Override
     public void run() {
 
-        double drawInterval = 1000000000 / 60;
-        double delta = 0.0;
-        long lastTime = System.nanoTime();
-        long currentTime;
+        double timePerFrame = 1000000000.0 / FPS_SET;
+        double timePerUpdate = 1000000000.0 / UPS_SET;
+
+        long previousTime = System.nanoTime();
+
+        double deltaU = 0;
+        double deltaF = 0;
 
         while (animationThread != null) {
 
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            lastTime = currentTime;
+            long currentTime = System.nanoTime();
 
-            if (delta >= 1) {
-                if (!paused) {
-                    update();
-                }
-                repaint();
-                delta--;
+            deltaU += (currentTime - previousTime) / timePerUpdate;
+            deltaF += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
+
+            if (deltaU >= 1) {
+                update();
+                deltaU--;
+            }
+
+            if (deltaF >= 1) {
+                this.repaint();
+                deltaF--;
             }
 
         }

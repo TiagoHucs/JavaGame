@@ -1,6 +1,9 @@
 package menu;
 
 import game.GameComponent;
+import game.GameState;
+
+import java.awt.event.KeyEvent;
 
 public class PauseMenu extends AbstractGameMenu {
 
@@ -27,8 +30,8 @@ public class PauseMenu extends AbstractGameMenu {
     public void executeAction(String action) {
         switch (action) {
             case OPT_RETOMAR_PARTIDA:
-                gameComponent.pause();
-                gameComponent.initPlayers();
+                gameComponent.gameState.state = GameState.State.PLAY;
+                gameComponent.currentGameLogic.init();
                 break;
             case OPT_CONFIGURACOES:
                 setOptions(configOptions);
@@ -37,8 +40,17 @@ public class PauseMenu extends AbstractGameMenu {
                 setOptions(defaultOptions);
                 break;
             case OPT_SAIR_DESKTOP:
-                System.exit(0);
+                gameComponent.gameState.state = GameState.State.QUIT;
         }
     }
 
+    @Override
+    public void update(GameComponent gameComponent) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }
