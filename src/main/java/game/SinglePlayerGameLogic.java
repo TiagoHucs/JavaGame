@@ -2,6 +2,7 @@ package game;
 
 import entities.Enemy;
 import entities.Shot;
+import ps.Explosion;
 import utilities.Config;
 
 import java.awt.*;
@@ -82,6 +83,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
                         if (inimigo.getLifes() == 0){
                             listaInimigosDestruidos.add(inimigo);
+                            playerState.getExplosions().add(new Explosion(inimigo));
 
                         } else {
                             inimigo.setLifes(inimigo.getLifes()-1);
@@ -96,6 +98,7 @@ public class SinglePlayerGameLogic implements GameLogic {
                     soundManager.playSound("im-hit.wav");
 
                     listaInimigosDestruidos.add(inimigo);
+                    playerState.getExplosions().add(new Explosion(inimigo));
                 }
 
                 playerState.getBullets().removeAll(listaTirosDestruidos);

@@ -5,8 +5,10 @@ import entities.Ship;
 import entities.Shot;
 import lombok.Getter;
 import lombok.Setter;
+import ps.Explosion;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class PlayerState {
     private final Ship ship = new Ship();
     private final List<Shot> bullets = new LinkedList<Shot>();
     private Blink blinkEffect = new Blink();
+
+    private List<Explosion> explosions = new ArrayList<Explosion>(10);
 
     PlayerState(int id) {
         this.id = id;
@@ -44,6 +48,10 @@ public class PlayerState {
             g.drawImage(ship.getImage(),
                     ship.getX() + ship.getOffSetX(),
                     ship.getY() + ship.getOffSetY(), game);
+        }
+
+        for (Explosion explosion: explosions) {
+            explosion.update(g);
         }
 
         int lifeStartX = 50;
