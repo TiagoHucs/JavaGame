@@ -27,7 +27,9 @@ public class Explosion {
     public void init(Ator ator) {
         for (int i = 0; i < QTD_PARTES; i++) {
             particles[i] = createParticle(ator);
-            particleImage[i] = ResourceManager.get().getImage("/image/player-ship-part-"+(i+1)+".png");
+            particleImage[i] = ResourceManager.get().getImage("/image/player-ship-part-" + (i + 1) + ".png",
+                    ator.getLargura(),
+                    ator.getAltura());
         }
     }
 
