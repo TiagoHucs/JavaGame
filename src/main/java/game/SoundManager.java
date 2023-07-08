@@ -53,6 +53,8 @@ public class SoundManager {
     public void playSound(String filename) {
 
         currentSoundId = soundIds.get(filename);
+
+        stopSound(currentSoundId);
         setVolume(sounds[currentSoundId], globalVolume);
 
         if (sounds[currentSoundId].getMicrosecondPosition() > 0) {
