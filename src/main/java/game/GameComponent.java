@@ -47,6 +47,10 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         if (players.size() < 7) {
             players.add(new PlayerState(players.size()));
         }
+
+        for (PlayerState player: players) {
+            player.getBlinkEffect().reset();
+        }
     }
 
     public final SoundManager getSoundManager() {
@@ -120,7 +124,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                     }
                 }
 
-                if (!playerState.isInvencible() && colisor.detectaColisao(playerState.getShip(), inimigo)) {
+                if (!playerState.getBlinkEffect().isInvencible() && colisor.detectaColisao(playerState.getShip(), inimigo)) {
                     playerState.getShip().sofreDano(25);
                     soundManager.playSound("im-hit.wav");
 

@@ -1,5 +1,6 @@
 package game;
 
+import effects.Blink;
 import entities.Ship;
 import entities.Shot;
 import lombok.Getter;
@@ -18,15 +19,12 @@ public class PlayerState {
     private final PlayerActions actions = new PlayerActions();
     private final Ship ship = new Ship();
     private final List<Shot> bullets = new LinkedList<Shot>();
-
-    private boolean blink = false;
-    private boolean invencible = true;
-
-    private int blinkTimer = 30;
+    private Blink blinkEffect = new Blink();
 
     PlayerState(int id) {
         this.id = id;
         ship.setImage("/image/ships/spaceShips_00" + (id + 3) + ".PNG");
+        ship.addEffect(blinkEffect);
     }
 
     public void draw(Graphics g, GameComponent game) {
@@ -37,15 +35,7 @@ public class PlayerState {
             g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
         }
 
-        if (invencible && blinkTimer > 0) {
-            blinkTimer--;
-            blink = !blink;
-        } else {
-            blinkTimer = 0;
-            invencible = false;
-        }
-
-        if (blink) {
+        if (blinkEffect.isBlink()) {
             g.drawArc(ship.getX() + ship.getOffSetX(),
                     ship.getY() + ship.getOffSetY(),
                     ship.getAltura(),ship.getLargura(),
