@@ -158,6 +158,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
     }
 
+    @SneakyThrows
     @Override
     public void run() {
 
@@ -187,6 +188,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                 deltaF--;
             }
 
+            animationThread.sleep(10);
         }
     }
 }
