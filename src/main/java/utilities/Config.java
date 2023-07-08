@@ -10,7 +10,7 @@ public class Config {
     private final int larguraTela = (int) screenSize.getWidth();
     private final int alturaTela = (int) screenSize.getHeight();
     private final int resolution = (int) screenSize.getWidth();
-    private boolean muted = false;
+    private boolean muted = true;
     private final Random randomGenerator = new Random();
 
     public Config() {

@@ -4,7 +4,6 @@ import game.GameComponent;
 import lombok.Getter;
 import lombok.Setter;
 import utilities.Config;
-import utilities.GameUtil;
 
 import java.awt.*;
 
@@ -15,9 +14,7 @@ public class Enemy extends Ator {
     private int lifes = 2;
 
     public Enemy(int x, int y) {
-        this.setImage("/image/ships/spaceShips_00" +
-                GameUtil.getRandomNumber(4, 9)
-                + ".PNG");
+        this.setImage("/image/enemy.png");
         this.setVelocidadeY(2);
         this.setX(x);
         this.setY(y);

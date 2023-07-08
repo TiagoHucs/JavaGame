@@ -37,7 +37,11 @@ public abstract class AbstractGameMenu implements GameLogic {
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
 
-        g.drawImage(getImage("/image/hudmanu.JPG"), width, height, gameComponent);
+        Color myColour = new Color(10, 10, 10, 200);
+        g.setColor(myColour);
+        g.fillRect(width,height,width,height);
+        g.setColor(Color.RED);
+        g.drawRect(width,height,width,height);
 
         g.setFont(font);
 
