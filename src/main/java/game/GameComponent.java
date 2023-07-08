@@ -11,10 +11,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GameComponent extends JComponent implements KeyListener, Runnable {
+public class GameComponent extends JPanel implements KeyListener, Runnable {
     private final int FPS_SET = 60;
-    private final int UPS_SET = 58;
-    private final Thread animationThread;
+    private final Thread gameThread;
     private final Config cfg;
     private final StarFieldEffect starFieldEffect;
     private final Font font;
@@ -23,7 +22,10 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     public final GameState gameState;
 
     public GameComponent(Config cfg) {
+
         this.cfg = cfg;
+        this.cfg.setup(this);
+
         this.font = new Font("TimesRoman", Font.PLAIN, 25);
 
         this.soundManager = new SoundManager();
@@ -37,8 +39,8 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
 
         this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
-        this.animationThread = new Thread(this);
-        this.animationThread.start();
+        this.gameThread = new Thread(this);
+        this.gameThread.start();
     }
 
     public final SoundManager getSoundManager() {
@@ -67,10 +69,6 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
             case PLAY:
                 currentGameLogic.draw(g, this);
                 break;
-
-            case QUIT:
-                System.exit(0);
-                break;
         }
 
         g.dispose();
@@ -90,7 +88,7 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
                 break;
 
             case QUIT:
-                animationThread.sleep(1);
+                System.exit(0);
                 break;
         }
     }
@@ -163,32 +161,24 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     public void run() {
 
         double timePerFrame = 1000000000.0 / FPS_SET;
-        double timePerUpdate = 1000000000.0 / UPS_SET;
 
         long previousTime = System.nanoTime();
 
-        double deltaU = 0;
-        double deltaF = 0;
+        double delta = 0;
 
         while (gameState.isGameRunning()) {
 
             long currentTime = System.nanoTime();
 
-            deltaU += (currentTime - previousTime) / timePerUpdate;
-            deltaF += (currentTime - previousTime) / timePerFrame;
+            delta += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;
 
-            if (deltaU >= 1) {
+            if (delta >= 1) {
                 update();
-                deltaU--;
-            }
-
-            if (deltaF >= 1) {
                 repaint();
-                deltaF--;
+                delta--;
             }
 
-            animationThread.sleep(10);
         }
     }
 }
