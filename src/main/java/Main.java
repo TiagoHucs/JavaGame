@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-    public static boolean DEBUG_MODE = true;
+    public static boolean DEBUG_MODE = false;
     public static void main(String[] args) {
 
         Config cfg = new Config();
