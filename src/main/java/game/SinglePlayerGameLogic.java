@@ -6,20 +6,22 @@ import utilities.Config;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 public class SinglePlayerGameLogic implements GameLogic {
-    private final Colisor colisor = new Colisor();
 
-    private Set<PlayerState> players = new HashSet<PlayerState>(7);
-    private final ArrayList<Enemy> listaInimigos = new ArrayList<Enemy>();
+    private final int ENEMY_COUNT = 20;
+    private final int PLAYER_COUT = 7;
+
+    private final Colisor colisor = new Colisor();
+    private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
+    private final Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
+
     @Override
     public void init() {
 
-        if (players.size() < 7) {
+        if (players.size() < PLAYER_COUT) {
             players.add(new PlayerState(players.size()));
         }
 
@@ -31,7 +33,7 @@ public class SinglePlayerGameLogic implements GameLogic {
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
 
-        for (Enemy i : listaInimigos) {
+        for (Enemy i : enemies) {
             i.draw(g, gameComponent);
         }
 
@@ -44,11 +46,11 @@ public class SinglePlayerGameLogic implements GameLogic {
     public void update(GameComponent gameComponent) {
 
         // Se acabarem os inimigos gere mais
-        if (listaInimigos.isEmpty()) {
+        if (enemies.isEmpty()) {
             geraInimigos(gameComponent);
         }
 
-        for (Enemy inimigo : listaInimigos) {
+        for (Enemy inimigo : enemies) {
             inimigo.move();
             inimigo.clampMove(gameComponent.getCfg());
         }
@@ -64,9 +66,9 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         SoundManager soundManager = gameComponent.getSoundManager();
 
-        Set<Enemy> listaInimigosDestruidos = new LinkedHashSet<Enemy>(listaInimigos.size());
+        Set<Enemy> listaInimigosDestruidos = new LinkedHashSet<Enemy>(enemies.size());
 
-        for (Enemy inimigo : listaInimigos) {
+        for (Enemy inimigo : enemies) {
 
             for (PlayerState playerState : players) {
 
@@ -85,6 +87,7 @@ public class SinglePlayerGameLogic implements GameLogic {
                         } else {
                             inimigo.setLifes(inimigo.getLifes()-1);
                         }
+
                         playerState.addScore(100);
                     }
                 }
@@ -100,7 +103,7 @@ public class SinglePlayerGameLogic implements GameLogic {
             }
         }
 
-        listaInimigos.removeAll(listaInimigosDestruidos);
+        enemies.removeAll(listaInimigosDestruidos);
     }
 
     private void geraInimigos(GameComponent gameComponent) {
@@ -108,8 +111,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         Config cfg = gameComponent.getCfg();
         SoundManager soundManager = gameComponent.getSoundManager();
 
-        for (int i = 0; i < 20; i++) {
-            listaInimigos.add(new Enemy(cfg.getRandomGenerator().nextInt(cfg.getResolution()), i * -50));
+        for (int i = 0; i < ENEMY_COUNT; i++) {
+            enemies.add(new Enemy(cfg.getRandomGenerator().nextInt(cfg.getResolution()), i * -50));
         }
 
         soundManager.playSound("fighters-coming.wav");

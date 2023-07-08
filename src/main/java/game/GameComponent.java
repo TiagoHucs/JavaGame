@@ -15,12 +15,11 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
     private final int UPS_SET = 59;
     private final Thread animationThread;
     private final Config cfg;
-    private final PauseMenu newPauseMenu;
     private final StarFieldEffect starFieldEffect;
     private final Font font;
     private final SoundManager soundManager;
-    public final GameLogic currentGameLogic;
-    public GameState gameState = new GameState();
+    public final GameLogic currentGameLogic, newPauseMenu;
+    public final GameState gameState;
 
     public GameComponent(Config cfg) {
         this.cfg = cfg;
@@ -29,7 +28,9 @@ public class GameComponent extends JComponent implements KeyListener, Runnable {
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
 
+        this.gameState = new GameState();
         this.gameState.state = GameState.State.MENU;
+
         this.newPauseMenu = new PauseMenu(this);
         this.currentGameLogic = new SinglePlayerGameLogic();
 
