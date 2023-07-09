@@ -22,8 +22,10 @@ public class WaveController {
     }
 
     public void updateCurrentWaveStatics(PlayerState playerState) {
-        this.currentWave.addPoints(playerState.getScore());
-        this.currentWave.setTimeToClean(timeToClean);
+        if (currentWave != null) {
+            currentWave.addPoints(playerState.getScore());
+            currentWave.setTimeToClean(timeToClean);
+        }
     }
 
     public void nextWave() {
