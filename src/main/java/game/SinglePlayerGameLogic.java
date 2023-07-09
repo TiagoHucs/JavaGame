@@ -12,7 +12,6 @@ import waves.WaveController;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.List;
 
@@ -46,6 +45,9 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         this.waveController = new WaveController();
         this.waveController.init();
+
+        // Limpa enimigos
+        this.enemies.clear();
     }
 
     @Override
@@ -59,20 +61,32 @@ public class SinglePlayerGameLogic implements GameLogic {
             playerState.draw(g, gameComponent);
         }
 
-        if (players.isEmpty()) {
-            gameComponent.gameState.state = GameState.State.GAMEOVER;
-           // g.drawString("GAME OVER", gameComponent.getWidth() / 2, gameComponent.getHeight() / 2);
-        }
-
         waveController.draw(g, gameComponent);
     }
 
     @Override
     public void update(GameComponent gameComponent) {
+        updateWaveController(gameComponent);
         updateInimigos(gameComponent);
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
+    }
+
+    private void updateWaveController(GameComponent gameComponent) {
+
+        if (enemies.isEmpty()) {
+
+            if (waveController.goToNextWave()) {
+                waveController.nextWave();
+
+            }  else if (waveController.isCanCreateEnemyWave()) {
+                geraInimigos(gameComponent);
+            }
+
+            waveController.finishCurrentWave();
+        }
+
         waveController.updateStatics();
     }
 
@@ -89,8 +103,9 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         players.removeAll(playersToRemove);
 
-        // TODO: Implementar State com as estatisticas da partida (GameState.State.GAME_OVER)
-        // Ao implementar o novo State, ir na classe GameComponent e adicionar as lógicas nos métodos paintComponent e update
+        if (players.isEmpty()) {
+            gameComponent.gameState.state = GameState.State.GAMEOVER;
+        }
     }
 
     private void updatePlayers(GameComponent gameComponent) {
@@ -102,12 +117,6 @@ public class SinglePlayerGameLogic implements GameLogic {
     }
 
     private void updateInimigos(GameComponent gameComponent) {
-
-        // Se acabarem os inimigos gere mais
-        if (enemies.isEmpty() && waveController.isWaveStarted()) {
-            waveController.nextWave();
-            geraInimigos(gameComponent);
-        }
 
         for (Enemy inimigo : enemies) {
             inimigo.move();
