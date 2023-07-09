@@ -49,7 +49,7 @@ public class WaveController {
         int waveNumber = currentWave == null ? 1 : currentWave.getNumber();
         boolean isNewWave = waveNumber != this.statics.size();
 
-        if (!isWaveStarted() && isNewWave) {
+        if (!isWaveStarted() || isNewWave) {
 
             int width = 200;
             int height = 50;
