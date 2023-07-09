@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 public class IntroMenu extends AbstractGameMenu {
     private GameComponent gameComponent;
 
+    private Graphics g;
     public IntroMenu(GameComponent gameComponent) {
         super(gameComponent);
         this.gameComponent = gameComponent;
@@ -16,35 +17,20 @@ public class IntroMenu extends AbstractGameMenu {
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
+        this.g = g;
+        this.write(Color.YELLOW,"INVADERS",40);
+        this.write(Color.WHITE,"Press any key",20);
+    }
 
-        g.setColor(Color.YELLOW);
-
-        this.font = new Font("Arial", Font.PLAIN, 40);
-        g.setFont(font);
-
-        if (metrics == null) {
-            metrics = g.getFontMetrics(font);
-        }
-
-        String text = "INVADERS";
+    private void write(Color color,String text, int size){
+        this.font = new Font("Arial", Font.PLAIN, size);
+        this.g.setFont(font);
+        this.metrics = this.g.getFontMetrics(font);
         int larguraTexto = metrics.stringWidth(text);
         int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
         int y = (gameComponent.getCfg().getAlturaTela() - larguraTexto) / 2;
-        g.drawString(text, x, y);
-
-        text = "Press any key";
-        g.setColor(Color.WHITE);
-
-        this.font = new Font("Arial", Font.PLAIN, 20);
-        g.setFont(font);
-
-        if (metrics == null) {
-            metrics = g.getFontMetrics(font);
-        }
-
-        larguraTexto = metrics.stringWidth(text);
-        x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
-        g.drawString(text, x, y + 20);
+        this.g.setColor(color);
+        this.g.drawString(text, x, y);
     }
 
     @Override
