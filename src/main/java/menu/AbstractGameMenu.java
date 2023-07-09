@@ -19,8 +19,8 @@ public abstract class AbstractGameMenu implements GameLogic {
     protected int selectedOption = 0;
     private final int width;
     private final int height;
-    private Font font;
-    private FontMetrics metrics;
+    protected Font font;
+    protected FontMetrics metrics;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;

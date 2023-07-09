@@ -2,6 +2,7 @@ package game;
 
 public class GameState {
     public enum State {
+        INTRO,
         MENU,
         PLAY,
         QUIT

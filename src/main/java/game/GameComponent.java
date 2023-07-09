@@ -2,6 +2,7 @@ package game;
 
 import effects.StarFieldEffect;
 
+import menu.IntroMenu;
 import menu.PauseMenu;
 import utilities.Config;
 
@@ -17,7 +18,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     private StarFieldEffect starFieldEffect;
     private Thread gameThread;
     public GameState gameState;
-    public GameLogic currentGameLogic, newPauseMenu;
+    public GameLogic currentGameLogic, newPauseMenu, introMenu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -39,8 +40,9 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         this.soundManager.setGlobalVolume(0.5f);
 
         this.gameState = new GameState();
-        this.gameState.state = GameState.State.MENU;
+        this.gameState.state = GameState.State.INTRO;
 
+        this.introMenu = new IntroMenu(this);
         this.newPauseMenu = new PauseMenu(this);
         this.currentGameLogic = new SinglePlayerGameLogic();
 
@@ -64,10 +66,12 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         switch (gameState.state) {
 
+            case INTRO:
+                introMenu.draw(g, this);
+                break;
             case MENU:
                 newPauseMenu.draw(g, this);
                 break;
-
             case PLAY:
                 currentGameLogic.draw(g, this);
                 break;
@@ -79,14 +83,15 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         switch (gameState.state) {
 
+            case INTRO:
+                introMenu.update(this);
+                break;
             case PLAY:
                 currentGameLogic.update(this);
                 break;
-
             case MENU:
                 newPauseMenu.update(this);
                 break;
-
             case QUIT:
                 System.exit(0);
                 break;
@@ -116,6 +121,10 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         }
 
         switch (gameState.state) {
+
+            case INTRO:
+                introMenu.keyPressed(e);
+                break;
 
             case PLAY:
                 currentGameLogic.keyPressed(e);
