@@ -27,7 +27,7 @@ public class PlayerState {
 
     PlayerState(int id) {
         this.id = id;
-        ship.setImage("/image/player-ship.png");
+        ship.setImage("/image/ship2.png");
         ship.addEffect(blinkEffect);
     }
 
