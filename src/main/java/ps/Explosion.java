@@ -26,7 +26,7 @@ public class Explosion {
     public void init(Ator ator) {
         for (int i = 0; i < QTD_PARTES; i++) {
 
-            BufferedImage image = ResourceManager.get().getImage("/image/player-ship-part-" + (i + 1) + ".png",
+            BufferedImage image = ResourceManager.get().getImage("/image/Explosion/explosion-" + (i + 1) + ".png",
                     ator.getLargura(),
                     ator.getAltura());
 

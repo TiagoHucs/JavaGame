@@ -15,7 +15,7 @@ public class Enemy extends Ator {
     private final BehaviorIA behavior;
 
     public Enemy(BehaviorIA behavior) {
-        this.setImage("/image/enemy-ship.png");
+        this.setImage("/image/enemy_1_1.png");
         this.behavior = behavior;
     }
 
