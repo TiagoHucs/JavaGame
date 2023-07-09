@@ -5,6 +5,7 @@ public class GameState {
         INTRO,
         MENU,
         PLAY,
+        GAMEOVER,
         QUIT
     }
 

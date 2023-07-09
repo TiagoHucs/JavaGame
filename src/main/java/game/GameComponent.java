@@ -2,6 +2,7 @@ package game;
 
 import effects.StarFieldEffect;
 
+import menu.GameOverMenu;
 import menu.IntroMenu;
 import menu.PauseMenu;
 import utilities.Config;
@@ -18,7 +19,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     private StarFieldEffect starFieldEffect;
     private Thread gameThread;
     public GameState gameState;
-    public GameLogic currentGameLogic, newPauseMenu, introMenu;
+    public GameLogic currentGameLogic, newPauseMenu, introMenu, gameOverMenu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -43,6 +44,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         this.gameState.state = GameState.State.INTRO;
 
         this.introMenu = new IntroMenu(this);
+        this.gameOverMenu = new GameOverMenu(this);
         this.newPauseMenu = new PauseMenu(this);
         this.currentGameLogic = new SinglePlayerGameLogic();
 
@@ -75,6 +77,9 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
             case PLAY:
                 currentGameLogic.draw(g, this);
                 break;
+            case GAMEOVER:
+                gameOverMenu.draw(g, this);
+                break;
         }
 
     }
@@ -90,6 +95,9 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 currentGameLogic.update(this);
                 break;
             case MENU:
+                newPauseMenu.update(this);
+                break;
+            case GAMEOVER:
                 newPauseMenu.update(this);
                 break;
             case QUIT:
@@ -132,6 +140,10 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
             case MENU:
                 newPauseMenu.keyPressed(e);
+                break;
+
+            case GAMEOVER:
+                gameOverMenu.keyPressed(e);
                 break;
         }
     }

@@ -60,7 +60,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         }
 
         if (players.isEmpty()) {
-            g.drawString("GAME OVER", gameComponent.getWidth() / 2, gameComponent.getHeight() / 2);
+            gameComponent.gameState.state = GameState.State.GAMEOVER;
+           // g.drawString("GAME OVER", gameComponent.getWidth() / 2, gameComponent.getHeight() / 2);
         }
 
         waveController.draw(g, gameComponent);
