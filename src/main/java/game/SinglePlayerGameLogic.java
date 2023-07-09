@@ -8,6 +8,7 @@ import ia.FallSideIA;
 import ia.LeftRightIA;
 import ps.Explosion;
 import utilities.Config;
+import waves.WaveController;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,6 +25,7 @@ public class SinglePlayerGameLogic implements GameLogic {
     private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
     private final Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
     private BehaviorIA[] behaviorIA;
+    private WaveController waveController;
 
     @Override
     public void init() {
@@ -41,6 +43,9 @@ public class SinglePlayerGameLogic implements GameLogic {
         behaviorIA[0] = new FallDownIA();
         behaviorIA[1] = new FallSideIA();
         behaviorIA[2] = new LeftRightIA();
+
+        this.waveController = new WaveController();
+        this.waveController.init();
     }
 
     @Override
@@ -57,6 +62,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         if (players.isEmpty()) {
             g.drawString("GAME OVER", gameComponent.getWidth() / 2, gameComponent.getHeight() / 2);
         }
+
+        waveController.draw(g, gameComponent);
     }
 
     @Override
@@ -65,6 +72,7 @@ public class SinglePlayerGameLogic implements GameLogic {
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
+        waveController.updateStatics();
     }
 
     private void checkForGameOver(GameComponent gameComponent) {
@@ -74,6 +82,7 @@ public class SinglePlayerGameLogic implements GameLogic {
         for (PlayerState playerState : players) {
             if (playerState.getShip().getLifes() == 0) {
                 playersToRemove.add(playerState);
+                waveController.updateCurrentWaveStatics(playerState);
             }
         }
 
@@ -94,7 +103,8 @@ public class SinglePlayerGameLogic implements GameLogic {
     private void updateInimigos(GameComponent gameComponent) {
 
         // Se acabarem os inimigos gere mais
-        if (enemies.isEmpty()) {
+        if (enemies.isEmpty() && waveController.isWaveStarted()) {
+            waveController.nextWave();
             geraInimigos(gameComponent);
         }
 
