@@ -97,7 +97,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 newPauseMenu.update(this);
                 break;
             case GAMEOVER:
-                newPauseMenu.update(this);
+                gameOverMenu.update(this);
                 break;
             case QUIT:
                 System.exit(0);
