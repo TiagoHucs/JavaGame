@@ -7,10 +7,7 @@ import ia.FallDownIA;
 import ia.LeftRightIA;
 import ps.Explosion2;
 import utilities.Config;
-import waves.LayoutWave01;
-import waves.LayoutWave02;
-import waves.WaveController;
-import waves.WaveLayout;
+import waves.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -44,7 +41,6 @@ public class SinglePlayerGameLogic implements GameLogic {
         // Cria os comportamentos possiveis para os inimigos
         behaviorIA = new BehaviorIA[2];
         behaviorIA[0] = new FallDownIA();
-        // behaviorIA[1] = new FallSideIA();
         behaviorIA[1] = new LeftRightIA();
 
         this.waveController = new WaveController();
@@ -199,6 +195,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         // TODO, transformar em um mapa de waves
         if (waveController.getCurrentWave().getNumber() == 2) {
             layout = new LayoutWave02();
+        } else if (waveController.getCurrentWave().getNumber() == 3) {
+            layout = new LayoutWave03();
         }
 
         enemies = layout.layoutToEnemy(gameComponent.getWidth() / 4, 0,
