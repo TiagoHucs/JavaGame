@@ -25,7 +25,7 @@ public class IntroMenu extends AbstractGameMenu {
     public void draw(Graphics g, GameComponent gameComponent) {
         setStartLine();
         drawImage(g,logo);
-        write( g,Color.WHITE,"Press any key",20);
+        writeText( g,Color.WHITE,"Press any key",20);
     }
 
     @Override

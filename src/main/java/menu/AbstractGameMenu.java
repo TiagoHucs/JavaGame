@@ -58,7 +58,7 @@ public abstract class AbstractGameMenu implements GameLogic {
         }
     }
 
-    protected void write(Graphics g, Color color,String text, int size){
+    protected void writeText(Graphics g, Color color,String text, int size){
         font = new Font("Arial", Font.PLAIN, size);
         g.setFont(font);
         metrics = g.getFontMetrics(font);
