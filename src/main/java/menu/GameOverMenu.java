@@ -2,43 +2,53 @@ package menu;
 
 import game.GameComponent;
 import game.GameState;
+import game.SinglePlayerGameLogic;
+import waves.WaveController;
+import waves.WaveStatics;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class GameOverMenu extends AbstractGameMenu {
-    private GameComponent gameComponent;
-
-    private Graphics g;
     private int line = 0;
+
     public GameOverMenu(GameComponent gameComponent) {
         super(gameComponent);
-        this.gameComponent = gameComponent;
     }
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
 
-        this.g = g;
         this.line = 0;
-        this.write(Color.YELLOW,"GAME OVER",40);
-        this.write(Color.WHITE,"1st 999999",20);
-        this.write(Color.WHITE,"2st 888888",20);
-        this.write(Color.WHITE,"3st 777777",20);
-        this.write(Color.WHITE,"Press esc to main",20);
 
+        WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
+
+        this.write(g, Color.YELLOW,"Statics",40);
+
+        for (WaveStatics statics: waveController.getStatics()) {
+            this.write(g, Color.CYAN,"Wave: " + statics.getNumber(),20);
+            this.write(g, Color.CYAN,"Points: " + statics.getPoints(),20);
+            this.write(g, Color.CYAN,"Time: " + statics.getTimeToClean(),20);
+        }
+
+        this.write(g, Color.RED,"GAME OVER",40);
+        this.write(g, Color.WHITE,"Press esc to main",20);
     }
 
-    private void write(Color color,String text, int size){
-        this.font = new Font("Arial", Font.PLAIN, size);
-        this.g.setFont(font);
-        this.metrics = this.g.getFontMetrics(font);
+    private void write(Graphics g, Color color, String text, int size){
+
+        font = new Font("Arial", Font.PLAIN, size);
+        metrics = g.getFontMetrics(font);
+
+        g.setFont(font);
+        g.setColor(color);
+
         int larguraTexto = metrics.stringWidth(text);
-        int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
-        int y = (gameComponent.getCfg().getAlturaTela()) / 2;
-        this.g.setColor(color);
-        this.g.drawString(text, x, y + (size * line));
-        this.line++;
+        int x = (gameComponent.getWidth() - larguraTexto) / 2;
+        int y = (gameComponent.getHeight()) / 2;
+
+        g.drawString(text, x, y + (size * line));
+        line++;
     }
 
     @Override

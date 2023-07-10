@@ -13,7 +13,7 @@ public abstract class AbstractGameMenu implements GameLogic {
     public static final String SND_TAB = "changing-tab.wav";
     public static final String SND_TIC = "tap.wav";
 
-    private final GameComponent gameComponent;
+    protected final GameComponent gameComponent;
 
     private String[] options = new String[]{};
     protected int selectedOption = 0;

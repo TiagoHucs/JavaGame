@@ -28,6 +28,10 @@ public class SinglePlayerGameLogic implements GameLogic {
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
 
+    public final WaveController getWaveController() {
+        return waveController;
+    }
+
     @Override
     public void init(GameComponent gameComponent) {
 

@@ -94,4 +94,7 @@ public class WaveController {
 
         return new LayoutWave01();
     }
+    public final List<WaveStatics> getStatics() {
+        return statics;
+    }
 }

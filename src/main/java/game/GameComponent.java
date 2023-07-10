@@ -37,15 +37,16 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     public void init() {
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
-        this.soundManager.setGlobalVolume(0.5f);
+        this.soundManager.setGlobalVolume(0.8f);
 
         this.gameState = new GameState();
         this.gameState.state = GameState.State.INTRO;
 
-        this.introMenu = new IntroMenu(this);
-        this.gameOverMenu = new GameOverMenu(this);
-        this.newPauseMenu = new PauseMenu(this);
         this.currentGameLogic = new SinglePlayerGameLogic();
+
+        this.introMenu = new IntroMenu(this);
+        this.newPauseMenu = new PauseMenu(this);
+        this.gameOverMenu = new GameOverMenu(this);
 
         this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
