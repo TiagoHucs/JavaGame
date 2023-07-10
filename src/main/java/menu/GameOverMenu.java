@@ -3,14 +3,15 @@ package menu;
 import game.GameComponent;
 import game.GameState;
 import game.SinglePlayerGameLogic;
+import utilities.ResourceManager;
 import waves.WaveController;
 import waves.WaveStatics;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class GameOverMenu extends AbstractGameMenu {
-    private int line = 0;
 
     public GameOverMenu(GameComponent gameComponent) {
         super(gameComponent);
@@ -18,12 +19,16 @@ public class GameOverMenu extends AbstractGameMenu {
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-
-        this.line = 0;
-
+        setStartLine();
+        Image logo;
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
-
-        this.write(g, Color.YELLOW,"Statics",40);
+        try {
+            logo = ResourceManager.get().getImage("/image/gameover.png");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        drawImage(g,logo);
+        write(g, Color.YELLOW,"Statics",40);
 
         for (WaveStatics statics: waveController.getStatics()) {
             this.write(g, Color.CYAN,"Wave: " + statics.getNumber(),20);
@@ -35,7 +40,7 @@ public class GameOverMenu extends AbstractGameMenu {
         this.write(g, Color.WHITE,"Press esc to main",20);
     }
 
-    private void write(Graphics g, Color color, String text, int size){
+    protected void write(Graphics g, Color color, String text, int size){
 
         font = new Font("Arial", Font.PLAIN, size);
         metrics = g.getFontMetrics(font);

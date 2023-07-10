@@ -21,6 +21,7 @@ public abstract class AbstractGameMenu implements GameLogic {
     private final int height;
     protected Font font;
     protected FontMetrics metrics;
+    protected int line = 0;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
@@ -55,6 +56,34 @@ public abstract class AbstractGameMenu implements GameLogic {
             int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
             g.drawString(options[i], x, height + 30 + ((i + 1) * 30));
         }
+    }
+
+    protected void write(Graphics g, Color color,String text, int size){
+        font = new Font("Arial", Font.PLAIN, size);
+        g.setFont(font);
+        metrics = g.getFontMetrics(font);
+        int larguraTexto = metrics.stringWidth(text);
+        int colunaInicial = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+        g.setColor(color);
+        g.drawString(text, colunaInicial, line);
+        nextLine(size);
+    }
+
+    protected void drawImage(Graphics g,Image image){
+        g.drawImage(image,
+                gameComponent.getCfg().getLarguraTela()/2 - image.getWidth(gameComponent) / 2,
+                line,
+                null,
+                gameComponent);
+        nextLine(image.getHeight(gameComponent));
+    }
+
+    private void nextLine(int heigh){
+        line = line + heigh +20;
+    }
+
+    protected void setStartLine(){
+        line = gameComponent.getCfg().getAlturaTela()/3;
     }
 
     @Override
