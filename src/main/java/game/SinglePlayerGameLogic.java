@@ -8,6 +8,7 @@ import ia.FallSideIA;
 import ia.LeftRightIA;
 import ps.Explosion;
 import utilities.Config;
+import waves.LayoutWave01;
 import waves.WaveController;
 
 import java.awt.*;
@@ -22,7 +23,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     private final Colisor colisor = new Colisor();
     private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
-    private final Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
+    private Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
 
@@ -179,11 +180,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         int typeIA = cfg.getRandomGenerator().nextInt(behaviorIA.length);
         BehaviorIA enemyIA = behaviorIA[typeIA];
 
-        for (int i = 0; i < ENEMY_COUNT; i++) {
-            Enemy enemy = new Enemy(enemyIA);
-            enemyIA.setupEnemy(i, enemy, gameComponent);
-            enemies.add(enemy);
-        }
+        LayoutWave01 l = new LayoutWave01();
+        enemies = l.layoutToEnemy(gameComponent.getWidth() / 4, 0, enemyIA, gameComponent);
 
         soundManager.playSound("fighters-coming.wav");
     }

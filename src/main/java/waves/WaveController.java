@@ -20,7 +20,7 @@ public class WaveController {
     }
 
     public void resetTimers() {
-        this.timeToStart = 100.0f;
+        this.timeToStart = 3.0f;
         this.timeToClean = 0.0f;
     }
 
@@ -39,8 +39,11 @@ public class WaveController {
     }
 
     public void updateStatics() {
-        this.timeToClean++;
-        this.timeToStart = Math.max(0, timeToStart - 1);
+
+        float delta = 1.0f / GameComponent.FPS_SET;
+
+        this.timeToClean += delta;
+        this.timeToStart = Math.max(0, timeToStart - delta);
     }
 
     public void draw(Graphics graphics, GameComponent gameComponent) {
@@ -50,13 +53,18 @@ public class WaveController {
             int width = 200;
             int height = 50;
 
+            // Centro da Tela - Centro do text-box
             int px = (gameComponent.getWidth() / 2) - (width / 2);
             int py = (gameComponent.getHeight() / 2) - (height / 2);
 
             graphics.setColor(Color.WHITE);
             graphics.setFont(font);
             graphics.drawString("Wave " + currentWave.getNumber(), px, py);
-            graphics.drawString("Starts in " + timeToStart, px, py + height);
+
+            int timeToInt = (int) timeToStart + 1;
+            graphics.drawString("Starts in " + timeToInt,
+                    px - font.getSize(),
+                    py + height);
         }
 
     }

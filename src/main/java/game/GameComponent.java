@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameComponent extends JPanel implements KeyListener, Runnable {
-    private final int FPS_SET = 60;
+    public static final int FPS_SET = 60;
     private Config cfg;
     private SoundManager soundManager;
     private StarFieldEffect starFieldEffect;
@@ -81,7 +81,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 gameOverMenu.draw(g, this);
                 break;
         }
-
     }
 
     public void update() {

@@ -25,6 +25,8 @@ public class PlayerState {
 
     private List<Explosion> explosions = new ArrayList<Explosion>(10);
 
+    private int playerAnimationFrame = 1;
+
     PlayerState(int id) {
         this.id = id;
         ship.setImage("/image/player_1.png");
@@ -56,7 +58,7 @@ public class PlayerState {
 
         List<Explosion> explosionsToRemove = new ArrayList<Explosion>(explosions.size());
 
-        for (Explosion explosion: explosions) {
+        for (Explosion explosion : explosions) {
 
             explosion.update(g, game);
 
@@ -70,16 +72,37 @@ public class PlayerState {
 
     private void drawShip(Graphics g, GameComponent game) {
 
+        updateAnimationFrame();
+
         if (blinkEffect.isBlink()) {
             g.drawArc(ship.getX() + ship.getOffSetX(),
                     ship.getY() + ship.getOffSetY(),
-                    ship.getAltura(),ship.getLargura(),
+                    ship.getAltura(), ship.getLargura(),
                     0, 360);
         } else {
             g.drawImage(ship.getImage(),
                     ship.getX() + ship.getOffSetX(),
                     ship.getY() + ship.getOffSetY(), game);
         }
+    }
+
+    private void updateAnimationFrame() {
+
+        if (playerAnimationFrame > 3) {
+            playerAnimationFrame = 1;
+        }
+
+        if (this.getActions().isLeft()) {
+            ship.setImage("/image/player_left-" + playerAnimationFrame + ".png");
+
+        } else if (this.getActions().isRight()) {
+            ship.setImage("/image/player_right-" + playerAnimationFrame + ".png");
+
+        } else {
+            ship.setImage("/image/player_" + playerAnimationFrame + ".png");
+        }
+
+        playerAnimationFrame++;
     }
 
     private void drawBullets(Graphics g) {
