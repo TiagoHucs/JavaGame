@@ -31,7 +31,7 @@ public class PauseMenu extends AbstractGameMenu {
         switch (action) {
             case OPT_RETOMAR_PARTIDA:
                 gameComponent.gameState.state = GameState.State.PLAY;
-                gameComponent.currentGameLogic.init();
+                gameComponent.currentGameLogic.init(gameComponent);
                 break;
             case OPT_CONFIGURACOES:
                 setOptions(configOptions);

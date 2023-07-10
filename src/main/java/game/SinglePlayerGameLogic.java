@@ -1,18 +1,19 @@
 package game;
 
 import entities.Enemy;
+import entities.Ship;
 import entities.Shot;
 import ia.BehaviorIA;
 import ia.FallDownIA;
 import ia.LeftRightIA;
 import ps.Explosion2;
 import utilities.Config;
-import waves.*;
+import waves.WaveController;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SinglePlayerGameLogic implements GameLogic {
@@ -28,10 +29,14 @@ public class SinglePlayerGameLogic implements GameLogic {
     private WaveController waveController;
 
     @Override
-    public void init() {
+    public void init(GameComponent gameComponent) {
 
         if (players.size() < PLAYER_COUT) {
-            players.add(new PlayerState(players.size()));
+            PlayerState playerState = new PlayerState(players.size());
+            Ship ship = playerState.getShip();
+            ship.setX(ship.getHorizonntalLimit(gameComponent) / 2);
+            ship.setY(ship.getVerticalLimit(gameComponent) - ship.getAltura());
+            players.add(playerState);
         }
 
         for (PlayerState player: players) {

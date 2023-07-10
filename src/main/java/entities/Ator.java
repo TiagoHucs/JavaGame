@@ -1,9 +1,9 @@
 package entities;
 
 import effects.Effect;
+import game.GameComponent;
 import lombok.Getter;
 import lombok.Setter;
-import utilities.Config;
 import utilities.ResourceManager;
 
 import java.awt.image.BufferedImage;
@@ -15,19 +15,13 @@ import java.util.Map;
 @Setter
 public class Ator {
 
-    private Config cfg = new Config();
-    private int altura = cfg.getResolution() / 25;
-    private int largura = altura;
-    private int x = (cfg.getLarguraTela() / 2) + (largura / 2);
-    private int y = (cfg.getAlturaTela() / 2) - (altura / 2);
-    private int velocidadeX = 0;
-    private int velocidadeY = 0;
+    private int largura, altura;
+    private int x, y;
+    private int velocidadeX, velocidadeY;
     private int maxVelocity = 15;
-
-    private int offSetX = 0, offSetY = 0;
+    private int offSetX, offSetY;
 
     private BufferedImage image = null;
-
     private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
 
     public void addEffect(Effect... effects) {
@@ -52,7 +46,9 @@ public class Ator {
 
     public void setImage(String filename) {
         try {
-            image = ResourceManager.get().getImage(filename, getLargura(), getAltura());
+            this.image = ResourceManager.get().getImage(filename);
+            this.setAltura(image.getHeight());
+            this.setLargura(image.getWidth());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -90,12 +86,12 @@ public class Ator {
         }
     }
 
-    public int getVerticalLimit(){
-        return cfg.getAlturaTela() - getAltura();
+    public int getVerticalLimit(GameComponent gameComponent){
+        return gameComponent.getHeight() - getAltura();
     }
 
-    public int getHorizonntalLimi(){
-        return cfg.getLarguraTela() - getLargura();
+    public int getHorizonntalLimit(GameComponent gameComponent){
+        return gameComponent.getWidth() - getLargura();
     }
 
 }

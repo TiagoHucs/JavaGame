@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 public interface GameLogic {
 
-    void init();
+    void init(GameComponent gameComponent);
 
     void draw(Graphics g, GameComponent gameComponent);
 

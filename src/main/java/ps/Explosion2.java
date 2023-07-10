@@ -3,11 +3,9 @@ package ps;
 import entities.Ator;
 import game.GameComponent;
 import lombok.SneakyThrows;
-import utilities.GameUtil;
 import utilities.ResourceManager;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;

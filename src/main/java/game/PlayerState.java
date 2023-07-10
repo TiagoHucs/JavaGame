@@ -30,7 +30,7 @@ public class PlayerState {
     }
 
     public void draw(Graphics g, GameComponent game) {
-        drawBullets(g);
+        drawBullets(g, game);
         drawShip(g, game);
         drawHUD(g, game);
     }
@@ -54,9 +54,12 @@ public class PlayerState {
         updateAnimationFrame();
 
         if (blinkEffect.isBlink()) {
+
+            int radius = (ship.getAltura() + ship.getLargura())/ 2;
+
             g.drawArc(ship.getX() + ship.getOffSetX(),
                     ship.getY() + ship.getOffSetY(),
-                    ship.getAltura(), ship.getLargura(),
+                    radius, radius,
                     0, 360);
         } else {
             g.drawImage(ship.getImage(),
@@ -84,21 +87,24 @@ public class PlayerState {
         playerAnimationFrame++;
     }
 
-    private void drawBullets(Graphics g) {
+    private void drawBullets(Graphics g, GameComponent game) {
 
         g.setColor(Color.RED);
 
         for (Shot tiro : bullets) {
-            g.fillRect(tiro.getX() + tiro.getOffSetX(), tiro.getY() + tiro.getOffSetY(), tiro.getLargura(), tiro.getAltura());
+            g.drawImage(tiro.getImage(),
+                    tiro.getX() + tiro.getOffSetX(),
+                    tiro.getY() + tiro.getOffSetY(),
+                    game);
         }
     }
 
     public void update(GameComponent game) {
         updateBullets(game);
-        updateShip();
+        updateShip(game);
     }
 
-    private void updateShip() {
+    private void updateShip(GameComponent game) {
 
         //Horizontalmente
         if (actions.isLeft() == actions.isRight()) {
@@ -125,15 +131,15 @@ public class PlayerState {
         ship.move();
         ship.checkWeapon();
 
-        if (ship.getX() > ship.getHorizonntalLimi()) {
-            ship.setX(ship.getHorizonntalLimi());
+        if (ship.getX() > ship.getHorizonntalLimit(game)) {
+            ship.setX(ship.getHorizonntalLimit(game));
 
         } else if (ship.getX() < 0) {
             ship.setX(0);
         }
 
-        if (ship.getY() > ship.getVerticalLimit()) {
-            ship.setY(ship.getVerticalLimit());
+        if (ship.getY() > ship.getVerticalLimit(game)) {
+            ship.setY(ship.getVerticalLimit(game));
 
         } else if (ship.getY() < 0) {
             ship.setY(0);

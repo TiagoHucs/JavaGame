@@ -1,7 +1,6 @@
 package game;
 
 import effects.StarFieldEffect;
-
 import menu.GameOverMenu;
 import menu.IntroMenu;
 import menu.PauseMenu;

@@ -26,11 +26,11 @@ public abstract class AbstractGameMenu implements GameLogic {
         this.gameComponent = gameComponent;
         this.width = gameComponent.getCfg().getLarguraTela() / 3;
         this.height = gameComponent.getCfg().getAlturaTela() / 3;
-        this.init();
+        this.init(gameComponent);
     }
 
     @Override
-    public void init() {
+    public void init(GameComponent gameComponent) {
         this.font = new Font("Arial", Font.PLAIN, 16);
     }
 
