@@ -43,7 +43,6 @@ public class Explosion2 {
 
     public void update(Graphics g, GameComponent game) {
         if(index < 8){
-            System.out.println("index: " +index);
             g.drawImage(sprites.get(index),ator.getX(),ator.getY(),game);
         }
         index++;

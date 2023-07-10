@@ -4,9 +4,8 @@ import entities.Enemy;
 import entities.Shot;
 import ia.BehaviorIA;
 import ia.FallDownIA;
-import ia.FallSideIA;
 import ia.LeftRightIA;
-import ps.Explosion;
+import ps.Explosion2;
 import utilities.Config;
 import waves.LayoutWave01;
 import waves.LayoutWave02;
@@ -17,6 +16,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SinglePlayerGameLogic implements GameLogic {
 
@@ -26,6 +26,7 @@ public class SinglePlayerGameLogic implements GameLogic {
     private final Colisor colisor = new Colisor();
     private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
     private Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
+    private Set<Explosion2> explosions = new HashSet<Explosion2>(ENEMY_COUNT);
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
 
@@ -64,6 +65,10 @@ public class SinglePlayerGameLogic implements GameLogic {
             playerState.draw(g, gameComponent);
         }
 
+        for (Explosion2 explosion : explosions) {
+            explosion.update(g, gameComponent);
+        }
+
         waveController.draw(g, gameComponent);
     }
 
@@ -74,6 +79,13 @@ public class SinglePlayerGameLogic implements GameLogic {
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
+        updateExplosions(gameComponent);
+    }
+
+    private void updateExplosions(GameComponent gameComponent) {
+        explosions.removeAll(explosions.stream()
+                .filter(Explosion2::isFinished)
+                .collect(Collectors.toList()));
     }
 
     private void updateWaveController(GameComponent gameComponent) {
@@ -149,7 +161,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
                         if (inimigo.getLifes() == 0){
                             listaInimigosDestruidos.add(inimigo);
-                            playerState.getExplosions().add(new Explosion(inimigo));
+                            explosions.add(new Explosion2(inimigo));
 
                         } else {
                             inimigo.setLifes(inimigo.getLifes()-1);
@@ -164,7 +176,7 @@ public class SinglePlayerGameLogic implements GameLogic {
                     soundManager.playSound("im-hit.wav");
 
                     listaInimigosDestruidos.add(inimigo);
-                    playerState.getExplosions().add(new Explosion(inimigo));
+                    explosions.add(new Explosion2(inimigo));
                 }
 
                 playerState.getBullets().removeAll(listaTirosDestruidos);

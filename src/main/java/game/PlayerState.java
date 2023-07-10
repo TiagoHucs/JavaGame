@@ -5,10 +5,8 @@ import entities.Ship;
 import entities.Shot;
 import lombok.Getter;
 import lombok.Setter;
-import ps.Explosion;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,8 +21,6 @@ public class PlayerState {
     private final List<Shot> bullets = new LinkedList<Shot>();
     private Blink blinkEffect = new Blink();
 
-    private List<Explosion> explosions = new ArrayList<Explosion>(10);
-
     private int playerAnimationFrame = 1;
 
     PlayerState(int id) {
@@ -36,7 +32,6 @@ public class PlayerState {
     public void draw(Graphics g, GameComponent game) {
         drawBullets(g);
         drawShip(g, game);
-        drawExplosions(g, game);
         drawHUD(g, game);
     }
 
@@ -52,22 +47,6 @@ public class PlayerState {
         g.setColor(Color.YELLOW);
         g.setFont(game.getCfg().getFont());
         g.drawString(score + " Pts", 5, lifeStartY + ship.getImage().getHeight() + 20);
-    }
-
-    private void drawExplosions(Graphics g, GameComponent game) {
-
-        List<Explosion> explosionsToRemove = new ArrayList<Explosion>(explosions.size());
-
-        for (Explosion explosion : explosions) {
-
-            explosion.update(g, game);
-
-            if (explosion.isFinished()) {
-                explosionsToRemove.add(explosion);
-            }
-        }
-
-        explosions.removeAll(explosionsToRemove);
     }
 
     private void drawShip(Graphics g, GameComponent game) {
