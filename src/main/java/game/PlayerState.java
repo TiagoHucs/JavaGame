@@ -5,8 +5,11 @@ import entities.Ship;
 import entities.Shot;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import utilities.ResourceManager;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,10 +26,14 @@ public class PlayerState {
 
     private int playerAnimationFrame = 1;
 
+    private BufferedImage lifeIcon;
+
+    @SneakyThrows
     PlayerState(int id) {
         this.id = id;
         ship.setImage("/image/player_1.png");
         ship.addEffect(blinkEffect);
+        lifeIcon = ResourceManager.get().getImage("/image/UI/icon-ship.png");
     }
 
     public void draw(Graphics g, GameComponent game) {
@@ -37,16 +44,12 @@ public class PlayerState {
 
     private void drawHUD(Graphics g, GameComponent game) {
 
-        int lifeStartX = 50;
-        int lifeStartY = 20 * (5 * id);
+        int lifeStartX = lifeIcon.getWidth();
+        int lifeStartY = lifeIcon.getHeight() + (lifeIcon.getHeight() * id);
 
         for (int i = 0; i < ship.getLifes(); i++) {
-            g.drawImage(ship.getImage(), lifeStartX * i, lifeStartY, game);
+            g.drawImage(lifeIcon, lifeStartX * i, lifeStartY, game);
         }
-
-        g.setColor(Color.YELLOW);
-        g.setFont(game.getCfg().getFont());
-        g.drawString(score + " Pts", 5, lifeStartY + ship.getImage().getHeight() + 20);
     }
 
     private void drawShip(Graphics g, GameComponent game) {
