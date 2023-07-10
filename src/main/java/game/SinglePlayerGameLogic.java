@@ -102,6 +102,11 @@ public class SinglePlayerGameLogic implements GameLogic {
         if (enemies.isEmpty()) {
 
             if (waveController.goToNextWave()) {
+
+                for (PlayerState playerState : players) {
+                    waveController.updateCurrentWaveStatics(playerState);
+                }
+
                 waveController.nextWave();
 
             }  else if (waveController.isCanCreateEnemyWave()) {
