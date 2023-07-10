@@ -9,7 +9,9 @@ import ia.LeftRightIA;
 import ps.Explosion;
 import utilities.Config;
 import waves.LayoutWave01;
+import waves.LayoutWave02;
 import waves.WaveController;
+import waves.WaveLayout;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -180,8 +182,15 @@ public class SinglePlayerGameLogic implements GameLogic {
         int typeIA = cfg.getRandomGenerator().nextInt(behaviorIA.length);
         BehaviorIA enemyIA = behaviorIA[typeIA];
 
-        LayoutWave01 l = new LayoutWave01();
-        enemies = l.layoutToEnemy(gameComponent.getWidth() / 4, 0, enemyIA, gameComponent);
+        WaveLayout layout = new LayoutWave01();
+
+        // TODO, transformar em um mapa de waves
+        if (waveController.getCurrentWave().getNumber() == 2) {
+            layout = new LayoutWave02();
+        }
+
+        enemies = layout.layoutToEnemy(gameComponent.getWidth() / 4, 0,
+                enemyIA, gameComponent);
 
         soundManager.playSound("fighters-coming.wav");
     }

@@ -83,4 +83,7 @@ public class WaveController {
         }
     }
 
+    public final WaveStatics getCurrentWave() {
+        return currentWave;
+    }
 }
