@@ -28,6 +28,8 @@ public class SinglePlayerGameLogic implements GameLogic {
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
 
+    private ScoreAnimation scoreAnimation = new ScoreAnimation();
+
     public final WaveController getWaveController() {
         return waveController;
     }
@@ -73,6 +75,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         for (Explosion2 explosion : explosions) {
             explosion.update(g, gameComponent);
         }
+
+        scoreAnimation.draw(g, gameComponent);
 
         waveController.draw(g, gameComponent);
     }
@@ -158,7 +162,9 @@ public class SinglePlayerGameLogic implements GameLogic {
                 Set<Shot> listaTirosDestruidos = new HashSet<Shot>();
 
                 for (Shot tiro : playerState.getBullets()) {
-                    if (tiro.getY() < -10) {
+
+                    // Fora dos limites da tela
+                    if (tiro.getY() < -tiro.getLargura() || tiro.getY() > gameComponent.getHeight() + tiro.getAltura()) {
                         listaTirosDestruidos.add(tiro);
 
                     } else if (colisor.detectaColisao(tiro, inimigo)) {
@@ -169,10 +175,11 @@ public class SinglePlayerGameLogic implements GameLogic {
                             explosions.add(new Explosion2(inimigo));
 
                         } else {
-                            inimigo.setLifes(inimigo.getLifes()-1);
+                            inimigo.setLifes(inimigo.getLifes() - 1);
                         }
 
                         playerState.addScore(100);
+                        scoreAnimation.addScore(100, inimigo);
                     }
                 }
 
