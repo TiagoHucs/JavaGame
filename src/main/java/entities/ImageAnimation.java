@@ -25,4 +25,15 @@ public class ImageAnimation {
         return images[animationFrame];
     }
 
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+
+    public int getAnimationLength() {
+        return images.length;
+    }
+
+    public boolean isFinished() {
+        return getAnimationFrame() + 1 == getAnimationLength();
+    }
 }

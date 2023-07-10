@@ -1,53 +1,44 @@
 package ps;
 
 import entities.Ator;
+import entities.ImageAnimation;
 import game.GameComponent;
 import lombok.SneakyThrows;
 import utilities.ResourceManager;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Explosion2 {
-    List<BufferedImage> sprites = new ArrayList<>(8);
-
-    Ator ator = null;
-
-    int index = 0;
-    List<String> srcList = new ArrayList<>(8);
+    private ImageAnimation animation;
+    private Ator origem = null;
 
     @SneakyThrows
-    public Explosion2(Ator ator) {
-        this.init(ator);
-        this.ator = ator;
-
-        for (int i = 1 ; i <= 8; i++) {
-            srcList.add("/image/Explosion/explosion-" + i + ".png");
-        }
-
-        for (String src : srcList) {
-            sprites.add(ResourceManager.get().getImage(src,
-                    ator.getLargura(),
-                    ator.getAltura()));
-        }
+    public Explosion2(Ator origem) {
+        this.init(origem);
     }
 
     @SneakyThrows
-    public void init(Ator ator) {
-
+    public void init(Ator origem) {
+        this.origem = origem;
+        this.animation = new ImageAnimation(
+                ResourceManager.get().getImage("/image/Explosion/explosion-1.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-2.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-3.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-4.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-5.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-6.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-7.png"),
+                ResourceManager.get().getImage("/image/Explosion/explosion-8.png")
+        );
     }
 
     public void update(Graphics g, GameComponent game) {
-        if(index < 8){
-            g.drawImage(sprites.get(index),ator.getX(),ator.getY(),game);
-        }
-        index++;
+        g.drawImage(animation.getCurrentImage(), origem.getX(), origem.getY(), game);
+        animation.updateAnimationFrame();
     }
 
     public boolean isFinished() {
-        return index > 8;
+        return animation.isFinished();
     }
 
 }
