@@ -39,10 +39,10 @@ public class SinglePlayerGameLogic implements GameLogic {
         }
 
         // Cria os comportamentos possiveis para os inimigos
-        behaviorIA = new BehaviorIA[3];
+        behaviorIA = new BehaviorIA[2];
         behaviorIA[0] = new FallDownIA();
-        behaviorIA[1] = new FallSideIA();
-        behaviorIA[2] = new LeftRightIA();
+        // behaviorIA[1] = new FallSideIA();
+        behaviorIA[1] = new LeftRightIA();
 
         this.waveController = new WaveController();
         this.waveController.init();
