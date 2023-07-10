@@ -25,6 +25,7 @@ public class PlayerState {
     private Blink blinkEffect = new Blink();
 
     private int playerAnimationFrame = 1;
+    private int shootsPerFire = 1;
 
     private BufferedImage lifeIcon;
 
@@ -153,7 +154,7 @@ public class PlayerState {
 
         if (actions.isFire() && ship.isCanFire()) {
             game.getSoundManager().playSound("bling.wav");
-            bullets.add(ship.atirar());
+            bullets.addAll(ship.atirar(shootsPerFire));
         }
 
         for (Shot tiro : bullets) {
@@ -163,5 +164,10 @@ public class PlayerState {
 
     public void addScore(int points) {
         this.score += points;
+    }
+
+    public void levelUp() {
+        // Level 5 é o maximo de tiros
+        this.shootsPerFire = Math.min(shootsPerFire + 1, 5);
     }
 }

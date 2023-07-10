@@ -5,6 +5,9 @@ import effects.Shake;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 public class Ship extends Ator {
@@ -18,12 +21,28 @@ public class Ship extends Ator {
         addEffect(new Shake(), new Recoil());
     }
 
-    public Shot atirar() {
-        Shot tiro = new Shot(getX() + (getLargura() / 2), getY());
+    public List<Shot> atirar(int numberOfShoots) {
+
+        int px = (getLargura() / 2);
+        int py = (getAltura() / 2);
+
+        if (numberOfShoots > 1) {
+            px -= numberOfShoots * 5;
+        }
+
+        List<Shot> tiros = new ArrayList<Shot>(numberOfShoots);
+
+        for (int i = 0; i < numberOfShoots; i++) {
+            Shot tiro = new Shot(getX() + px, getY() - py);
+            tiros.add(tiro);
+            px += tiro.getLargura();
+        }
+
         this.fireTimer = 10;
         this.canFire = false;
+
         getEffect(Recoil.class).setSize(10.0f);
-        return tiro;
+        return tiros;
     }
 
     public void sofreDano(int dano) {
