@@ -4,6 +4,8 @@ import game.GameComponent;
 import ia.BehaviorIA;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import utilities.ResourceManager;
 
 import java.awt.*;
 
@@ -13,10 +15,17 @@ public class Enemy extends Ator {
 
     private int lifes = 2;
     private final BehaviorIA behavior;
+    private ImageAnimation animation;
 
+    @SneakyThrows
     public Enemy(BehaviorIA behavior) {
-        this.setImage("/image/enemy_1_1.png");
         this.behavior = behavior;
+        this.animation = new ImageAnimation(
+                ResourceManager.get().getImage("/image/enemy_1_1.png"),
+                ResourceManager.get().getImage("/image/enemy_1_2.png"),
+                ResourceManager.get().getImage("/image/enemy_1_3.png")
+        );
+        this.setImage(animation.getCurrentImage());
     }
 
     public void clampMove(GameComponent gameComponent) {
@@ -24,8 +33,12 @@ public class Enemy extends Ator {
     }
 
     public void draw(Graphics g, GameComponent gameComponent) {
+
         int px = getX() + getOffSetX();
         int py = getY() + getOffSetY();
-        g.drawImage(getImage(), px, py, gameComponent);
+
+        g.drawImage(animation.getCurrentImage(), px, py, gameComponent);
+
+        animation.updateAnimationFrame();
     }
 }

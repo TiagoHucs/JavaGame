@@ -46,12 +46,16 @@ public class Ator {
 
     public void setImage(String filename) {
         try {
-            this.image = ResourceManager.get().getImage(filename);
-            this.setAltura(image.getHeight());
-            this.setLargura(image.getWidth());
+            setImage(ResourceManager.get().getImage(filename));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+        this.setAltura(image.getHeight());
+        this.setLargura(image.getWidth());
     }
 
     public void increaseXVelocity() {
