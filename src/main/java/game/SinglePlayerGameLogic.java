@@ -212,7 +212,7 @@ public class SinglePlayerGameLogic implements GameLogic {
         BehaviorIA enemyIA = behaviorIA[typeIA];
 
         enemies = waveController.getWaveLayout()
-                .layoutToEnemy(gameComponent.getWidth() / 4, 0, enemyIA, gameComponent);
+                .layoutToEnemy(gameComponent.getWidth() / 2, 0, enemyIA, gameComponent);
 
         soundManager.playSound("fighters-coming.wav");
     }

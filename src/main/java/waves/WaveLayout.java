@@ -16,17 +16,19 @@ public abstract class WaveLayout {
 
     public Set<Enemy> layoutToEnemy(int offSetX, int offSetY, BehaviorIA enemyIA, GameComponent gameComponent) {
 
-        int py = offSetY;
+        final String[] layout = getLayout();
+        final char enemyType = getEnemyType("0");
 
-        Set<Enemy> enemyList = new LinkedHashSet<>(10 * 4);
+        Set<Enemy> enemyList = new LinkedHashSet<Enemy>(layout.length);
 
         Enemy p = new Enemy(null);
 
-        char enemyType = getEnemyType("0");
+        int py = offSetY;
 
-        for (String row : getLayout()) {
+        for (String row : layout) {
 
             int px = offSetX;
+            px -= p.getLargura() + (row.length() / 2) * p.getLargura();
             py += p.getAltura();
 
             for (int i = 0; i < row.length(); i++) {
