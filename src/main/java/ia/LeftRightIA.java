@@ -2,9 +2,6 @@ package ia;
 
 import entities.Ator;
 import game.GameComponent;
-import utilities.Config;
-
-import java.awt.geom.Point2D;
 
 public class LeftRightIA implements BehaviorIA {
 

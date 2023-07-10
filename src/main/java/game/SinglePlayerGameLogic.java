@@ -190,17 +190,8 @@ public class SinglePlayerGameLogic implements GameLogic {
         int typeIA = cfg.getRandomGenerator().nextInt(behaviorIA.length);
         BehaviorIA enemyIA = behaviorIA[typeIA];
 
-        WaveLayout layout = new LayoutWave01();
-
-        // TODO, transformar em um mapa de waves
-        if (waveController.getCurrentWave().getNumber() == 2) {
-            layout = new LayoutWave02();
-        } else if (waveController.getCurrentWave().getNumber() == 3) {
-            layout = new LayoutWave03();
-        }
-
-        enemies = layout.layoutToEnemy(gameComponent.getWidth() / 4, 0,
-                enemyIA, gameComponent);
+        enemies = waveController.getWaveLayout()
+                .layoutToEnemy(gameComponent.getWidth() / 4, 0, enemyIA, gameComponent);
 
         soundManager.playSound("fighters-coming.wav");
     }

@@ -82,8 +82,16 @@ public class WaveController {
             this.currentWave.setFinished(true);
         }
     }
+    
+    public final WaveLayout getWaveLayout() {
 
-    public final WaveStatics getCurrentWave() {
-        return currentWave;
+        switch (currentWave.getNumber()) {
+            case 1: return new LayoutWave01();
+            case 2: return new LayoutWave02();
+            case 3: return new LayoutWave03();
+            case 4: return new LayoutWave04();
+        }
+
+        return new LayoutWave01();
     }
 }
