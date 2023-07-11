@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GameOverMenu extends AbstractGameMenu {
 
-    public static final String OPT_RETOMAR_PARTIDA = "PRESS ANY KEY";
+    public static final String OPT_RETOMAR_PARTIDA = "PRESS ESC TO BACK MENU";
 
     private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA};
 

@@ -19,18 +19,14 @@ public abstract class AbstractGameMenu implements GameLogic {
 
     private String[] options = new String[]{};
     private List<String> text;
-    protected int selectedOption = 0;
-    private final int width;
-    private final int height;
+    private int selectedOption = 0;
     private final Font font = ResourceManager.get().getFont();
-    protected FontMetrics metrics;
-    protected int line = 0;
+    private FontMetrics metrics;
+    private int line = 0;
     private final Image logo;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
-        this.width = gameComponent.getCfg().getLarguraTela() / 3;
-        this.height = gameComponent.getCfg().getAlturaTela() / 3;
         this.init(gameComponent);
         try {
             logo = ResourceManager.get().getImage("/image/logo.png");
@@ -78,7 +74,7 @@ public abstract class AbstractGameMenu implements GameLogic {
         }
     }
 
-    protected void drawGameLogo(Graphics g){
+    private void drawGameLogo(Graphics g){
         g.drawImage(logo,
                 gameComponent.getCfg().getLarguraTela()/2 - logo.getWidth(gameComponent) / 2,
                 gameComponent.getCfg().getAlturaTela()/5,
@@ -91,7 +87,7 @@ public abstract class AbstractGameMenu implements GameLogic {
         line = line + heigh +20;
     }
 
-    protected void setStartLine(){
+    private void setStartLine(){
         line = gameComponent.getCfg().getAlturaTela()/3;
     }
 
