@@ -2,6 +2,7 @@ package waves;
 
 import game.GameComponent;
 import game.PlayerState;
+import utilities.ResourceManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,10 +13,11 @@ public class WaveController {
     private float timeToClean;
     private WaveStatics currentWave;
     private List<WaveStatics> statics;
-    private Font font = new Font("Arial", Font.BOLD, 40);
+    private Font font;
 
     public void init() {
         this.statics = new ArrayList<WaveStatics>();
+        this.font = ResourceManager.get().getFont();
         this.nextWave();
     }
 

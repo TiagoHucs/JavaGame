@@ -6,6 +6,7 @@ import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 public abstract class AbstractGameMenu implements GameLogic {
@@ -32,17 +33,11 @@ public abstract class AbstractGameMenu implements GameLogic {
 
     @Override
     public void init(GameComponent gameComponent) {
-        this.font = new Font("Arial", Font.PLAIN, 16);
+        font = ResourceManager.get().getFont();
     }
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-
-        Color myColour = new Color(10, 10, 10, 200);
-        g.setColor(myColour);
-        g.fillRect(width,height,width,height);
-        g.setColor(Color.RED);
-        g.drawRect(width,height,width,height);
 
         g.setFont(font);
 
@@ -59,7 +54,6 @@ public abstract class AbstractGameMenu implements GameLogic {
     }
 
     protected void writeText(Graphics g, Color color,String text, int size){
-        font = new Font("Arial", Font.PLAIN, size);
         g.setFont(font);
         metrics = g.getFontMetrics(font);
         int larguraTexto = metrics.stringWidth(text);
@@ -115,14 +109,6 @@ public abstract class AbstractGameMenu implements GameLogic {
     public void setOptions(String[] options) {
         this.options = options;
         this.selectedOption = 0;
-    }
-
-    public Image getImage(String filename) {
-        try {
-            return ResourceManager.get().getImage(filename, width, height);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

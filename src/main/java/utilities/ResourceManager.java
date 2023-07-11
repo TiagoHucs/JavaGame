@@ -3,7 +3,9 @@ package utilities;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ public class ResourceManager {
     private final static ResourceManager instance = new ResourceManager();
     private final Map<String, URL> resources;
     private final Map<String, BufferedImage> images;
+    private Font font;
 
     private ResourceManager() {
         this.images = new HashMap<String, BufferedImage>();
@@ -48,6 +51,20 @@ public class ResourceManager {
         images.put(resourceName, bufferedImageResized);
 
         return getImage(resourceName);
+    }
+
+    public synchronized Font getFont() {
+        if(font == null){
+            File fontFile = new File("src/main/resources/fonts/BowlbyOneSC-Regular.ttf");
+            try {
+                font =  Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.PLAIN, 16);
+            } catch (FontFormatException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return font;
     }
 
     private URL getResource(String resourceName) {

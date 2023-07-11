@@ -2,16 +2,22 @@ package game;
 
 import entities.Ator;
 import entities.Enemy;
+import utilities.ResourceManager;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreAnimation {
 
-    private Font font = new Font("Arial", Font.PLAIN, 10);
+    private Font font;
 
     private List<PointEffect> points = new ArrayList<PointEffect>(100);
+
+    public ScoreAnimation() {
+        this.font = ResourceManager.get().getFont();
+    }
 
     public void draw(Graphics g, GameComponent gameComponent) {
 
