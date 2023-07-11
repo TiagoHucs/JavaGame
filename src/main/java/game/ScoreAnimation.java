@@ -1,6 +1,7 @@
 package game;
 
 import entities.Ator;
+import entities.Enemy;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ScoreAnimation {
 
         for (PointEffect p : points) {
             p.update();
-            g.drawString(p.getPoints() + "pts", p.getX(), p.getY());
+            g.drawString(p.getAlert(), p.getX(), p.getY());
             if (p.getLife() < 0) {
                 pointsToRemove.add(p);
             }
@@ -40,6 +41,17 @@ public class ScoreAnimation {
                 .x(ator.getX() + (ator.getLargura() / 2))
                 .y(ator.getY())
                 .points(pts).build();
+
+        points.add(pointEffect);
+    }
+
+    public void addExtraLife(Enemy ator) {
+        PointEffect pointEffect = PointEffect
+                .builder()
+                .life(100)
+                .x(ator.getX() + (ator.getLargura() / 2))
+                .y(ator.getY())
+                .alert("Extra Life!").build();
 
         points.add(pointEffect);
     }

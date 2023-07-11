@@ -185,7 +185,14 @@ public class SinglePlayerGameLogic implements GameLogic {
                         }
 
                         playerState.addScore(100);
-                        scoreAnimation.addScore(100, inimigo);
+
+                        if (playerState.extraLife()) {
+                            playerState.addExtraLife(1);
+                            scoreAnimation.addExtraLife(inimigo);
+                        } else {
+                            scoreAnimation.addScore(100, inimigo);
+                        }
+
                     }
                 }
 

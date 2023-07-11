@@ -19,6 +19,8 @@ public class PlayerState {
 
     private int id;
     private int score = 0;
+    private int pointsToExtraLife = 10000;
+
     private final PlayerActions actions = new PlayerActions();
     private final Ship ship = new Ship();
     private final List<Shot> bullets = new LinkedList<Shot>();
@@ -166,8 +168,17 @@ public class PlayerState {
         this.score += points;
     }
 
+    public void addExtraLife(int lifes) {
+        int total = this.ship.getLifes() + lifes;
+        this.ship.setLifes(total);
+    }
+
     public void levelUp() {
         // Level 5 é o maximo de tiros
         this.shootsPerFire = Math.min(shootsPerFire + 1, 5);
+    }
+
+    public boolean extraLife() {
+        return score % pointsToExtraLife == 0;
     }
 }
