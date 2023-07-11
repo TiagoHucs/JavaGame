@@ -7,6 +7,8 @@ import utilities.ResourceManager;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractGameMenu implements GameLogic {
 
@@ -16,6 +18,7 @@ public abstract class AbstractGameMenu implements GameLogic {
     protected final GameComponent gameComponent;
 
     private String[] options = new String[]{};
+    private List<String> text;
     protected int selectedOption = 0;
     private final int width;
     private final int height;
@@ -46,27 +49,33 @@ public abstract class AbstractGameMenu implements GameLogic {
         setStartLine();
         drawGameLogo(g);
         g.setFont(font);
-
         if (metrics == null) {
             metrics = g.getFontMetrics(font);
         }
+        if(text != null){
+            drawText(g,gameComponent);
+        }
+        drawOptions(g, gameComponent);
+    }
 
+    private void drawOptions(Graphics g, GameComponent gameComponent) {
         for (int i = 0; i < options.length; i++) {
             g.setColor(i == selectedOption ? Color.YELLOW : Color.WHITE);
             int larguraTexto = metrics.stringWidth(options[i]);
             int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
-            g.drawString(options[i], x, height + 30 + ((i + 1) * 30));
+            g.drawString(options[i], x, line);
+            nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
         }
     }
 
-    protected void writeText(Graphics g, Color color,String text, int size){
-        g.setFont(font);
-        metrics = g.getFontMetrics(font);
-        int larguraTexto = metrics.stringWidth(text);
-        int colunaInicial = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
-        g.setColor(color);
-        g.drawString(text, colunaInicial, line);
-        nextLine(size);
+    private void drawText(Graphics g, GameComponent gameComponent) {
+        for (String textLine: text) {
+            g.setColor(Color.WHITE);
+            int larguraTexto = metrics.stringWidth(textLine);
+            int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+            g.drawString(textLine, x, line);
+            nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
+        }
     }
 
     protected void drawGameLogo(Graphics g){
@@ -75,7 +84,7 @@ public abstract class AbstractGameMenu implements GameLogic {
                 gameComponent.getCfg().getAlturaTela()/5,
                 null,
                 gameComponent);
-        nextLine(logo.getHeight(gameComponent));
+        nextLine(logo.getHeight(gameComponent)/2);
     }
 
     private void nextLine(int heigh){
@@ -115,6 +124,10 @@ public abstract class AbstractGameMenu implements GameLogic {
     public void setOptions(String[] options) {
         this.options = options;
         this.selectedOption = 0;
+    }
+
+    public void setText(List<String> text) {
+        this.text = text;
     }
 
 }

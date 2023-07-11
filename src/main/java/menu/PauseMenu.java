@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 
 public class PauseMenu extends AbstractGameMenu {
 
-    public static final String OPT_RETOMAR_PARTIDA = "RETOMAR PARTIDA";
+    public static final String OPT_RETOMAR_PARTIDA = "INICIAR/RETOMAR PARTIDA";
     private static final String OPT_CONFIGURACOES = "CONFIGURAÇÕES";
     private static final String OPT_SAIR_DESKTOP = "SAIR PARA DESKTOP";
     private static final String OPT_SOM = "CONFIGURAÇÕES SOM";

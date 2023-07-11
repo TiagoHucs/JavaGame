@@ -10,18 +10,18 @@ import waves.WaveStatics;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameOverMenu extends AbstractGameMenu {
 
-    private Image logo;
+    public static final String OPT_RETOMAR_PARTIDA = "PRESS ANY KEY";
+
+    private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA};
 
     public GameOverMenu(GameComponent gameComponent) {
         super(gameComponent);
-        try {
-            logo = ResourceManager.get().getImage("/image/gameover.png");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        setOptions(defaultOptions);
     }
 
     @Override
@@ -30,15 +30,14 @@ public class GameOverMenu extends AbstractGameMenu {
 
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
 
-        writeText(g, Color.YELLOW,"GAME OVER",40);
-
+        List<String> text = new ArrayList<>();
+        text.add("GAME OVER");
         for (WaveStatics statics: waveController.getStatics()) {
-            writeText(g, Color.CYAN,"Wave: " + statics.getNumber(),20);
-            writeText(g, Color.CYAN,"Points: " + statics.getPoints(),20);
-            writeText(g, Color.CYAN,"Time: " + statics.getTimeToClean(),20);
+            text.add("Wave: " + statics.getNumber());
+            text.add("Points: " + statics.getPoints());
+            text.add("Time: " + statics.getTimeToClean());
         }
-
-        writeText(g, Color.WHITE,"Press esc to main",20);
+        setText(text);
     }
 
 

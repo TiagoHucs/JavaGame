@@ -4,6 +4,7 @@ import game.GameComponent;
 import game.GameState;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 public class IntroMenu extends AbstractGameMenu {
 
@@ -16,6 +17,7 @@ public class IntroMenu extends AbstractGameMenu {
     public IntroMenu(GameComponent gameComponent) {
         super(gameComponent);
         this.gameComponent = gameComponent;
+        this.setText(Arrays.asList("A crazy space adventure ever!"));
         this.setOptions(defaultOptions);
     }
 
