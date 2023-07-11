@@ -2,39 +2,25 @@ package menu;
 
 import game.GameComponent;
 import game.GameState;
-import utilities.ResourceManager;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 public class IntroMenu extends AbstractGameMenu {
 
-    private Image logo;
+    public static final String OPT_RETOMAR_PARTIDA = "PRESS ANY KEY";
+
+    private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA};
+
+    private GameComponent gameComponent;
 
     public IntroMenu(GameComponent gameComponent) {
         super(gameComponent);
-        try {
-            logo = ResourceManager.get().getImage("/image/logo.png");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void draw(Graphics g, GameComponent gameComponent) {
-        setStartLine();
-        drawImage(g,logo);
-        writeText( g,Color.WHITE,"Press any key",20);
+        this.gameComponent = gameComponent;
+        this.setOptions(defaultOptions);
     }
 
     @Override
     public void executeAction(String action) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
         gameComponent.gameState.state = GameState.State.MENU;
     }
 
@@ -47,6 +33,4 @@ public class IntroMenu extends AbstractGameMenu {
     public void keyReleased(KeyEvent e) {
 
     }
-
-
 }

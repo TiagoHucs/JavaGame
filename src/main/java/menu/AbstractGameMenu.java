@@ -6,6 +6,8 @@ import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+
 public abstract class AbstractGameMenu implements GameLogic {
 
     public static final String SND_TAB = "changing-tab.wav";
@@ -20,12 +22,18 @@ public abstract class AbstractGameMenu implements GameLogic {
     private final Font font = ResourceManager.get().getFont();
     protected FontMetrics metrics;
     protected int line = 0;
+    private final Image logo;
 
     public AbstractGameMenu(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
         this.width = gameComponent.getCfg().getLarguraTela() / 3;
         this.height = gameComponent.getCfg().getAlturaTela() / 3;
         this.init(gameComponent);
+        try {
+            logo = ResourceManager.get().getImage("/image/logo.png");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -35,7 +43,8 @@ public abstract class AbstractGameMenu implements GameLogic {
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-
+        setStartLine();
+        drawGameLogo(g);
         g.setFont(font);
 
         if (metrics == null) {
@@ -60,13 +69,13 @@ public abstract class AbstractGameMenu implements GameLogic {
         nextLine(size);
     }
 
-    protected void drawImage(Graphics g,Image image){
-        g.drawImage(image,
-                gameComponent.getCfg().getLarguraTela()/2 - image.getWidth(gameComponent) / 2,
-                line,
+    protected void drawGameLogo(Graphics g){
+        g.drawImage(logo,
+                gameComponent.getCfg().getLarguraTela()/2 - logo.getWidth(gameComponent) / 2,
+                gameComponent.getCfg().getAlturaTela()/5,
                 null,
                 gameComponent);
-        nextLine(image.getHeight(gameComponent));
+        nextLine(logo.getHeight(gameComponent));
     }
 
     private void nextLine(int heigh){

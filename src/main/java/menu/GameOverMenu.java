@@ -26,12 +26,11 @@ public class GameOverMenu extends AbstractGameMenu {
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-        setStartLine();
+        super.draw(g,gameComponent);
 
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
 
-        drawImage(g,logo);
-        writeText(g, Color.YELLOW,"Statics",40);
+        writeText(g, Color.YELLOW,"GAME OVER",40);
 
         for (WaveStatics statics: waveController.getStatics()) {
             writeText(g, Color.CYAN,"Wave: " + statics.getNumber(),20);
