@@ -6,9 +6,6 @@ import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-
 public abstract class AbstractGameMenu implements GameLogic {
 
     public static final String SND_TAB = "changing-tab.wav";
