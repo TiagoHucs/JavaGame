@@ -8,23 +8,21 @@ import java.util.Arrays;
 
 public class IntroMenu extends AbstractGameMenu {
 
-    public static final String OPT_RETOMAR_PARTIDA = "PRESS ANY KEY";
-
-    private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA};
-
-    private GameComponent gameComponent;
-
     public IntroMenu(GameComponent gameComponent) {
         super(gameComponent);
-        this.gameComponent = gameComponent;
+    }
+
+    @Override
+    public void init(GameComponent gameComponent) {
         this.setText(Arrays.asList("A crazy space adventure ever!"));
-        this.setOptions(defaultOptions);
+        this.setOptions(new String[]{"PRESS ANY KEY"});
     }
 
     @Override
     public void executeAction(String action) {
         gameComponent.gameState.state = GameState.State.MENU;
     }
+
 
     @Override
     public void update(GameComponent gameComponent) {

@@ -7,7 +7,6 @@ import utilities.ResourceManager;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractGameMenu implements GameLogic {
@@ -17,7 +16,7 @@ public abstract class AbstractGameMenu implements GameLogic {
 
     protected final GameComponent gameComponent;
 
-    private String[] options = new String[]{};
+    private String[] options;
     private List<String> text;
     private int selectedOption = 0;
     private final Font font = ResourceManager.get().getFont();
@@ -33,11 +32,6 @@ public abstract class AbstractGameMenu implements GameLogic {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void init(GameComponent gameComponent) {
-
     }
 
     @Override

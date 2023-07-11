@@ -3,25 +3,23 @@ package menu;
 import game.GameComponent;
 import game.GameState;
 import game.SinglePlayerGameLogic;
-import utilities.ResourceManager;
 import waves.WaveController;
 import waves.WaveStatics;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameOverMenu extends AbstractGameMenu {
 
-    public static final String OPT_RETOMAR_PARTIDA = "PRESS ESC TO BACK MENU";
-
-    private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA};
-
     public GameOverMenu(GameComponent gameComponent) {
         super(gameComponent);
-        setOptions(defaultOptions);
+    }
+
+    @Override
+    public void init(GameComponent gameComponent) {
+        setOptions(new String[]{"PRESS ESC TO BACK MENU"});
     }
 
     @Override
@@ -30,7 +28,7 @@ public class GameOverMenu extends AbstractGameMenu {
 
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
 
-        List<String> text = new ArrayList<>();
+        List<String> text = new ArrayList<>(4);
         text.add("GAME OVER");
         for (WaveStatics statics: waveController.getStatics()) {
             text.add("Wave: " + statics.getNumber());

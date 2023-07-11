@@ -18,11 +18,13 @@ public class PauseMenu extends AbstractGameMenu {
     private final String[] defaultOptions = {OPT_RETOMAR_PARTIDA, OPT_CONFIGURACOES, OPT_SAIR_DESKTOP};
     private final String[] configOptions = {OPT_SOM, OPT_DIFICULDADE, OPT_CONTROLE, OPT_VOLTA_PRINCIPAL};
 
-    private GameComponent gameComponent;
+    @Override
+    public void init(GameComponent gameComponent) {
+
+    }
 
     public PauseMenu(GameComponent gameComponent) {
         super(gameComponent);
-        this.gameComponent = gameComponent;
         this.setOptions(defaultOptions);
     }
 
