@@ -11,13 +11,9 @@ import java.util.List;
 
 public class ScoreAnimation {
 
-    private Font font;
+    private final Font font = ResourceManager.get().getFont();
 
     private List<PointEffect> points = new ArrayList<PointEffect>(100);
-
-    public ScoreAnimation() {
-        this.font = ResourceManager.get().getFont();
-    }
 
     public void draw(Graphics g, GameComponent gameComponent) {
 

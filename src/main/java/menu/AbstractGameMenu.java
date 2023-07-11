@@ -17,7 +17,7 @@ public abstract class AbstractGameMenu implements GameLogic {
     protected int selectedOption = 0;
     private final int width;
     private final int height;
-    protected Font font;
+    private final Font font = ResourceManager.get().getFont();
     protected FontMetrics metrics;
     protected int line = 0;
 
@@ -30,7 +30,7 @@ public abstract class AbstractGameMenu implements GameLogic {
 
     @Override
     public void init(GameComponent gameComponent) {
-        font = ResourceManager.get().getFont();
+
     }
 
     @Override

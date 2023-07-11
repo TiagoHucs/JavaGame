@@ -13,11 +13,10 @@ public class WaveController {
     private float timeToClean;
     private WaveStatics currentWave;
     private List<WaveStatics> statics;
-    private Font font;
+    private final Font font = ResourceManager.get().getFont();
 
     public void init() {
         this.statics = new ArrayList<WaveStatics>();
-        this.font = ResourceManager.get().getFont();
         this.nextWave();
     }
 
