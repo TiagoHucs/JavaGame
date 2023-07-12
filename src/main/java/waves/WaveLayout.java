@@ -4,8 +4,8 @@ import entities.Enemy;
 import game.GameComponent;
 import ia.BehaviorIA;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class WaveLayout {
     public abstract String[] getLayout();
@@ -14,12 +14,12 @@ public abstract class WaveLayout {
         return c.charAt(0);
     }
 
-    public Set<Enemy> layoutToEnemy(int offSetX, int offSetY, BehaviorIA enemyIA, GameComponent gameComponent) {
+    public List<Enemy> layoutToEnemy(int offSetX, int offSetY, BehaviorIA enemyIA, GameComponent gameComponent) {
 
         final String[] layout = getLayout();
         final char enemyType = getEnemyType("0");
 
-        Set<Enemy> enemyList = new LinkedHashSet<Enemy>(layout.length);
+        List<Enemy> enemyList = new LinkedList<Enemy>();
 
         Enemy p = new Enemy(null);
 

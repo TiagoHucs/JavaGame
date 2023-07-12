@@ -17,14 +17,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SinglePlayerGameLogic implements GameLogic {
-
-    private final int ENEMY_COUNT = 20;
     private final int PLAYER_COUT = 7;
 
     private final Colisor colisor = new Colisor();
-    private Set<PlayerState> players = new HashSet<PlayerState>(PLAYER_COUT);
-    private Set<Enemy> enemies = new HashSet<Enemy>(ENEMY_COUNT);
-    private Set<Explosion2> explosions = new HashSet<Explosion2>(ENEMY_COUNT);
+    private List<PlayerState> players = new LinkedList<PlayerState>();
+    private List<Enemy> enemies = new LinkedList<Enemy>();
+    private List<Explosion2> explosions = new LinkedList<Explosion2>();
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
 
@@ -72,8 +70,17 @@ public class SinglePlayerGameLogic implements GameLogic {
             playerState.draw(g, gameComponent);
         }
 
-        for (Explosion2 explosion : explosions) {
+        Iterator<Explosion2> explosionItr = explosions.iterator();
+
+        while (explosionItr.hasNext()) {
+
+            Explosion2 explosion = explosionItr.next();
+
             explosion.update(g, gameComponent);
+
+            if (explosion.isFinished()) {
+                explosionItr.remove();
+            }
         }
 
         scoreAnimation.draw(g, gameComponent);
@@ -88,13 +95,6 @@ public class SinglePlayerGameLogic implements GameLogic {
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
-        updateExplosions(gameComponent);
-    }
-
-    private void updateExplosions(GameComponent gameComponent) {
-        explosions.removeAll(explosions.stream()
-                .filter(Explosion2::isFinished)
-                .collect(Collectors.toList()));
     }
 
     private void updateWaveController(GameComponent gameComponent) {
@@ -122,16 +122,17 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     private void checkForGameOver(GameComponent gameComponent) {
 
-        List<PlayerState> playersToRemove = new ArrayList<PlayerState>(players.size());
+        Iterator<PlayerState> playerStateIterator = players.iterator();
 
-        for (PlayerState playerState : players) {
-            if (playerState.getShip().getLifes() == 0) {
-                playersToRemove.add(playerState);
-                waveController.updateCurrentWaveStatics(playerState);
+        while (playerStateIterator.hasNext()) {
+
+            PlayerState playerStat = playerStateIterator.next();
+
+            if (playerStat.getShip().getLifes() == 0) {
+                waveController.updateCurrentWaveStatics(playerStat);
+                playerStateIterator.remove();
             }
         }
-
-        players.removeAll(playersToRemove);
 
         if (players.isEmpty()) {
             gameComponent.gameState.state = GameState.State.GAMEOVER;
@@ -157,58 +158,69 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     private void checkCollisions(GameComponent gameComponent) {
 
-        SoundManager soundManager = gameComponent.getSoundManager();
+        for (PlayerState playerState : players) {
 
-        Set<Enemy> listaInimigosDestruidos = new LinkedHashSet<Enemy>(enemies.size());
+            Iterator<Enemy> enemyIterator = enemies.iterator();
 
-        for (Enemy inimigo : enemies) {
+            while (enemyIterator.hasNext()) {
+                Enemy inimigo = enemyIterator.next();
+                verificaColisao(gameComponent, enemyIterator, inimigo, playerState);
+                verificaVidaInimigo(enemyIterator, inimigo);
+            }
 
-            for (PlayerState playerState : players) {
+        }
+    }
 
-                Set<Shot> listaTirosDestruidos = new HashSet<Shot>();
+    private void verificaVidaInimigo(Iterator<Enemy> enemyIterator, Enemy inimigo) {
+        if (inimigo.getLifes() == 0) {
+            explosions.add(new Explosion2(inimigo));
+            enemyIterator.remove();
+        }
+    }
 
-                for (Shot tiro : playerState.getBullets()) {
+    private void verificaColisao(PlayerState playerState, Enemy inimigo) {
 
-                    // Fora dos limites da tela
-                    if (tiro.getY() < -tiro.getLargura() || tiro.getY() > gameComponent.getHeight() + tiro.getAltura()) {
-                        listaTirosDestruidos.add(tiro);
+        Iterator<Shot> bullerIterator = playerState.getBullets().iterator();
 
-                    } else if (colisor.detectaColisao(tiro, inimigo)) {
-                        listaTirosDestruidos.add(tiro);
+        while (bullerIterator.hasNext()) {
 
-                        if (inimigo.getLifes() == 0){
-                            listaInimigosDestruidos.add(inimigo);
-                            explosions.add(new Explosion2(inimigo));
+            Shot tiro = bullerIterator.next();
 
-                        } else {
-                            inimigo.setLifes(inimigo.getLifes() - 1);
-                        }
+            if (colisor.detectaColisao(tiro, inimigo)) {
 
-                        playerState.addScore(100);
+                inimigo.removeLifes(1);
+                playerState.addScore(100);
 
-                        if (playerState.extraLife()) {
-                            playerState.addExtraLife(1);
-                            scoreAnimation.addExtraLife(inimigo);
-                        } else {
-                            scoreAnimation.addScore(100, inimigo);
-                        }
+                if (playerState.extraLife()) {
+                    playerState.addExtraLife(1);
+                    scoreAnimation.addExtraLife(inimigo);
 
-                    }
+                } else {
+                    scoreAnimation.addScore(100, inimigo);
                 }
 
-                if (!playerState.getBlinkEffect().isInvencible() && colisor.detectaColisao(playerState.getShip(), inimigo)) {
-                    playerState.getShip().sofreDano(25);
-                    soundManager.playSound("im-hit.wav");
-
-                    listaInimigosDestruidos.add(inimigo);
-                    explosions.add(new Explosion2(inimigo));
-                }
-
-                playerState.getBullets().removeAll(listaTirosDestruidos);
+                bullerIterator.remove();
             }
         }
+    }
 
-        enemies.removeAll(listaInimigosDestruidos);
+    private void verificaColisao(GameComponent gameComponent, Iterator<Enemy> enemyIterator, Enemy inimigo, PlayerState playerState) {
+
+        // Se jogador invencivel, tiros tmb nao tem efeito no inimigo.
+        if (playerState.getBlinkEffect().isInvencible())
+            return;
+
+        if (colisor.detectaColisao(playerState.getShip(), inimigo)) {
+
+            playerState.getShip().sofreDano(25);
+            explosions.add(new Explosion2(inimigo));
+            gameComponent.getSoundManager().playSound("im-hit.wav");
+            enemyIterator.remove();
+
+        } else {
+            verificaColisao(playerState, inimigo);
+        }
+
     }
 
     private void geraInimigos(GameComponent gameComponent) {

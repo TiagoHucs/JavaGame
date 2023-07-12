@@ -41,4 +41,8 @@ public class Enemy extends Ator {
 
         animation.updateAnimationFrame();
     }
+
+    public void removeLifes(int qtd) {
+        this.lifes = Math.max(0, lifes - qtd);
+    }
 }

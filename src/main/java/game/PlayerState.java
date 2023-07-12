@@ -10,6 +10,7 @@ import utilities.ResourceManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class PlayerState {
 
     private final PlayerActions actions = new PlayerActions();
     private final Ship ship = new Ship();
-    private final List<Shot> bullets = new LinkedList<Shot>();
+    private final LinkedList<Shot> bullets = new LinkedList<Shot>();
     private Blink blinkEffect = new Blink();
 
     private int playerAnimationFrame = 1;
@@ -95,8 +96,6 @@ public class PlayerState {
 
     private void drawBullets(Graphics g, GameComponent game) {
 
-        g.setColor(Color.RED);
-
         for (Shot tiro : bullets) {
             g.drawImage(tiro.getImage(),
                     tiro.getX() + tiro.getOffSetX(),
@@ -159,8 +158,18 @@ public class PlayerState {
             bullets.addAll(ship.atirar(shootsPerFire));
         }
 
-        for (Shot tiro : bullets) {
-            tiro.move();
+        Iterator<Shot> shotIterator = bullets.iterator();
+
+        while (shotIterator.hasNext()) {
+
+            Shot tiro = shotIterator.next();
+
+            if (tiro.isOffScreen(game)) {
+                shotIterator.remove();
+
+            } else {
+                tiro.move();
+            }
         }
     }
 

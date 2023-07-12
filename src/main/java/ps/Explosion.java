@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Explosion {
@@ -18,7 +20,7 @@ public class Explosion {
 
     @SneakyThrows
     public Explosion(Ator ator) {
-        this.particles = new ArrayList<Particle>(QTD_PARTES);
+        this.particles = new LinkedList<Particle>();
         this.init(ator);
     }
 
@@ -59,22 +61,21 @@ public class Explosion {
 
     public void update(Graphics g, GameComponent game) {
 
-        List<Particle> particlesToRemove = new ArrayList<Particle>(particles.size());
+        Iterator<Particle> particleIterator = particles.iterator();
 
-        for (Particle p : particles) {
+        while (particleIterator.hasNext()) {
 
+            Particle p = particleIterator.next();
             p.move();
             p.draw(g);
 
             if (p.getPosition().getX() < 0 || p.getPosition().getX() > game.getCfg().getLarguraTela()) {
-                particlesToRemove.add(p);
+                particleIterator.remove();
 
             } else if (p.getPosition().getY() < 0 || p.getPosition().getY() > game.getCfg().getAlturaTela()) {
-                particlesToRemove.add(p);
+                particleIterator.remove();
             }
         }
-
-        particles.removeAll(particlesToRemove);
     }
 
     public boolean isFinished() {

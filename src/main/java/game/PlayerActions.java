@@ -15,39 +15,21 @@ public class PlayerActions {
     private boolean down = false;
     private boolean fire = false;
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            up = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            down = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            left = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            right = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            fire = true;
+    private void changeValue(KeyEvent e, boolean value) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP: up = value;break;
+            case KeyEvent.VK_DOWN: down = value;break;
+            case KeyEvent.VK_LEFT: left = value;break;
+            case KeyEvent.VK_RIGHT: right = value;break;
+            case KeyEvent.VK_SPACE: fire = value;break;
         }
     }
 
+    public void keyPressed(KeyEvent e) {
+        changeValue(e, true);
+    }
+
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            up = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            down = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            left = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            right = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            fire = false;
-        }
+        changeValue(e, false);
     }
 }
