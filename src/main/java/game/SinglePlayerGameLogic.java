@@ -1,6 +1,7 @@
 package game;
 
 import entities.Enemy;
+import entities.PowerUp;
 import entities.Ship;
 import entities.Shot;
 import ia.BehaviorIA;
@@ -19,15 +20,14 @@ import java.util.List;
 
 public class SinglePlayerGameLogic implements GameLogic {
     private final int PLAYER_COUT = 7;
-
-    private final Colisor colisor = new Colisor();
     private List<PlayerState> players = new LinkedList<PlayerState>();
     private List<Enemy> enemies = new LinkedList<Enemy>();
     private List<Explosion2> explosions = new LinkedList<Explosion2>();
+    private List<PowerUp> powerUps = new LinkedList<PowerUp>();
     private BehaviorIA[] behaviorIA;
     private WaveController waveController;
-
     private ScoreAnimation scoreAnimation = new ScoreAnimation();
+    private CollisionController collisionController = new CollisionController();
 
     public final WaveController getWaveController() {
         return waveController;
@@ -73,6 +73,10 @@ public class SinglePlayerGameLogic implements GameLogic {
             playerState.draw(g, gameComponent);
         }
 
+        for (PowerUp powerUp : powerUps) {
+            powerUp.drawImage(g, gameComponent);
+        }
+
         Iterator<Explosion2> explosionItr = explosions.iterator();
 
         while (explosionItr.hasNext()) {
@@ -94,6 +98,7 @@ public class SinglePlayerGameLogic implements GameLogic {
     @Override
     public void update(GameComponent gameComponent) {
         updateWaveController(gameComponent);
+        updatePowerUps(gameComponent);
         updateInimigos(gameComponent);
         updatePlayers(gameComponent);
         checkCollisions(gameComponent);
@@ -108,7 +113,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
                 for (PlayerState playerState : players) {
                     waveController.updateCurrentWaveStatics(playerState);
-                    playerState.levelUp();
+                    playerState.levelUp(scoreAnimation);
                 }
 
                 waveController.nextWave();
@@ -159,6 +164,32 @@ public class SinglePlayerGameLogic implements GameLogic {
 
     }
 
+    private void updatePowerUps(GameComponent gameComponent) {
+
+        Iterator<PowerUp> powerUpItr = powerUps.iterator();
+
+        while (powerUpItr.hasNext()) {
+
+            PowerUp powerUp = powerUpItr.next();
+
+            powerUp.move();
+
+            for (PlayerState playerState : players) {
+
+                if (collisionController.detectaColisao(powerUp, playerState.getShip())) {
+                    powerUp.levelUp(playerState, scoreAnimation);
+                    powerUpItr.remove();
+                    break;
+                }
+
+            }
+
+            if (powerUp.isOutOfScreen(gameComponent)) {
+                powerUpItr.remove();
+            }
+        }
+    }
+
     private void checkCollisions(GameComponent gameComponent) {
 
         for (PlayerState playerState : players) {
@@ -189,7 +220,12 @@ public class SinglePlayerGameLogic implements GameLogic {
 
             Shot tiro = bullerIterator.next();
 
-            if (colisor.detectaColisao(tiro, inimigo)) {
+            if (collisionController.detectaColisao(tiro, inimigo)) {
+
+                if (inimigo.isDropPowerUp()) {
+                    PowerUp powerUp = new PowerUp(inimigo);
+                    powerUps.add(powerUp);
+                }
 
                 inimigo.removeLifes(1);
                 playerState.addScore(100);
@@ -213,11 +249,18 @@ public class SinglePlayerGameLogic implements GameLogic {
         if (playerState.getBlinkEffect().isInvencible())
             return;
 
-        if (colisor.detectaColisao(playerState.getShip(), inimigo)) {
+        if (collisionController.detectaColisao(playerState.getShip(), inimigo)) {
 
             playerState.getShip().sofreDano(25);
-            explosions.add(new Explosion2(inimigo));
             gameComponent.getSoundManager().playSound("im-hit.wav");
+
+            if (playerState.getShootsPerFire() > 1) {
+                PowerUp powerUp = new PowerUp(playerState.getShip());
+                powerUp.levelDown(playerState, scoreAnimation);
+                powerUps.add(powerUp);
+            }
+
+            explosions.add(new Explosion2(inimigo));
             enemyIterator.remove();
 
         } else {

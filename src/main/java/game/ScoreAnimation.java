@@ -1,7 +1,6 @@
 package game;
 
 import entities.Ator;
-import entities.Enemy;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -46,13 +45,35 @@ public class ScoreAnimation {
         points.add(pointEffect);
     }
 
-    public void addExtraLife(Enemy ator) {
+    public void addExtraLife(Ator ator) {
         PointEffect pointEffect = PointEffect
                 .builder()
                 .life(100)
                 .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
-                .y((int) ator.getPosition().y)
+                .y((int) (ator.getPosition().y))
                 .alert("Extra Life!").build();
+
+        points.add(pointEffect);
+    }
+
+    public void addPowerUp(Ator ator) {
+        PointEffect pointEffect = PointEffect
+                .builder()
+                .life(50)
+                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
+                .y((int) (ator.getPosition().y))
+                .alert("Power Up!").build();
+
+        points.add(pointEffect);
+    }
+
+    public void addPowerDown(Ator ator) {
+        PointEffect pointEffect = PointEffect
+                .builder()
+                .life(50)
+                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
+                .y((int) (ator.getPosition().y))
+                .alert("Ouch!").build();
 
         points.add(pointEffect);
     }

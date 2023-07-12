@@ -106,9 +106,12 @@ public class Ator {
     public boolean isOutOfScreenX(GameComponent gameComponent) {
         return this.position.x < -size.x || this.position.x > gameComponent.getWidth();
     }
-
     public boolean isOutOfScreenY(GameComponent gameComponent) {
         return this.position.y > gameComponent.getHeight();
+    }
+
+    public boolean isOutOfScreen(GameComponent gameComponent) {
+        return isOutOfScreenX(gameComponent) || isOutOfScreenY(gameComponent);
     }
 
     public int getPositionWithOffsetX() {

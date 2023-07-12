@@ -5,6 +5,7 @@ import ia.BehaviorIA;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import utilities.GameUtil;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -44,5 +45,12 @@ public class Enemy extends Ator {
 
     public void removeLifes(int qtd) {
         this.lifes = Math.max(0, lifes - qtd);
+    }
+
+    // TODO: por enquanto esta aleatorio, mas no futuro o WaveController que vai escolher quais inimigos tem power Up
+    public boolean isDropPowerUp() {
+        int dropFail = 90;
+        int dropRate = 100 - dropFail;
+        return GameUtil.getRandomNumber(dropRate, dropFail + dropRate) > dropFail;
     }
 }

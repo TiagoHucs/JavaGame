@@ -176,9 +176,18 @@ public class PlayerState {
         this.ship.setLifes(total);
     }
 
-    public void levelUp() {
+    public void levelUp(ScoreAnimation scoreAnimation) {
         // Level 5 é o maximo de tiros
         this.shootsPerFire = Math.min(shootsPerFire + 1, 5);
+
+        scoreAnimation.addPowerUp(ship);
+    }
+
+    public void levelDown(ScoreAnimation scoreAnimation) {
+
+        this.shootsPerFire = Math.max(1, shootsPerFire - 1);
+
+        scoreAnimation.addPowerDown(ship);
     }
 
     public boolean extraLife() {
