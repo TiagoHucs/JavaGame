@@ -144,7 +144,7 @@ public class Ator {
             AffineTransform transform =
                     AffineTransform.getRotateInstance(Math.toRadians(direction),
                     size.getX() / 2.0,
-                    size.getX() / 2.0);
+                    size.getY() / 2.0);
 
             AffineTransformOp filtro = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
