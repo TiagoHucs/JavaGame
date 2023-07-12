@@ -17,31 +17,33 @@ public class Ship extends Ator {
     private boolean canFire = true;
 
     public Ship() {
+        super();
         this.setImage("/image/player_1.png");
         addEffect(new Shake(), new Recoil());
     }
 
     public List<Shot> atirar(int numberOfShoots) {
 
-        int px = (getLargura() / 2);
-        int py = (getAltura() / 2);
+        float px = getSize().x / 2.0f;
+        float py = getSize().y / 2.0f;
 
         if (numberOfShoots > 1) {
-            px -= numberOfShoots * 5;
+            px -= numberOfShoots * 5.0f;
         }
 
         List<Shot> tiros = new ArrayList<Shot>(numberOfShoots);
 
         for (int i = 0; i < numberOfShoots; i++) {
-            Shot tiro = new Shot(getX() + px, getY() - py);
+            Shot tiro = new Shot(getPosition().x + px, getPosition().y - py);
             tiros.add(tiro);
-            px += tiro.getLargura();
+            px += tiro.getSize().x;
         }
 
         this.fireTimer = 10;
         this.canFire = false;
 
-        getEffect(Recoil.class).setSize(10.0f);
+        getEffect(Recoil.class).setSize((getSize().y / getSize().x) * 10.0f);
+
         return tiros;
     }
 

@@ -5,7 +5,6 @@ import entities.Enemy;
 import utilities.ResourceManager;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +39,8 @@ public class ScoreAnimation {
         PointEffect pointEffect = PointEffect
                 .builder()
                 .life(10)
-                .x(ator.getX() + (ator.getLargura() / 2))
-                .y(ator.getY())
+                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
+                .y((int) ator.getPosition().y)
                 .points(pts).build();
 
         points.add(pointEffect);
@@ -51,8 +50,8 @@ public class ScoreAnimation {
         PointEffect pointEffect = PointEffect
                 .builder()
                 .life(100)
-                .x(ator.getX() + (ator.getLargura() / 2))
-                .y(ator.getY())
+                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
+                .y((int) ator.getPosition().y)
                 .alert("Extra Life!").build();
 
         points.add(pointEffect);

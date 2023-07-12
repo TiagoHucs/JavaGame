@@ -2,6 +2,7 @@ package effects;
 
 import entities.Ator;
 
+import java.awt.geom.Point2D;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Shake implements Effect {
@@ -33,8 +34,9 @@ public class Shake implements Effect {
     }
 
     private void shake(Ator ator) {
-        ator.setOffSetX((int) (offSetX * ator.getLargura()));
-        ator.setOffSetY((int) (offSetY * ator.getAltura()));
+        ator.setImageOffset(new Point2D.Float(
+                offSetX * ator.getSize().x,
+                offSetY * ator.getSize().y));
     }
 
     private float randRange() {

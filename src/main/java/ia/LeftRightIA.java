@@ -8,23 +8,23 @@ public class LeftRightIA implements BehaviorIA {
     @Override
     public void setSpeed(Ator ator, GameComponent gameComponent) {
 
-        if (ator.getX() <= 0) {
-            ator.setVelocidadeX(2);
+        if (ator.getPosition().x <= 0) {
+            ator.getVelocity().x = 2.0f;
         } else {
-            ator.setVelocidadeX(-2);
+            ator.getVelocity().x = -2.0f;
         }
 
     }
     @Override
     public void clampMove(Ator ator, GameComponent gameComponent) {
 
-        if (ator.getX() < -ator.getLargura() || ator.getX() > gameComponent.getWidth()) {
-            ator.setVelocidadeX(ator.getVelocidadeX() * -1);
-            ator.setY(ator.getY() + ator.getAltura());
+        if (ator.isOutOfScreenX(gameComponent)) {
+            ator.getVelocity().x = ator.getVelocity().x * -1.0f;
+            ator.getPosition().y += ator.getSize().y;
         }
 
-        if (ator.getY() > gameComponent.getHeight()) {
-            ator.setY(-100);
+        if (ator.isOutOfScreenY(gameComponent)) {
+            ator.getPosition().y = -ator.getSize().y * 2;
         }
 
     }

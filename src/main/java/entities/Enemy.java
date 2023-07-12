@@ -19,6 +19,7 @@ public class Enemy extends Ator {
 
     @SneakyThrows
     public Enemy(BehaviorIA behavior) {
+        super();
         this.behavior = behavior;
         this.animation = new ImageAnimation(
                 ResourceManager.get().getImage("/image/enemy_1_1.png"),
@@ -34,10 +35,9 @@ public class Enemy extends Ator {
 
     public void draw(Graphics g, GameComponent gameComponent) {
 
-        int px = getX() + getOffSetX();
-        int py = getY() + getOffSetY();
-
-        g.drawImage(animation.getCurrentImage(), px, py, gameComponent);
+        g.drawImage(animation.getCurrentImage(),
+                getPositionWithOffsetX(),
+                getPositionWithOffsetY(), gameComponent);
 
         animation.updateAnimationFrame();
     }

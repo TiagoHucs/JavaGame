@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import utilities.ResourceManager;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,13 +17,13 @@ import java.util.Map;
 @Setter
 public class Ator {
 
-    private int largura, altura;
-    private int x, y;
-    private int velocidadeX, velocidadeY;
-    private int maxVelocity = 15;
-    private int offSetX, offSetY;
+    private Point2D.Float size = new Point2D.Float(1.0f, 1.0f);
+    private Point2D.Float position = new Point2D.Float(0.0f, 0.0f);
+    private Point2D.Float velocity = new Point2D.Float(0.0f, 0.0f);
+    private Point2D.Float maxVelocity = new Point2D.Float(15.0f, 15.0f);
+    private Point2D.Float imageOffset = new Point2D.Float(0.0f, 0.0f);
 
-    private BufferedImage image = null;
+    private BufferedImage image;
     private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
 
     public void addEffect(Effect... effects) {
@@ -35,8 +37,9 @@ public class Ator {
     }
 
     public void move() {
-        this.x += this.velocidadeX;
-        this.y += this.velocidadeY;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
 
         for (Effect effect : effectList.values()) {
             effect.update(1.0f / 60.0f, this);
@@ -54,48 +57,69 @@ public class Ator {
 
     public void setImage(BufferedImage image) {
         this.image = image;
-        this.setAltura(image.getHeight());
-        this.setLargura(image.getWidth());
+        this.size = new Point2D.Float(image.getWidth(), image.getHeight());
     }
 
     public void increaseXVelocity() {
-        this.velocidadeX = velocidadeX >= maxVelocity ? velocidadeX : velocidadeX + 1;
+        this.velocity.x = Math.min(this.maxVelocity.x, this.velocity.x + 1.0f);
     }
 
     public void decreaseXVelocity() {
-        this.velocidadeX = velocidadeX <= -maxVelocity ? velocidadeX : velocidadeX - 1;
+        this.velocity.x = Math.max(-this.maxVelocity.x, this.velocity.x - 1.0f);
     }
 
     public void increaseYVelocity() {
-        this.velocidadeY = velocidadeY >= maxVelocity ? velocidadeY : velocidadeY + 1;
+        this.velocity.y = Math.min(this.maxVelocity.y, this.velocity.y + 1.0f);
     }
 
     public void decreaseYVelocity() {
-        this.velocidadeY = velocidadeY <= -maxVelocity ? velocidadeY : velocidadeY - 1;
+        this.velocity.y = Math.max(-this.maxVelocity.y, this.velocity.y - 1.0f);
     }
 
     public void slowDownX() {
-        if (this.velocidadeX > 0) {
-            this.velocidadeX--;
-        } else if (this.velocidadeX < 0) {
-            this.velocidadeX++;
+
+        if (this.velocity.x > 0) {
+            this.velocity.x--;
+
+        } else if (this.velocity.x < 0) {
+            this.velocity.x++;
         }
     }
 
     public void slowDownY() {
-        if (this.velocidadeY > 0) {
-            this.velocidadeY--;
-        } else if (this.velocidadeY < 0) {
-            this.velocidadeY++;
+        if (this.velocity.y > 0) {
+            this.velocity.y--;
+
+        } else if (this.velocity.y < 0) {
+            this.velocity.y++;
         }
     }
 
-    public int getVerticalLimit(GameComponent gameComponent){
-        return gameComponent.getHeight() - getAltura();
+    public float getVerticalLimit(GameComponent gameComponent){
+        return gameComponent.getHeight() - this.size.y;
     }
 
-    public int getHorizonntalLimit(GameComponent gameComponent){
-        return gameComponent.getWidth() - getLargura();
+    public float getHorizonntalLimit(GameComponent gameComponent){
+        return gameComponent.getWidth() - this.size.x;
     }
 
+    public boolean isOutOfScreenX(GameComponent gameComponent) {
+        return this.position.x < -size.x || this.position.x > gameComponent.getWidth();
+    }
+
+    public boolean isOutOfScreenY(GameComponent gameComponent) {
+        return this.position.y > gameComponent.getHeight();
+    }
+
+    public int getPositionWithOffsetX() {
+        return (int) (getPosition().x + getImageOffset().x);
+    }
+
+    public int getPositionWithOffsetY() {
+        return (int) (getPosition().y + getImageOffset().y);
+    }
+
+    public void drawImage(Graphics g, GameComponent game) {
+        g.drawImage(image, getPositionWithOffsetX(), getPositionWithOffsetY(), game);
+    }
 }

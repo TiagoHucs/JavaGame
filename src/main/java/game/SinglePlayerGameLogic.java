@@ -12,9 +12,10 @@ import waves.WaveController;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class SinglePlayerGameLogic implements GameLogic {
     private final int PLAYER_COUT = 7;
@@ -38,8 +39,9 @@ public class SinglePlayerGameLogic implements GameLogic {
         if (players.size() < PLAYER_COUT) {
             PlayerState playerState = new PlayerState(players.size());
             Ship ship = playerState.getShip();
-            ship.setX(ship.getHorizonntalLimit(gameComponent) / 2);
-            ship.setY(ship.getVerticalLimit(gameComponent) - ship.getAltura());
+            ship.setPosition(new Point2D.Float(
+                    ship.getHorizonntalLimit(gameComponent) / 2.0f,
+                    ship.getVerticalLimit(gameComponent) - ship.getSize().y));
             players.add(playerState);
         }
 

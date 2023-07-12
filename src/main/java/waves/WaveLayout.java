@@ -4,6 +4,7 @@ import entities.Enemy;
 import game.GameComponent;
 import ia.BehaviorIA;
 
+import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,17 +29,16 @@ public abstract class WaveLayout {
         for (String row : layout) {
 
             int px = offSetX;
-            px -= p.getLargura() + (row.length() / 2) * p.getLargura();
-            py += p.getAltura();
+            px -= p.getSize().x + (row.length() / 2) * p.getSize().x;
+            py += p.getSize().y;
 
             for (int i = 0; i < row.length(); i++) {
 
-                px += p.getLargura();
+                px += p.getSize().x;
 
                 if (enemyType == row.charAt(i)) {
                     p = new Enemy(enemyIA);
-                    p.setY(py);
-                    p.setX(px);
+                    p.setPosition(new Point2D.Float(px, py));
                     enemyIA.setSpeed(p, gameComponent);
                     enemyList.add(p);
                 }

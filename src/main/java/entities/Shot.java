@@ -2,17 +2,19 @@ package entities;
 
 import game.GameComponent;
 
+import java.awt.geom.Point2D;
+
 public class Shot extends Ator {
-    public Shot(int x, int y) {
-        this.setX(x);
-        this.setY(y);
+    public Shot(float x, float y) {
+        super();
+        this.setPosition(new Point2D.Float(x, y));
+        this.setVelocity(new Point2D.Float(0.0f, -10.0f));
         this.setImage("/image/projectile_1.png");
-        this.setVelocidadeY(-10);
     }
     public boolean isOffScreen(GameComponent gameComponent) {
         // Tiro só se move vertical por enquanto
-        return getY() < -getLargura() ||
-               getY() > gameComponent.getHeight() + getAltura();
+        return this.getPosition().y < -this.getSize().x ||
+                this.getPosition().y > gameComponent.getHeight() + this.getSize().y;
     }
 
 }

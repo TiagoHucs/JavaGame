@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -62,16 +61,14 @@ public class PlayerState {
 
         if (blinkEffect.isBlink()) {
 
-            int radius = (ship.getAltura() + ship.getLargura())/ 2;
-
-            g.drawArc(ship.getX() + ship.getOffSetX(),
-                    ship.getY() + ship.getOffSetY(),
-                    radius, radius,
+            g.drawArc(ship.getPositionWithOffsetX(),
+                    ship.getPositionWithOffsetY(),
+                    (int) ship.getSize().x,
+                    (int) ship.getSize().y,
                     0, 360);
+
         } else {
-            g.drawImage(ship.getImage(),
-                    ship.getX() + ship.getOffSetX(),
-                    ship.getY() + ship.getOffSetY(), game);
+            ship.drawImage(g, game);
         }
     }
 
@@ -97,10 +94,7 @@ public class PlayerState {
     private void drawBullets(Graphics g, GameComponent game) {
 
         for (Shot tiro : bullets) {
-            g.drawImage(tiro.getImage(),
-                    tiro.getX() + tiro.getOffSetX(),
-                    tiro.getY() + tiro.getOffSetY(),
-                    game);
+            tiro.drawImage(g, game);
         }
     }
 
@@ -136,18 +130,18 @@ public class PlayerState {
         ship.move();
         ship.checkWeapon();
 
-        if (ship.getX() > ship.getHorizonntalLimit(game)) {
-            ship.setX(ship.getHorizonntalLimit(game));
+        if (ship.getPosition().x > ship.getHorizonntalLimit(game)) {
+            ship.getPosition().x = ship.getHorizonntalLimit(game);
 
-        } else if (ship.getX() < 0) {
-            ship.setX(0);
+        } else if (ship.getPosition().x < 0.0f) {
+            ship.getPosition().x = 0.0f;
         }
 
-        if (ship.getY() > ship.getVerticalLimit(game)) {
-            ship.setY(ship.getVerticalLimit(game));
+        if (ship.getPosition().y > ship.getVerticalLimit(game)) {
+            ship.getPosition().y = ship.getVerticalLimit(game);
 
-        } else if (ship.getY() < 0) {
-            ship.setY(0);
+        } else if (ship.getPosition().y < 0.0f) {
+            ship.getPosition().y = 0.0f;
         }
     }
 

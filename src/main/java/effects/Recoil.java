@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Recoil implements Effect {
+
     float size = 0.0f;
 
     @Override
@@ -17,7 +18,7 @@ public class Recoil implements Effect {
     }
 
     private void recoil(Ator ator) {
-        ator.setOffSetY((int) size);
+        ator.getImageOffset().y = size;
     }
 
 }

@@ -33,7 +33,7 @@ public class Explosion2 {
     }
 
     public void update(Graphics g, GameComponent game) {
-        g.drawImage(animation.getCurrentImage(), origem.getX(), origem.getY(), game);
+        g.drawImage(animation.getCurrentImage(), (int) origem.getPosition().x, (int) origem.getPosition().y, game);
         animation.updateAnimationFrame();
     }
 
