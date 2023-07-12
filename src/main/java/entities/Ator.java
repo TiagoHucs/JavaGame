@@ -7,7 +7,9 @@ import lombok.Setter;
 import utilities.ResourceManager;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class Ator {
     private Point2D.Float velocity = new Point2D.Float(0.0f, 0.0f);
     private Point2D.Float maxVelocity = new Point2D.Float(15.0f, 15.0f);
     private Point2D.Float imageOffset = new Point2D.Float(0.0f, 0.0f);
+    private Double direction;
 
     private BufferedImage image;
     private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
@@ -44,7 +47,6 @@ public class Ator {
         for (Effect effect : effectList.values()) {
             effect.update(1.0f / 60.0f, this);
         }
-
     }
 
     public void setImage(String filename) {
@@ -122,7 +124,34 @@ public class Ator {
         return (int) (getPosition().y + getImageOffset().y);
     }
 
+    public Double getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Double direction) {
+        this.direction = direction;
+    }
+
     public void drawImage(Graphics g, GameComponent game) {
-        g.drawImage(image, getPositionWithOffsetX(), getPositionWithOffsetY(), game);
+
+        if (direction == null) {
+            g.drawImage(image, getPositionWithOffsetX(), getPositionWithOffsetY(), game);
+
+        } else {
+
+            Graphics2D g2d =  (Graphics2D) g;
+
+            AffineTransform transform =
+                    AffineTransform.getRotateInstance(Math.toRadians(direction),
+                    size.getX() / 2.0,
+                    size.getX() / 2.0);
+
+            AffineTransformOp filtro = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+
+            g2d.drawImage(filtro.filter(getImage(), null),
+                    getPositionWithOffsetX(),
+                    getPositionWithOffsetY(), game);
+        }
+
     }
 }
