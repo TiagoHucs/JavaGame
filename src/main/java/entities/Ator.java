@@ -149,8 +149,8 @@ public class Ator {
             AffineTransformOp filtro = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
             g2d.drawImage(filtro.filter(getImage(), null),
-                    getPositionWithOffsetX(),
-                    getPositionWithOffsetY(), game);
+                    (int) getPosition().getX(),
+                    (int) getPosition().getY(), game);
         }
 
     }
