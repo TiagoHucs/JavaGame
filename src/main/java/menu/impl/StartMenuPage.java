@@ -1,17 +1,19 @@
-package menu;
+package menu.impl;
 
 import game.GameComponent;
 import game.GameState;
+import menu.AbstractMenuOption;
+import menu.AbstractMenuPage;
 
 import java.util.Arrays;
 
-public class StartMenu extends AbstractMenuPage {
+public class StartMenuPage extends AbstractMenuPage {
 
     public static final String OPT_BACK_GAME = "INICIAR/RETOMAR PARTIDA";
     private static final String OPT_CONFIGURATIONS = "CONFIGURAÇÕES";
     private static final String OPT_EXIT_GAME = "SAIR PARA DESKTOP";
 
-    public StartMenu(GameComponent gameComponent) {
+    public StartMenuPage(GameComponent gameComponent) {
         super("PRINCIPAL");
 
         setOptions(Arrays.asList(

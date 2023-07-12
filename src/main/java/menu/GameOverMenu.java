@@ -3,20 +3,18 @@ package menu;
 import game.GameComponent;
 import game.GameLogic;
 import menu.impl.GameOverMenuPage;
-import menu.impl.StartMenuPage;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainMenu implements GameLogic {
+public class GameOverMenu implements GameLogic {
 
     private List<MenuPage> pages = new ArrayList<>(2);
     private MenuPage selectedPage;
 
-    public MainMenu(GameComponent gameComponent) {
-        pages.add(new StartMenuPage(gameComponent));
+    public GameOverMenu(GameComponent gameComponent) {
         pages.add(new GameOverMenuPage(gameComponent));
         selectedPage = pages.get(0);
     }

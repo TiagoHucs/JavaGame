@@ -1,7 +1,6 @@
 package menu;
 
 import game.GameComponent;
-import game.GameState;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -14,9 +13,9 @@ public abstract class AbstractMenuPage implements MenuPage {
     private String title;
     private List<MenuOption> options;
     private MenuOption selectedOption;
-    private final Font font = ResourceManager.get().getFont();
-    private FontMetrics metrics;
-    private int line = 0;
+    protected final Font font = ResourceManager.get().getFont();
+    protected FontMetrics metrics;
+    protected int line = 0;
     private final Image logo;
 
     public AbstractMenuPage(String title) {
@@ -37,6 +36,7 @@ public abstract class AbstractMenuPage implements MenuPage {
         setStartLine(gameComponent);
         drawGameLogo(g, gameComponent);
         g.setFont(font);
+        drawTitle(g,gameComponent);
         if (metrics == null) {
             metrics = g.getFontMetrics(font);
         }
@@ -56,17 +56,17 @@ public abstract class AbstractMenuPage implements MenuPage {
         }
     }
 
-    protected void drawText(Graphics g, GameComponent gameComponent) {
+    protected void drawTitle(Graphics g, GameComponent gameComponent) {
         if (metrics == null) {
             metrics = g.getFontMetrics(font);
         }
-        for (MenuOption option: options) {
-            g.setColor(option == selectedOption ? Color.YELLOW : Color.WHITE);
-            int larguraTexto = metrics.stringWidth(option.getTitle());
-            int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
-            g.drawString(option.getTitle(), x, line);
-            nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
-        }
+
+        g.setColor(Color.BLUE);
+        int larguraTexto = metrics.stringWidth(this.title);
+        int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+        g.drawString(this.title, x, line);
+        nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
+
     }
 
     private void drawGameLogo(Graphics g, GameComponent gameComponent){
@@ -78,7 +78,7 @@ public abstract class AbstractMenuPage implements MenuPage {
         nextLine(logo.getHeight(gameComponent)/2);
     }
 
-    private void nextLine(int heigh){
+    protected void nextLine(int heigh){
         line = line + heigh +20;
     }
 
