@@ -46,6 +46,7 @@ public class SinglePlayerGameLogic implements GameLogic {
         }
 
         for (PlayerState player: players) {
+            player.getActions().reset();
             player.getBlinkEffect().reset();
         }
 
