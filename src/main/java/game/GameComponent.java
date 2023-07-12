@@ -1,9 +1,7 @@
 package game;
 
 import effects.StarFieldEffect;
-import menu.GameOverMenu;
-import menu.IntroMenu;
-import menu.PauseMenu;
+import menu.MainMenu;
 import utilities.Config;
 
 import javax.swing.*;
@@ -18,7 +16,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     private StarFieldEffect starFieldEffect;
     private Thread gameThread;
     public GameState gameState;
-    public GameLogic currentGameLogic, newPauseMenu, introMenu, gameOverMenu;
+    public GameLogic currentGameLogic, mainMenu , gameOverMenu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -40,13 +38,11 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         this.soundManager.setGlobalVolume(0.8f);
 
         this.gameState = new GameState();
-        this.gameState.state = GameState.State.INTRO;
+        this.gameState.state = GameState.State.MENU;
 
         this.currentGameLogic = new SinglePlayerGameLogic();
 
-        this.introMenu = new IntroMenu(this);
-        this.newPauseMenu = new PauseMenu(this);
-        this.gameOverMenu = new GameOverMenu(this);
+        this.mainMenu = new MainMenu(this);
 
         this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
@@ -68,17 +64,14 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         switch (gameState.state) {
 
-            case INTRO:
-                introMenu.draw(g, this);
-                break;
             case MENU:
-                newPauseMenu.draw(g, this);
+                mainMenu.draw(g, this);
                 break;
             case PLAY:
                 currentGameLogic.draw(g, this);
                 break;
             case GAMEOVER:
-                gameOverMenu.draw(g, this);
+                mainMenu.draw(g, this);
                 break;
         }
     }
@@ -87,17 +80,14 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         switch (gameState.state) {
 
-            case INTRO:
-                introMenu.update(this);
-                break;
             case PLAY:
                 currentGameLogic.update(this);
                 break;
             case MENU:
-                newPauseMenu.update(this);
+                mainMenu.update(this);
                 break;
             case GAMEOVER:
-                gameOverMenu.update(this);
+                mainMenu.update(this);
                 break;
             case QUIT:
                 System.exit(0);
@@ -129,16 +119,12 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         switch (gameState.state) {
 
-            case INTRO:
-                introMenu.keyPressed(e);
-                break;
-
             case PLAY:
                 currentGameLogic.keyPressed(e);
                 break;
 
             case MENU:
-                newPauseMenu.keyPressed(e);
+                mainMenu.keyPressed(e);
                 break;
 
             case GAMEOVER:
@@ -156,7 +142,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 break;
 
             case MENU:
-                newPauseMenu.keyReleased(e);
+                mainMenu.keyReleased(e);
                 break;
         }
 

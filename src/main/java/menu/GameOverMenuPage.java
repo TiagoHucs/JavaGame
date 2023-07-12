@@ -7,27 +7,30 @@ import waves.WaveController;
 import waves.WaveStatics;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class GameOverMenu extends AbstractGameMenu {
+public class GameOverMenuPage extends AbstractMenuPage {
 
-    public GameOverMenu(GameComponent gameComponent) {
-        super(gameComponent);
-    }
+    public static final String OPT_RETURN_MENU = "PRESS ESC TO RETURN";
 
-    @Override
-    public void init(GameComponent gameComponent) {
-        setOptions(new String[]{"PRESS ESC TO BACK MENU"});
+    public GameOverMenuPage(GameComponent gameComponent) {
+        super("GAME OVER");
+        setOptions(Arrays.asList(
+                new AbstractMenuOption(OPT_RETURN_MENU) {
+                    @Override
+                    public void execute() {
+
+                    }
+                }
+        ));
     }
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
         super.draw(g,gameComponent);
-
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
-
         List<String> text = new ArrayList<>(4);
         text.add("GAME OVER");
         for (WaveStatics statics: waveController.getStatics()) {
@@ -35,29 +38,8 @@ public class GameOverMenu extends AbstractGameMenu {
             text.add("Points: " + statics.getPoints());
             text.add("Time: " + statics.getTimeToClean());
         }
-        setText(text);
-    }
-
-
-    @Override
-    public void executeAction(String action) {
 
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(KeyEvent.VK_ESCAPE == e.getKeyCode()){
-            gameComponent.gameState.state = GameState.State.INTRO;
-        }
-    }
 
-    @Override
-    public void update(GameComponent gameComponent) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 }
