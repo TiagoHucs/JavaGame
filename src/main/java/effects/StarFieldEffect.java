@@ -34,11 +34,12 @@ public class StarFieldEffect {
     @SneakyThrows
     private void createStaticStars() {
 
+        // Ordem sugerida, do mais longe para o mais perto.
         List<BufferedImage> images = Arrays.asList(
-                ResourceManager.get().getImage("/image/Space Background/stars_1.png"),
-                ResourceManager.get().getImage("/image/Space Background/stars_2.png"),
+                ResourceManager.get().getImage("/image/Space Background/nebula_2.png"),
                 ResourceManager.get().getImage("/image/Space Background/nebula_1.png"),
-                ResourceManager.get().getImage("/image/Space Background/nebula_2.png")
+                ResourceManager.get().getImage("/image/Space Background/stars_2.png"),
+                ResourceManager.get().getImage("/image/Space Background/stars_1.png")
         );
 
         this.createStaticLayerImage(images);
