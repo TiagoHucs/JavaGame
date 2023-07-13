@@ -2,6 +2,7 @@ package menu.impl;
 
 import game.GameComponent;
 import menu.AbstractMenuOption;
+import menu.AbstractMenuOptionLevel;
 import menu.AbstractMenuPage;
 import menu.MainMenu;
 
@@ -16,10 +17,20 @@ public class SoundMenuPage extends AbstractMenuPage {
         super(title);
 
         setOptions(Arrays.asList(
-                new AbstractMenuOption(OPT_MUTED) {
+                new AbstractMenuOptionLevel(OPT_MUTED) {
                     @Override
                     public void execute() {
                         System.out.println(OPT_MUTED);
+                    }
+
+                    @Override
+                    public void increase() {
+                        System.out.println("Increasing "+ OPT_MUTED);
+                    }
+
+                    @Override
+                    public void decrease() {
+                        System.out.println("Decreasing "+ OPT_MUTED);
                     }
                 },
                 new AbstractMenuOption(OPT_SOUND_LEVEL) {

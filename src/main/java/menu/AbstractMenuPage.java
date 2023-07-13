@@ -108,6 +108,18 @@ public abstract class AbstractMenuPage implements MenuPage {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             selectedOption.execute();
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            if(selectedOption instanceof MenuOptionLevel){
+                ((MenuOptionLevel)selectedOption).decrease();
+            }
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if(selectedOption instanceof MenuOptionLevel){
+                ((MenuOptionLevel)selectedOption).increase();
+            }
+        }
     }
 
 
