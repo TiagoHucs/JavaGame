@@ -8,6 +8,8 @@ public class StarFieldEffect {
     private List<Star> starList;
     private final int w;
     private final int h;
+    public static final Color STAR_COLOR = new Color(117,67,121);
+    public static final Color SPACE_COLOR = new Color(25, 6, 31);
 
     public StarFieldEffect(int w, int h, int starCount) {
         this.w = w;
@@ -36,7 +38,7 @@ public class StarFieldEffect {
 
     public void draw(Graphics graphics) {
 
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(STAR_COLOR);
 
         for (Star star : starList) {
             graphics.fillOval(
