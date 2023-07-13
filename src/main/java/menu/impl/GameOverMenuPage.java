@@ -5,6 +5,7 @@ import game.GameState;
 import game.SinglePlayerGameLogic;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
+import menu.MainMenu;
 import waves.WaveController;
 import waves.WaveStatics;
 
@@ -17,13 +18,14 @@ public class GameOverMenuPage extends AbstractMenuPage {
 
     public static final String OPT_RETURN_MENU = "PRESS ESC TO RETURN";
 
-    public GameOverMenuPage(GameComponent gameComponent) {
-        super("GAME OVER");
+    public GameOverMenuPage(String title,GameComponent gameComponent, MainMenu mainMenu) {
+        super(title);
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_RETURN_MENU) {
                     @Override
                     public void execute() {
                         gameComponent.gameState.state = GameState.State.MENU;
+                        mainMenu.setMenuPage(MainMenu.KEY_GAME_MENU);
                     }
                 }
         ));

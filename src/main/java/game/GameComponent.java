@@ -1,7 +1,6 @@
 package game;
 
 import effects.StarFieldEffect;
-import menu.GameOverMenu;
 import menu.MainMenu;
 import utilities.Config;
 
@@ -44,7 +43,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         this.currentGameLogic = new SinglePlayerGameLogic();
 
         this.mainMenu = new MainMenu(this);
-        this.gameOverMenu = new GameOverMenu(this);
 
         this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
 
@@ -73,7 +71,8 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 currentGameLogic.draw(g, this);
                 break;
             case GAMEOVER:
-                gameOverMenu.draw(g, this);
+                ((MainMenu) mainMenu).setMenuPage(MainMenu.KEY_GAME_OVER);
+                mainMenu.draw(g, this);
                 break;
         }
     }
