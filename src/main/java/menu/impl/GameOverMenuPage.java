@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GameOverMenuPage extends AbstractMenuPage {
 
-    public static final String OPT_RETURN_MENU = "PRESS ESC TO RETURN";
+    public static final String OPT_RETURN_MENU = "PRESS ENTER TO RETURN";
 
     public GameOverMenuPage(String title,GameComponent gameComponent, MainMenu mainMenu) {
         super(title);
