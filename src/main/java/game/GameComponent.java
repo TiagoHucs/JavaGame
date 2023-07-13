@@ -44,7 +44,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         this.mainMenu = new MainMenu(this);
 
-        this.starFieldEffect = new StarFieldEffect(cfg.getLarguraTela(), cfg.getAlturaTela(), 400);
+        this.starFieldEffect = new StarFieldEffect(this, 400);
 
         this.gameThread = new Thread(this);
         this.gameThread.start();
@@ -60,7 +60,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         g.setColor(StarFieldEffect.SPACE_COLOR);
         g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
 
-        starFieldEffect.draw(g);
+        starFieldEffect.draw(g, this);
 
         switch (gameState.state) {
 

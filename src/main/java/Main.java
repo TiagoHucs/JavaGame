@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-    public static boolean DEBUG_MODE = false;
     public static void main(String[] args) {
 
         Config cfg = new Config();
@@ -22,12 +21,16 @@ public class Main {
         gameWindow.setLocationRelativeTo(null);
         gameWindow.addKeyListener(game);
 
-        if (!DEBUG_MODE) {
+        if (!isDebugMode()) {
             GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
             graphicsDevice.setFullScreenWindow(gameWindow);
         }
 
         gameWindow.setVisible(true);
+    }
+
+    public static boolean isDebugMode() {
+        return java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0;
     }
 }
