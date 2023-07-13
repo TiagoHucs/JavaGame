@@ -15,7 +15,7 @@ public abstract class WaveLayout {
         return c.charAt(0);
     }
 
-    public List<Enemy> layoutToEnemy(int offSetX, int offSetY, BehaviorIA enemyIA, GameComponent gameComponent) {
+    public List<Enemy> layoutToEnemy(int offSetX, int offSetY, BehaviorIA enemyIA, int typeIA, GameComponent gameComponent) {
 
         final String[] layout = getLayout();
         final char enemyType = getEnemyType("0");
@@ -37,7 +37,7 @@ public abstract class WaveLayout {
                 px += p.getSize().x;
 
                 if (enemyType == row.charAt(i)) {
-                    p = new Enemy(enemyIA);
+                    p = new Enemy(enemyIA, typeIA + 1);
                     p.setPosition(new Point2D.Float(px, py));
                     enemyIA.setSpeed(p, gameComponent);
                     enemyList.add(p);

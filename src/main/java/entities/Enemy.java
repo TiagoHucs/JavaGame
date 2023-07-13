@@ -20,12 +20,17 @@ public class Enemy extends Ator {
 
     @SneakyThrows
     public Enemy(BehaviorIA behavior) {
+        this(behavior, 1);
+    }
+
+    @SneakyThrows
+    public Enemy(BehaviorIA behavior, int enemyType) {
         super();
         this.behavior = behavior;
         this.animation = new ImageAnimation(
-                ResourceManager.get().getImage("/image/enemy_1_1.png"),
-                ResourceManager.get().getImage("/image/enemy_1_2.png"),
-                ResourceManager.get().getImage("/image/enemy_1_3.png")
+                ResourceManager.get().getImage("/image/enemy_" + enemyType + "_1.png"),
+                ResourceManager.get().getImage("/image/enemy_" + enemyType + "_2.png"),
+                ResourceManager.get().getImage("/image/enemy_" + enemyType + "_3.png")
         );
         this.setImage(animation.getCurrentImage());
     }

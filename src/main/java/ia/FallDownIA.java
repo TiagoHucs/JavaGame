@@ -9,7 +9,7 @@ public class FallDownIA implements BehaviorIA {
 
     @Override
     public void setSpeed(Ator ator, GameComponent gameComponent) {
-        ator.setVelocity(new Point2D.Float(0.0f, 1.0f));
+        ator.setVelocity(new Point2D.Float(0.0f, 0.8f));
     }
 
     @Override
