@@ -7,69 +7,63 @@ import utilities.ResourceManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StarFieldEffect {
-    private List<Star> starList;
     private final int w;
     private final int h;
     public static final Color STAR_COLOR = new Color(117, 67, 121);
     public static final Color SPACE_COLOR = new Color(25, 6, 31);
-    private BufferedImage stars1, stars2, nebula1, nebula2, staticBackground;
-    private BufferedImage[] layers;
+    private BufferedImage layers[], staticBackground;
+    private List<Star> starList;
 
-    public StarFieldEffect(GameComponent gameComponent, int starCount) {
+    public StarFieldEffect(GameComponent gameComponent, boolean staticBackground) {
+
         this.w = gameComponent.getWidth();
         this.h = gameComponent.getHeight();
-        // this.createDynamicStars(starCount);
-        this.createStaticStars();
+
+        if (staticBackground) {
+            this.createStaticStars();
+        } else {
+            this.createDynamicStars(256);
+        }
+
     }
 
     @SneakyThrows
     private void createStaticStars() {
 
-        this.stars1 = ResourceManager.get().getImage("/image/Space Background/stars_1.png");
-        this.stars2 = ResourceManager.get().getImage("/image/Space Background/stars_2.png");
-        this.nebula1 = ResourceManager.get().getImage("/image/Space Background/nebula_1.png");
-        this.nebula2 = ResourceManager.get().getImage("/image/Space Background/nebula_2.png");
+        List<BufferedImage> images = Arrays.asList(
+                ResourceManager.get().getImage("/image/Space Background/stars_1.png"),
+                ResourceManager.get().getImage("/image/Space Background/stars_2.png"),
+                ResourceManager.get().getImage("/image/Space Background/nebula_1.png"),
+                ResourceManager.get().getImage("/image/Space Background/nebula_2.png")
+        );
 
-        this.createStaticLayerImage(4);
+        this.createStaticLayerImage(images);
         this.createStaticBackgroundImage();
     }
 
-    private void createStaticLayerImage(int layerCount) {
+    private void createStaticLayerImage(List<BufferedImage> images) {
 
-        layers = new BufferedImage[layerCount];
+        layers = new BufferedImage[images.size()];
 
-        for (int i = 0; i < layerCount; i++) {
+        for (BufferedImage layerImage : images) {
 
-            layers[i] = new BufferedImage(w, h, stars1.getType());
+            int i = images.indexOf(layerImage);
+            layers[i] = new BufferedImage(w, h, layerImage.getType());
 
             Graphics graphics = layers[i].getGraphics();
-            graphics.setColor(SPACE_COLOR);
-
-            switch (i) {
-                case 0:
-                    renderLayer(graphics, stars1);
-                    break;
-                case 1:
-                    renderLayer(graphics, stars2);
-                    break;
-                case 2:
-                    renderLayer(graphics, nebula1);
-                    break;
-                case 3:
-                    renderLayer(graphics, nebula2);
-                    break;
-            }
-
+            renderLayer(graphics, layerImage);
             graphics.dispose();
+
         }
     }
 
     private void createStaticBackgroundImage() {
 
-        staticBackground = new BufferedImage(w, h, stars1.getType());
+        staticBackground = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
         Graphics graphics = staticBackground.getGraphics();
         graphics.setColor(SPACE_COLOR);
@@ -101,8 +95,14 @@ public class StarFieldEffect {
     }
 
     public void draw(Graphics graphics, GameComponent game) {
-        // drawDynamicStars(graphics);
-        drawStaticStars(graphics, game, false);
+
+        if (starList == null) {
+            drawStaticStars(graphics, game, false);
+
+        } else {
+            drawDynamicStars(graphics);
+        }
+
     }
 
     private void drawStaticStars(Graphics graphics, GameComponent game, boolean parallaxEffect) {
@@ -110,8 +110,8 @@ public class StarFieldEffect {
         // TODO: no futuro pode ter efeito parallax
         if (parallaxEffect) {
 
-            for (int i = 0; i < layers.length; i++) {
-                graphics.drawImage(layers[i], 0, 0, game);
+            for (BufferedImage layer : layers) {
+                graphics.drawImage(layer, 0, 0, game);
             }
 
         } else {

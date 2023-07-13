@@ -44,7 +44,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         this.mainMenu = new MainMenu(this);
 
-        this.starFieldEffect = new StarFieldEffect(this, 400);
+        this.starFieldEffect = new StarFieldEffect(this, true);
 
         this.gameThread = new Thread(this);
         this.gameThread.start();
