@@ -44,6 +44,9 @@ public class Config {
     }
 
     public void setup(Component gameWindow) {
+        if (gameWindow instanceof Frame) {
+            ((Frame) gameWindow).setUndecorated(true);
+        }
         gameWindow.setBackground(Color.BLACK);
         gameWindow.setPreferredSize(screenSize);
         gameWindow.requestFocusInWindow();
