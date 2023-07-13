@@ -222,7 +222,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
             if (collisionController.detectaColisao(tiro, inimigo)) {
 
-                if (inimigo.isDropPowerUp()) {
+                if (powerUps.isEmpty() && inimigo.isDropPowerUp()) {
                     PowerUp powerUp = new PowerUp(inimigo);
                     powerUps.add(powerUp);
                 }
