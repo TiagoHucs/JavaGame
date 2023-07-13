@@ -178,6 +178,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
                 if (collisionController.detectaColisao(powerUp, playerState.getShip())) {
                     powerUp.levelUp(playerState, scoreAnimation);
+                    gameComponent.getSoundManager().playSound("power-up.wav");
                     powerUpItr.remove();
                     break;
                 }
@@ -199,15 +200,16 @@ public class SinglePlayerGameLogic implements GameLogic {
             while (enemyIterator.hasNext()) {
                 Enemy inimigo = enemyIterator.next();
                 verificaColisao(gameComponent, enemyIterator, inimigo, playerState);
-                verificaVidaInimigo(enemyIterator, inimigo);
+                verificaVidaInimigo(gameComponent, enemyIterator, inimigo);
             }
 
         }
     }
 
-    private void verificaVidaInimigo(Iterator<Enemy> enemyIterator, Enemy inimigo) {
+    private void verificaVidaInimigo(GameComponent gc, Iterator<Enemy> enemyIterator, Enemy inimigo) {
         if (inimigo.getLifes() == 0) {
             explosions.add(new Explosion2(inimigo));
+            gc.getSoundManager().playSound("explosion.wav");
             enemyIterator.remove();
         }
     }
