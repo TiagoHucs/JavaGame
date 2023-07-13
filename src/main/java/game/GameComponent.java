@@ -16,7 +16,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     private StarFieldEffect starFieldEffect;
     private Thread gameThread;
     public GameState gameState;
-    public GameLogic currentGameLogic, mainMenu , gameOverMenu;
+    public GameLogic currentGameLogic, mainMenu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -126,7 +126,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 break;
 
             case GAMEOVER:
-                gameOverMenu.keyPressed(e);
+                mainMenu.keyPressed(e);
                 break;
         }
     }
