@@ -4,6 +4,8 @@ import game.GameComponent;
 import game.GameState;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
+import menu.MainMenu;
+import menu.MenuPage;
 
 import java.util.Arrays;
 
@@ -13,8 +15,8 @@ public class StartMenuPage extends AbstractMenuPage {
     private static final String OPT_CONFIGURATIONS = "CONFIGURAÇÕES";
     private static final String OPT_EXIT_GAME = "SAIR PARA DESKTOP";
 
-    public StartMenuPage(GameComponent gameComponent) {
-        super("PRINCIPAL");
+    public StartMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
+        super(title);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_BACK_GAME) {
@@ -27,7 +29,7 @@ public class StartMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_CONFIGURATIONS) {
                     @Override
                     public void execute() {
-                       System.out.println("CHAMA CONFIG");
+                       mainMenu.setMenuPage("CONFIGURATIONS MENU");
                     }
                 },
                 new AbstractMenuOption(OPT_EXIT_GAME) {
