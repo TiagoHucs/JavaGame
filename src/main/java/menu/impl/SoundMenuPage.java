@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class SoundMenuPage extends AbstractMenuPage {
 
-    public static final String OPT_MUTED = "MUTED: TRUE";
+    public static final String OPT_MUTED = "MUTED";
     private static final String OPT_SOUND_LEVEL = "LEVEL VOLUME: 100%";
 
     public SoundMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
@@ -25,12 +25,17 @@ public class SoundMenuPage extends AbstractMenuPage {
 
                     @Override
                     public void increase() {
-                        System.out.println("Increasing "+ OPT_MUTED);
+                        gameComponent.getCfg().setMuted(true);
                     }
 
                     @Override
                     public void decrease() {
-                        System.out.println("Decreasing "+ OPT_MUTED);
+                        gameComponent.getCfg().setMuted(false);
+                    }
+
+                    @Override
+                    public String getTitle() {
+                        return super.getTitle() + ": " +gameComponent.getCfg().isMuted();
                     }
                 },
                 new AbstractMenuOption(OPT_SOUND_LEVEL) {
