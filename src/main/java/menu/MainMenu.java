@@ -15,13 +15,17 @@ public class MainMenu implements GameLogic {
     private HashMap<String,MenuPage> pages = new HashMap<>(2);
     private MenuPage selectedPage;
 
+    public static final String KEY_GAME_MENU = "GAME MENU";
+    public static final String KEY_CONFIGURATIONS_MENU = "CONFIGURATIONS MENU";
+    public static final String KEY_SOUND_MENU = "SOUND MENU";
+
     public MainMenu(GameComponent gameComponent) {
 
-        pages.put("GAME MENU",new StartMenuPage("GAME MENU",gameComponent,this));
-        pages.put("CONFIGURATIONS MENU",new ConfigMenuPage("CONFIGURATIONS MENU",gameComponent,this));
-        pages.put("SOUND MENU",new SoundMenuPage("SOUND MENU",gameComponent,this));
+        pages.put(KEY_GAME_MENU,new StartMenuPage(KEY_GAME_MENU,gameComponent,this));
+        pages.put(KEY_CONFIGURATIONS_MENU,new ConfigMenuPage(KEY_CONFIGURATIONS_MENU,gameComponent,this));
+        pages.put(KEY_SOUND_MENU,new SoundMenuPage(KEY_SOUND_MENU,gameComponent,this));
 
-        setMenuPage("GAME MENU");
+        setMenuPage(KEY_GAME_MENU);
     }
 
     @Override

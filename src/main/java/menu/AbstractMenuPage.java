@@ -10,6 +10,8 @@ import java.util.List;
 
 public abstract class AbstractMenuPage implements MenuPage {
 
+    protected static final String OPT_BACK = "BACK";
+
     private String title;
     private List<MenuOption> options;
     private MenuOption selectedOption;

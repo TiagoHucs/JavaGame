@@ -11,9 +11,9 @@ import java.util.Arrays;
 
 public class StartMenuPage extends AbstractMenuPage {
 
-    public static final String OPT_BACK_GAME = "INICIAR/RETOMAR PARTIDA";
-    private static final String OPT_CONFIGURATIONS = "CONFIGURAÇÕES";
-    private static final String OPT_EXIT_GAME = "SAIR PARA DESKTOP";
+    public static final String OPT_BACK_GAME = "CONTINUE/RETURN GAME";
+    private static final String OPT_CONFIGURATIONS = "CONFIGURATIONS";
+    private static final String OPT_EXIT_GAME = "EXIT TO DESKTOP";
 
     public StartMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
         super(title);
@@ -29,7 +29,7 @@ public class StartMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_CONFIGURATIONS) {
                     @Override
                     public void execute() {
-                       mainMenu.setMenuPage("CONFIGURATIONS MENU");
+                       mainMenu.setMenuPage(MainMenu.KEY_CONFIGURATIONS_MENU);
                     }
                 },
                 new AbstractMenuOption(OPT_EXIT_GAME) {

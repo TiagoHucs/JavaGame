@@ -11,8 +11,6 @@ public class SoundMenuPage extends AbstractMenuPage {
 
     public static final String OPT_MUTED = "MUTED: TRUE";
     private static final String OPT_SOUND_LEVEL = "LEVEL VOLUME: 100%";
-    private static final String OPT_BACK = "BACK";
-    private static final String KEY_BACK_PAGE = "CONFIGURATIONS MENU";
 
     public SoundMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
         super(title);
@@ -33,8 +31,7 @@ public class SoundMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_BACK) {
                     @Override
                     public void execute() {
-                        System.out.println(KEY_BACK_PAGE);
-                        mainMenu.setMenuPage(KEY_BACK_PAGE);
+                        mainMenu.setMenuPage(MainMenu.KEY_CONFIGURATIONS_MENU);
                     }
                 }
         ));

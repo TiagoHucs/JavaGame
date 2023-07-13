@@ -14,10 +14,6 @@ public class ConfigMenuPage extends AbstractMenuPage {
     public static final String OPT_GRAPHICS = "GRAPHICS";
     private static final String OPT_SOUND = "SOUND";
     private static final String OPT_CONTROLLER = "CONTROLLER";
-    private static final String OPT_BACK = "BACK";
-
-    private static final String KEY_BACK_PAGE = "GAME MENU";
-    private static final String KEY_SOUND_MENU = "SOUND MENU";
 
     public ConfigMenuPage(String title,GameComponent gameComponent, MainMenu mainMenu) {
         super(title);
@@ -32,8 +28,7 @@ public class ConfigMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_SOUND) {
                     @Override
                     public void execute() {
-                       System.out.println(OPT_SOUND);
-                       mainMenu.setMenuPage(KEY_SOUND_MENU);
+                       mainMenu.setMenuPage(MainMenu.KEY_SOUND_MENU);
                     }
                 },
                 new AbstractMenuOption(OPT_CONTROLLER) {
@@ -45,8 +40,7 @@ public class ConfigMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_BACK) {
                     @Override
                     public void execute() {
-                        System.out.println(KEY_BACK_PAGE);
-                        mainMenu.setMenuPage(KEY_BACK_PAGE);
+                        mainMenu.setMenuPage(MainMenu.KEY_GAME_MENU);
                     }
                 }
         ));
