@@ -51,14 +51,11 @@ public class StarFieldEffect {
         layers = new BufferedImage[images.size()];
 
         for (BufferedImage layerImage : images) {
-
             int i = images.indexOf(layerImage);
             layers[i] = new BufferedImage(w, h, layerImage.getType());
-
             Graphics graphics = layers[i].getGraphics();
             renderLayer(graphics, layerImage);
             graphics.dispose();
-
         }
     }
 
@@ -68,6 +65,7 @@ public class StarFieldEffect {
 
         Graphics graphics = staticBackground.getGraphics();
         graphics.setColor(SPACE_COLOR);
+        graphics.fillRect(0, 0, w, h);
 
         for (BufferedImage layer : layers) {
             graphics.drawImage(layer, 0, 0, null);
@@ -140,6 +138,9 @@ public class StarFieldEffect {
     }
 
     private void drawDynamicStars(Graphics graphics) {
+
+        graphics.setColor(SPACE_COLOR);
+        graphics.fillRect(0, 0, w, h);
 
         graphics.setColor(STAR_COLOR);
 

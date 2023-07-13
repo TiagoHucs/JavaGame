@@ -57,9 +57,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
 
         this.update();
 
-        g.setColor(StarFieldEffect.SPACE_COLOR);
-        g.fillRect(0, 0, cfg.getLarguraTela(), cfg.getAlturaTela());
-
         starFieldEffect.draw(g, this);
 
         switch (gameState.state) {
