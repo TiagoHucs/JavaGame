@@ -52,7 +52,7 @@ public abstract class AbstractMenuPage implements MenuPage {
         for (MenuOption option: options) {
             g.setColor(option == selectedOption ? Color.YELLOW : Color.WHITE);
             int larguraTexto = metrics.stringWidth(option.getTitle());
-            int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+            int x = (gameComponent.getCfg().getGameWidth() - larguraTexto) / 2;
             g.drawString(option.getTitle(), x, line);
             nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
         }
@@ -65,7 +65,7 @@ public abstract class AbstractMenuPage implements MenuPage {
 
         g.setColor(Color.BLUE);
         int larguraTexto = metrics.stringWidth(this.title);
-        int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+        int x = (gameComponent.getCfg().getGameWidth() - larguraTexto) / 2;
         g.drawString(this.title, x, line);
         nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
 
@@ -73,8 +73,8 @@ public abstract class AbstractMenuPage implements MenuPage {
 
     private void drawGameLogo(Graphics g, GameComponent gameComponent){
         g.drawImage(logo,
-                gameComponent.getCfg().getLarguraTela()/2 - logo.getWidth(gameComponent) / 2,
-                gameComponent.getCfg().getAlturaTela()/5,
+                gameComponent.getCfg().getGameWidth()/2 - logo.getWidth(gameComponent) / 2,
+                gameComponent.getCfg().getGameHeight()/5,
                 null,
                 gameComponent);
         nextLine(logo.getHeight(gameComponent)/2);
@@ -85,7 +85,7 @@ public abstract class AbstractMenuPage implements MenuPage {
     }
 
     private void setStartLine(GameComponent gameComponent){
-        line = gameComponent.getCfg().getAlturaTela()/3;
+        line = gameComponent.getCfg().getGameHeight()/3;
     }
 
     public void sendEvent(KeyEvent e){

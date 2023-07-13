@@ -1,6 +1,7 @@
 package game;
 
 import effects.StarFieldEffect;
+import lombok.SneakyThrows;
 import menu.MainMenu;
 import utilities.Config;
 
@@ -10,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameComponent extends JPanel implements KeyListener, Runnable {
-    public static final int FPS_SET = 60;
+    public static final float FPS_SET = 60.0f;
     private Config cfg;
     private SoundManager soundManager;
     private StarFieldEffect starFieldEffect;
@@ -74,21 +75,20 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         }
     }
 
+    @SneakyThrows
     public void update() {
 
         switch (gameState.state) {
-
             case PLAY:
                 currentGameLogic.update(this);
                 break;
             case MENU:
-                mainMenu.update(this);
-                break;
             case GAMEOVER:
                 mainMenu.update(this);
                 break;
             case QUIT:
                 System.exit(0);
+                gameThread.join();
                 break;
         }
     }
@@ -102,29 +102,18 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) {
 
         switch (e.getKeyCode()) {
-
-            case KeyEvent.VK_M:
-                cfg.setMuted(!cfg.isMuted());
-                soundManager.toogleMute(cfg.isMuted());
-                break;
-
             case KeyEvent.VK_ESCAPE:
                 gameState.state = GameState.State.MENU;
                 soundManager.playSound("changing-tab.wav");
                 break;
-
         }
 
         switch (gameState.state) {
-
             case PLAY:
                 currentGameLogic.keyPressed(e);
                 break;
 
             case MENU:
-                mainMenu.keyPressed(e);
-                break;
-
             case GAMEOVER:
                 mainMenu.keyPressed(e);
                 break;
@@ -140,6 +129,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 break;
 
             case MENU:
+            case GAMEOVER:
                 mainMenu.keyReleased(e);
                 break;
         }
@@ -149,11 +139,11 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
 
-        double timePerFrame = 1000000000.0 / FPS_SET;
+        final float timePerFrame = 1000000000.0f / FPS_SET;
 
         long previousTime = System.nanoTime();
 
-        double delta = 0;
+        float delta = 0.0f;
 
         while (gameState.isGameRunning()) {
 
@@ -166,7 +156,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 repaint();
                 delta--;
             }
-
         }
     }
 }

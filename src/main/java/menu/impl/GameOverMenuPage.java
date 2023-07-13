@@ -46,7 +46,7 @@ public class GameOverMenuPage extends AbstractMenuPage {
         g.setColor(new Color(80,80,80,255));
         for (String txt :text) {
             int larguraTexto = metrics.stringWidth(txt);
-            int x = (gameComponent.getCfg().getLarguraTela() - larguraTexto) / 2;
+            int x = (gameComponent.getCfg().getGameWidth() - larguraTexto) / 2;
             g.drawString(txt, x, line);
             nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
         }

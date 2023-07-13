@@ -7,7 +7,7 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
 
-        Config cfg = new Config();
+        Config cfg = new Config(Toolkit.getDefaultToolkit().getScreenSize());
 
         GameComponent game = new GameComponent(cfg);
 
