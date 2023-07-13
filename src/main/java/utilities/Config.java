@@ -8,7 +8,8 @@ public class Config {
     private final int larguraTela = (int) screenSize.getWidth();
     private final int alturaTela = (int) screenSize.getHeight();
     private final int resolution = (int) screenSize.getWidth();
-    private boolean muted = true;
+    private boolean muted = false;
+    private int soundVolume = 80;
     private final Random randomGenerator = new Random();
     private final Font font = new Font("TimesRoman", Font.PLAIN, 25);
 
@@ -35,6 +36,14 @@ public class Config {
         this.muted = muted;
     }
 
+    public int getSoundVolume() {
+        return soundVolume;
+    }
+
+    public void setSoundVolume(int soundVolume) {
+        this.soundVolume = Math.max(0, Math.min(100, soundVolume));
+    }
+
     public Random getRandomGenerator() {
         return randomGenerator;
     }
@@ -50,5 +59,9 @@ public class Config {
         gameWindow.setBackground(Color.BLACK);
         gameWindow.setPreferredSize(screenSize);
         gameWindow.requestFocusInWindow();
+    }
+
+    public float getGlobalVolume() {
+        return (float) getSoundVolume() / 100.0f;
     }
 }

@@ -35,7 +35,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     public void init() {
         this.soundManager = new SoundManager();
         this.soundManager.loadSounds("/audio");
-        this.soundManager.setGlobalVolume(0.8f);
+        this.soundManager.setGlobalVolume(cfg.getGlobalVolume());
 
         this.gameState = new GameState();
         this.gameState.state = GameState.State.MENU;
