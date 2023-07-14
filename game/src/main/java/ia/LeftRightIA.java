@@ -2,6 +2,7 @@ package ia;
 
 import entities.Ator;
 import game.GameComponent;
+import game.PlayerState;
 
 public class LeftRightIA implements BehaviorIA {
 
@@ -27,6 +28,13 @@ public class LeftRightIA implements BehaviorIA {
             ator.getPosition().y = -ator.getSize().y * 2;
         }
 
+    }
+
+    @Override
+    public void damage(Ator ator, PlayerState playerState, GameComponent gameComponent) {
+        if (ator.getPosition().y > gameComponent.getCfg().getGameHeight()) {
+            playerState.getShip().sofreDano(10);
+        }
     }
 
 }

@@ -158,6 +158,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         for (Enemy inimigo : enemies) {
             inimigo.move();
+            inimigo.damage(players, gameComponent);
             inimigo.clampMove(gameComponent);
         }
 
@@ -274,12 +275,12 @@ public class SinglePlayerGameLogic implements GameLogic {
 
         Config cfg = gameComponent.getCfg();
         SoundManager soundManager = gameComponent.getSoundManager();
+        Dimension offset = new Dimension(cfg.getGameWidth() / 2, 0);
 
         int typeIA = cfg.getRandomGenerator().nextInt(behaviorIA.length);
         BehaviorIA enemyIA = behaviorIA[typeIA];
 
-        enemies = waveController.getWaveLayout()
-                .layoutToEnemy(gameComponent.getCfg().getGameWidth() / 2, 0, enemyIA, typeIA, gameComponent);
+        enemies = waveController.getWaveLayout().layoutToEnemy(offset.width, offset.height, enemyIA, typeIA, gameComponent);
 
         soundManager.playSound("fighters-coming.wav");
     }
