@@ -51,21 +51,34 @@ public class WaveController {
 
         if (timeToStart > 0) {
 
-            int width = 200;
-            int height = 50;
-
-            // Centro da Tela - Centro do text-box
-            int px = (gameComponent.getCfg().getGameWidth() / 2) - (width / 2);
-            int py = (gameComponent.getCfg().getGameHeight() / 2) - (height / 2);
-
-            graphics.setColor(Color.WHITE);
+            // Preparando graphics
             graphics.setFont(font);
-            graphics.drawString("Wave " + currentWave.getNumber(), px, py);
+            graphics.setColor(Color.CYAN);
 
+            // Descobrindo o centro da tela
+            Dimension screenCenter = new Dimension (
+                    gameComponent.getCfg().getGameWidth() / 2,
+                    gameComponent.getCfg().getGameHeight() / 2);
+
+            // Texto 1
+            String waveText = "Wave " + String.format("%02d", currentWave.getNumber());
+
+            // TODO: depois achar uma forma melhor de pegar o tamanho da fonte, já que é a mesma para o jogo melhor ter um util para isso
+            Dimension centerText = new Dimension(
+                    waveText.length() * font.getSize() / 2,
+                    waveText.length() * font.getSize() / 2);
+
+            graphics.drawString(waveText, screenCenter.width - centerText.width, screenCenter.height - centerText.height);
+
+            // Texto 2
             int timeToInt = (int) timeToStart + 1;
-            graphics.drawString("Starts in " + timeToInt,
-                    px - font.getSize(),
-                    py + height);
+            String timeToStartText = "Starts in " + String.format("%02d", timeToInt);
+
+            centerText = new Dimension(
+                    timeToStartText.length() * font.getSize() / 2,
+                    timeToStartText.length() * font.getSize() / 2);
+
+            graphics.drawString(timeToStartText, screenCenter.width - centerText.width, screenCenter.height - centerText.height);
         }
 
     }
