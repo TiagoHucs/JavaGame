@@ -17,7 +17,8 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     private StarFieldEffect starFieldEffect;
     private Thread gameThread;
     public GameState gameState;
-    public GameLogic currentGameLogic, mainMenu;
+    public GameLogic currentGameLogic;
+    public MainMenu mainMenu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -65,7 +66,6 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
         starFieldEffect.draw(g2d, this);
 
         switch (gameState.state) {
-
             case MENU:
                 mainMenu.draw(g2d, this);
                 break;
@@ -73,7 +73,7 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
                 currentGameLogic.draw(g2d, this);
                 break;
             case GAMEOVER:
-                ((MainMenu) mainMenu).setMenuPage(MainMenu.KEY_GAME_OVER);
+                mainMenu.setMenuPage(MainMenu.KEY_GAME_OVER);
                 mainMenu.draw(g2d, this);
                 break;
         }
