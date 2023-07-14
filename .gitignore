@@ -3,3 +3,5 @@ idea
 ../.idea/
 /target/
 
+/game/target/
+/engine/target/
