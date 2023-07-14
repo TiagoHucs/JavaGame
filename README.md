@@ -1,5 +1,2 @@
-Compilar jogo:
-javac Main.java
-
-Executar jogo:
-Java Main
+eftgames:
+JavaGame Iniciative

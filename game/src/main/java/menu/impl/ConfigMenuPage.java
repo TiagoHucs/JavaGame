@@ -1,11 +1,9 @@
 package menu.impl;
 
 import game.GameComponent;
-import game.GameState;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
 import menu.MainMenu;
-import menu.MenuPage;
 
 import java.util.Arrays;
 

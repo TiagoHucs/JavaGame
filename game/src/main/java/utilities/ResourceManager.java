@@ -54,7 +54,7 @@ public class ResourceManager {
 
     public synchronized Font getFont() {
         if(font == null){
-            File fontFile = new File("src/main/resources/fonts/PressStart2P-Regular.ttf");
+            File fontFile = new File("game/src/main/resources/fonts/PressStart2P-Regular.ttf");
             try {
                 font =  Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.PLAIN, 16);
             } catch (FontFormatException e) {

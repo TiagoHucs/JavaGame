@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-import java.security.cert.CertPathBuilder;
 
 @Getter
 @Setter

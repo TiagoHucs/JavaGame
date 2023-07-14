@@ -4,7 +4,6 @@ import game.PlayerState;
 import game.ScoreAnimation;
 
 import java.awt.geom.Point2D;
-import java.util.List;
 
 public class PowerUp extends Ator {
     public PowerUp(Ator child) {

@@ -4,7 +4,6 @@ import entities.Ator;
 import utilities.ResourceManager;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
