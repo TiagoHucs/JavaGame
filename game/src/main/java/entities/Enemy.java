@@ -1,6 +1,7 @@
 package entities;
 
 import game.GameComponent;
+import game.PlayerState;
 import ia.BehaviorIA;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import utilities.GameUtil;
 import utilities.ResourceManager;
 
 import java.awt.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +39,14 @@ public class Enemy extends Ator {
 
     public void clampMove(GameComponent gameComponent) {
         behavior.clampMove(this, gameComponent);
+    }
+
+    public void damage(List<PlayerState> players, GameComponent gameComponent) {
+
+        for (PlayerState playerState : players) {
+            behavior.damage(this, playerState, gameComponent);
+        }
+
     }
 
     public void draw(Graphics g, GameComponent gameComponent) {

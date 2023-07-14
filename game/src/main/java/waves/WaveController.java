@@ -2,6 +2,7 @@ package waves;
 
 import game.GameComponent;
 import game.PlayerState;
+import utilities.GameUtil;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -97,16 +98,29 @@ public class WaveController {
         }
     }
     
-    public final WaveLayout getWaveLayout() {
+    public WaveLayout getWaveLayout() {
 
-        switch (currentWave.getNumber()) {
+        WaveLayout waveLayout = createWaveLayout(currentWave.getNumber());
+
+        // Chegou ao fim? pega qualquer uma na sorte ai então...
+        if (waveLayout == null) {
+            waveLayout = createWaveLayout(GameUtil.getRandomNumber(1, 4));
+        }
+
+        return waveLayout;
+    }
+
+    private WaveLayout createWaveLayout(int layoutNumber) {
+
+        switch (layoutNumber) {
+            case 0:
             case 1: return new LayoutWave01();
             case 2: return new LayoutWave02();
             case 3: return new LayoutWave03();
             case 4: return new LayoutWave04();
         }
 
-        return new LayoutWave01();
+        return null;
     }
     public final List<WaveStatics> getStatics() {
         return statics;
