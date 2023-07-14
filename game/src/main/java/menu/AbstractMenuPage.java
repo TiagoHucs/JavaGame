@@ -122,5 +122,7 @@ public abstract class AbstractMenuPage implements MenuPage {
         }
     }
 
-
+    public String getTitle() {
+        return title;
+    }
 }

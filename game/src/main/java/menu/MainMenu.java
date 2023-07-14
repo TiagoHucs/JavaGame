@@ -13,33 +13,36 @@ import java.util.HashMap;
 
 public class MainMenu implements GameLogic {
 
-    private HashMap<String,MenuPage> pages = new HashMap<>(4);
+    private HashMap<String, MenuPage> pages = new HashMap<>(4);
     private MenuPage selectedPage;
 
     public static final String KEY_GAME_MENU = "GAME MENU";
     public static final String KEY_CONFIGURATIONS_MENU = "CONFIGURATIONS MENU";
     public static final String KEY_SOUND_MENU = "SOUND MENU";
-    public static final String KEY_GAME_OVER = "GAME OVER novo";
+    public static final String KEY_GAME_OVER = "GAME OVER";
 
     public MainMenu(GameComponent gameComponent) {
 
-        pages.put(KEY_GAME_MENU,new StartMenuPage(KEY_GAME_MENU,gameComponent,this));
-        pages.put(KEY_CONFIGURATIONS_MENU,new ConfigMenuPage(KEY_CONFIGURATIONS_MENU,gameComponent,this));
-        pages.put(KEY_SOUND_MENU,new SoundMenuPage(KEY_SOUND_MENU,gameComponent,this));
-
-        pages.put(KEY_GAME_OVER,new GameOverMenuPage(KEY_SOUND_MENU,gameComponent,this));
+        registerMenu(new StartMenuPage(KEY_GAME_MENU, gameComponent, this));
+        registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent, this));
+        registerMenu(new SoundMenuPage(KEY_SOUND_MENU, gameComponent, this));
+        registerMenu(new GameOverMenuPage(KEY_GAME_OVER, gameComponent, this));
 
         setMenuPage(KEY_GAME_MENU);
     }
 
+    private void registerMenu(AbstractMenuPage menu) {
+        pages.put(menu.getTitle(), menu);
+    }
+
     @Override
     public void init(GameComponent gameComponent) {
-
+        setMenuPage(KEY_GAME_MENU);
     }
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-        selectedPage.draw(g,gameComponent);
+        selectedPage.draw(g, gameComponent);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class MainMenu implements GameLogic {
 
     }
 
-    public void setMenuPage(String menuPageKey){
+    public void setMenuPage(String menuPageKey) {
         selectedPage = pages.get(menuPageKey);
     }
 }
