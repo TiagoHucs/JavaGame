@@ -14,7 +14,7 @@ public class Shot extends Ator {
     public boolean isOffScreen(GameComponent gameComponent) {
         // Tiro só se move vertical por enquanto
         return this.getPosition().y < -this.getSize().x ||
-                this.getPosition().y > gameComponent.getHeight() + this.getSize().y;
+                this.getPosition().y > gameComponent.getCfg().getGameHeight() + this.getSize().y;
     }
 
 }

@@ -98,18 +98,18 @@ public class Ator {
     }
 
     public float getVerticalLimit(GameComponent gameComponent){
-        return gameComponent.getHeight() - this.size.y;
+        return gameComponent.getCfg().getGameHeight() - this.size.y;
     }
 
     public float getHorizonntalLimit(GameComponent gameComponent){
-        return gameComponent.getWidth() - this.size.x;
+        return gameComponent.getCfg().getGameWidth() - this.size.x;
     }
 
     public boolean isOutOfScreenX(GameComponent gameComponent) {
-        return this.position.x < -size.x || this.position.x > gameComponent.getWidth();
+        return this.position.x < -size.x || this.position.x > gameComponent.getCfg().getGameWidth();
     }
     public boolean isOutOfScreenY(GameComponent gameComponent) {
-        return this.position.y > gameComponent.getHeight();
+        return this.position.y > gameComponent.getCfg().getGameHeight();
     }
 
     public boolean isOutOfScreen(GameComponent gameComponent) {

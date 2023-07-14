@@ -20,8 +20,8 @@ public class StarFieldEffect {
 
     public StarFieldEffect(GameComponent gameComponent, boolean staticBackground) {
 
-        this.w = gameComponent.getWidth();
-        this.h = gameComponent.getHeight();
+        this.w = gameComponent.getCfg().getGameWidth();
+        this.h = gameComponent.getCfg().getGameHeight();
 
         if (staticBackground) {
             this.createStaticStars();

@@ -14,7 +14,7 @@ public class FallDownIA implements BehaviorIA {
 
     @Override
     public void clampMove(Ator ator, GameComponent gameComponent) {
-        if (ator.getPosition().y > gameComponent.getHeight()) {
+        if (ator.getPosition().y > gameComponent.getCfg().getGameHeight()) {
             ator.getPosition().y = -ator.getSize().y;
         }
     }

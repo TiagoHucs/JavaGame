@@ -54,23 +54,27 @@ public class GameComponent extends JPanel implements KeyListener, Runnable {
     @Override
     public void paintComponent(Graphics g) {
 
-        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        super.paintComponent(g2d);
+
+        cfg.applyRenderScale(g2d);
 
         this.update();
 
-        starFieldEffect.draw(g, this);
+        starFieldEffect.draw(g2d, this);
 
         switch (gameState.state) {
 
             case MENU:
-                mainMenu.draw(g, this);
+                mainMenu.draw(g2d, this);
                 break;
             case PLAY:
-                currentGameLogic.draw(g, this);
+                currentGameLogic.draw(g2d, this);
                 break;
             case GAMEOVER:
                 ((MainMenu) mainMenu).setMenuPage(MainMenu.KEY_GAME_OVER);
-                mainMenu.draw(g, this);
+                mainMenu.draw(g2d, this);
                 break;
         }
     }

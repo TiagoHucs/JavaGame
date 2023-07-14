@@ -55,8 +55,8 @@ public class WaveController {
             int height = 50;
 
             // Centro da Tela - Centro do text-box
-            int px = (gameComponent.getWidth() / 2) - (width / 2);
-            int py = (gameComponent.getHeight() / 2) - (height / 2);
+            int px = (gameComponent.getCfg().getGameWidth() / 2) - (width / 2);
+            int py = (gameComponent.getCfg().getGameHeight() / 2) - (height / 2);
 
             graphics.setColor(Color.WHITE);
             graphics.setFont(font);
