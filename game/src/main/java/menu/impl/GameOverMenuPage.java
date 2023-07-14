@@ -18,7 +18,7 @@ public class GameOverMenuPage extends AbstractMenuPage {
 
     public static final String OPT_RETURN_MENU = "PRESS ENTER TO RETURN";
 
-    public GameOverMenuPage(String title,GameComponent gameComponent, MainMenu mainMenu) {
+    public GameOverMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
         super(title);
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_RETURN_MENU) {
@@ -33,22 +33,26 @@ public class GameOverMenuPage extends AbstractMenuPage {
 
     @Override
     public void draw(Graphics g, GameComponent gameComponent) {
-        super.draw(g,gameComponent);
-        WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
-        List<String> text = new ArrayList<>(4);
+        super.draw(g, gameComponent);
 
-        for (WaveStatics statics: waveController.getStatics()) {
-            text.add("Wave: " + statics.getNumber());
-            text.add("Points: " + statics.getPoints());
-            text.add("Time: " + statics.getTimeToClean());
+        WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
+
+        List<String> text = new ArrayList<String>(
+                waveController.getStatics().size() * 3);
+
+        for (WaveStatics statics : waveController.getStatics()) {
+            text.add(String.format("Wave: %02d", statics.getNumber()));
+            text.add(String.format("Points: %012d", statics.getPoints()));
+            text.add(String.format("Time: %.2f", statics.getTimeToClean()));
         }
 
-        g.setColor(new Color(80,80,80,255));
-        for (String txt :text) {
+        g.setColor(Color.LIGHT_GRAY);
+
+        for (String txt : text) {
             int larguraTexto = metrics.stringWidth(txt);
             int x = (gameComponent.getCfg().getGameWidth() - larguraTexto) / 2;
             g.drawString(txt, x, line);
-            nextLine(16);//TODO: pegar automaticamente o tamanho da fonte
+            nextLine(font.getSize());
         }
 
     }
