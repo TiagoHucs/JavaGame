@@ -11,42 +11,38 @@ public class Config {
     private int soundVolume = 80;
     private final Random randomGenerator = new Random();
 
-    private boolean fixedAspectRatio = false;
-
     public Config(Dimension screenSize) {
         this.screenSize = screenSize;
-        this.gameSize = new Dimension(640, 480);
+        this.gameSize = calculateGameSize();
         this.scale = new Point2D.Double((double) screenSize.width / gameSize.width, (double) screenSize.height / gameSize.height);
-        //this.fixAspectRatio();
         System.setProperty("sun.java2d.noddraw", Boolean.TRUE.toString());
         System.setProperty("sun.java2d.opengl", Boolean.TRUE.toString());
     }
 
-    // Caso queira a imagem 1x1 sem esticar
-    public void fixAspectRatio() {
+    private Dimension calculateGameSize() {
 
-        if (scale.x < scale.y) {
-            scale.y = scale.x;
-        } else {
-            scale.x = scale.y;
-        }
+        // Numeros mágicos baseados no tamanho da imagem do jogador
+        Dimension playerSize = new Dimension(48, 58);
 
-        fixedAspectRatio = true;
+        // Quantidade de tiles por eixo
+        Dimension tileCount = new Dimension(20, 10);
+
+        return new Dimension(playerSize.width * tileCount.width, playerSize.height * tileCount.height);
     }
 
-    public double getScaleWidth() {
+    public final double getScaleWidth() {
         return scale.x;
     }
 
-    public double getScaleHeight() {
+    public final double getScaleHeight() {
         return scale.y;
     }
 
-    public int getGameWidth() {
+    public final int getGameWidth() {
         return gameSize.width;
     }
 
-    public int getGameHeight() {
+    public final int getGameHeight() {
         return gameSize.height;
     }
 
@@ -88,16 +84,7 @@ public class Config {
     }
 
     public void applyRenderScale(Graphics2D g2d) {
-
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
-        if (fixedAspectRatio) {
-            double tx = gameSize.getWidth() * 0.5;
-            double ty = 0;
-            g2d.translate(tx, ty);
-        }
-
-        g2d.scale(scale.x, scale.y);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.scale(getScaleWidth(), getScaleHeight());
     }
 }

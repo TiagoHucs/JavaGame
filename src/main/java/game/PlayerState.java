@@ -61,6 +61,8 @@ public class PlayerState {
 
         if (blinkEffect.isBlink()) {
 
+            g.setColor(Color.GRAY);
+
             g.drawArc(ship.getPositionWithOffsetX(),
                     ship.getPositionWithOffsetY(),
                     (int) ship.getSize().x,
