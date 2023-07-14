@@ -2,6 +2,7 @@ package utilities;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Config {
@@ -77,6 +78,16 @@ public class Config {
         gameWindow.setMaximumSize(screenSize);
         gameWindow.setMinimumSize(gameSize);
         gameWindow.requestFocusInWindow();
+
+        hideMouseCursor(gameWindow);
+    }
+
+    private static void hideMouseCursor(Component gameWindow) {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Point hotSpot = new Point(0, 0);
+        BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
+        Cursor invisibleCursor = toolkit.createCustomCursor(cursorImage, hotSpot, "InvisibleCursor");
+        gameWindow.setCursor(invisibleCursor);
     }
 
     public float getGlobalVolume() {
