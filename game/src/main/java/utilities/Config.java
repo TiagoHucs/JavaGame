@@ -8,16 +8,30 @@ import java.util.Random;
 public class Config {
     private final Dimension screenSize, gameSize;
     private final Point2D.Double scale;
+    private final boolean debugMode;
     private boolean muted = false;
     private int soundVolume = 80;
     private final Random randomGenerator = new Random();
 
-    public Config(Dimension screenSize) {
-        this.screenSize = screenSize;
+    public Config(Dimension screenSize, boolean debugMode) {
+
+        this.debugMode = debugMode;
         this.gameSize = calculateGameSize();
-        this.scale = new Point2D.Double((double) screenSize.width / gameSize.width, (double) screenSize.height / gameSize.height);
+
+        if (this.debugMode) {
+            this.screenSize = gameSize;
+        } else {
+            this.screenSize = screenSize;
+        }
+
+        this.scale = calculateScale();
+
         System.setProperty("sun.java2d.noddraw", Boolean.TRUE.toString());
         System.setProperty("sun.java2d.opengl", Boolean.TRUE.toString());
+    }
+
+    private Point2D.Double calculateScale() {
+        return new Point2D.Double((double) screenSize.width / gameSize.width, (double) screenSize.height / gameSize.height);
     }
 
     private Dimension calculateGameSize() {
@@ -69,15 +83,10 @@ public class Config {
 
     public void setup(Component gameWindow) {
 
-        if (gameWindow instanceof Frame) {
-            ((Frame) gameWindow).setUndecorated(true);
-        }
-
         gameWindow.setBackground(Color.BLACK);
         gameWindow.setSize(screenSize);
+        gameWindow.setMinimumSize(screenSize);
         gameWindow.setMaximumSize(screenSize);
-        gameWindow.setMinimumSize(gameSize);
-        gameWindow.requestFocusInWindow();
 
         hideMouseCursor(gameWindow);
     }

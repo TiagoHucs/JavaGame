@@ -7,7 +7,9 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
 
-        Config cfg = new Config(Toolkit.getDefaultToolkit().getScreenSize());
+        final boolean debugMode = isDebugMode();
+
+        Config cfg = new Config(Toolkit.getDefaultToolkit().getScreenSize(), debugMode);
 
         GameComponent game = new GameComponent(cfg);
 
@@ -17,17 +19,24 @@ public class Main {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.add(game);
         gameWindow.setResizable(false);
+        gameWindow.setUndecorated(true);
+        gameWindow.setIgnoreRepaint(true);
         gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.addKeyListener(game);
 
-        if (!isDebugMode()) {
+        if (!debugMode) {
+
             GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
             graphicsDevice.setFullScreenWindow(gameWindow);
+
+            // Melhora velocidade
+            gameWindow.createBufferStrategy(2);
         }
 
         gameWindow.setVisible(true);
+        gameWindow.requestFocusInWindow();
     }
 
     public static boolean isDebugMode() {
