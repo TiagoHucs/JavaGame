@@ -113,7 +113,6 @@ public class SinglePlayerGameLogic implements GameLogic {
 
                 for (PlayerState playerState : players) {
                     waveController.updateCurrentWaveStatics(playerState);
-                    playerState.levelUp(scoreAnimation);
                 }
 
                 waveController.nextWave();

@@ -5,30 +5,32 @@ import utilities.ResourceManager;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ScoreAnimation {
-
     private final Font font = ResourceManager.get().getFont();
-
-    private List<PointEffect> points = new ArrayList<PointEffect>(100);
+    private List<PointEffect> points = new LinkedList<PointEffect>();
 
     public void draw(Graphics g, GameComponent gameComponent) {
 
         g.setFont(font);
-        g.setColor(Color.YELLOW);
 
-        List<PointEffect> pointsToRemove = new ArrayList<>(points.size());
+        Iterator<PointEffect> iterator = points.iterator();
 
-        for (PointEffect p : points) {
+        while (iterator.hasNext()) {
+
+            PointEffect p = iterator.next();
             p.update();
-            g.drawString(p.getAlert(), p.getX(), p.getY());
+
+            g.setColor(p.getColor());
+            g.drawString(p.getText(), p.getX(), p.getY());
+
             if (p.getLife() < 0) {
-                pointsToRemove.add(p);
+                iterator.remove();
             }
         }
-
-        points.removeAll(pointsToRemove);
 
     }
 
@@ -36,44 +38,35 @@ public class ScoreAnimation {
     public void addScore(int pts, Ator ator) {
 
         PointEffect pointEffect = PointEffect
-                .builder()
-                .life(10)
-                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
-                .y((int) ator.getPosition().y)
-                .points(pts).build();
+                .scoreBuilder(ator, pts)
+                .build();
 
         points.add(pointEffect);
     }
 
     public void addExtraLife(Ator ator) {
+
         PointEffect pointEffect = PointEffect
-                .builder()
-                .life(100)
-                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
-                .y((int) (ator.getPosition().y))
-                .alert("Extra Life!").build();
+                .extraLifeBuilder(ator)
+                .build();
 
         points.add(pointEffect);
     }
 
     public void addPowerUp(Ator ator) {
+
         PointEffect pointEffect = PointEffect
-                .builder()
-                .life(50)
-                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
-                .y((int) (ator.getPosition().y))
-                .alert("Power Up!").build();
+                .powerUpBuilder(ator)
+                .build();
 
         points.add(pointEffect);
     }
 
     public void addPowerDown(Ator ator) {
+
         PointEffect pointEffect = PointEffect
-                .builder()
-                .life(50)
-                .x((int) (ator.getPosition().x + (ator.getSize().x / 2.0f)))
-                .y((int) (ator.getPosition().y))
-                .alert("Ouch!").build();
+                .powerDownBuilder(ator)
+                .build();
 
         points.add(pointEffect);
     }
