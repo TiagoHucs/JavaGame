@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Ship extends Ator {
+public class Ship extends Actor {
 
     private int lifes = 3;
     private int fireTimer = 0;

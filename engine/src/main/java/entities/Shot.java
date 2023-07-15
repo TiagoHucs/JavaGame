@@ -4,7 +4,7 @@ import game.GameComponent;
 
 import java.awt.geom.Point2D;
 
-public class Shot extends Ator {
+public class Shot extends Actor {
     public Shot(float x, float y) {
         super();
         this.setPosition(new Point2D.Float(x, y));

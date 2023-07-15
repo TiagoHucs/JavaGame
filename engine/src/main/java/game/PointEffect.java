@@ -1,7 +1,7 @@
 package game;
 
 
-import entities.Ator;
+import entities.Actor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class PointEffect {
     private String text;
     private Color color;
 
-    public static PointEffectBuilder scoreBuilder(Ator ator, int pts) {
+    public static PointEffectBuilder scoreBuilder(Actor actor, int pts) {
 
-        float px = ator.getPosition().x + (ator.getSize().x / 2.0f);
-        float py = ator.getPosition().y;
+        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
+        float py = actor.getPosition().y;
 
         return PointEffect.builder()
                 .life(10)
@@ -31,10 +31,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder extraLifeBuilder(Ator ator) {
+    public static PointEffectBuilder extraLifeBuilder(Actor actor) {
 
-        float px = ator.getPosition().x + (ator.getSize().x / 2.0f);
-        float py = ator.getPosition().y;
+        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
+        float py = actor.getPosition().y;
 
         return PointEffect.builder()
                 .life(100)
@@ -44,10 +44,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder powerUpBuilder(Ator ator) {
+    public static PointEffectBuilder powerUpBuilder(Actor actor) {
 
-        float px = ator.getPosition().x + (ator.getSize().x / 2.0f);
-        float py = ator.getPosition().y;
+        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
+        float py = actor.getPosition().y;
 
         return PointEffect.builder()
                 .life(50)
@@ -57,10 +57,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder powerDownBuilder(Ator ator) {
+    public static PointEffectBuilder powerDownBuilder(Actor actor) {
 
-        float px = ator.getPosition().x + (ator.getSize().x / 2.0f);
-        float py = ator.getPosition().y;
+        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
+        float py = actor.getPosition().y;
 
         return PointEffect.builder()
                 .life(50)

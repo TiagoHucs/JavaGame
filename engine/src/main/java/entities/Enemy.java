@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Enemy extends Ator {
+public class Enemy extends Actor {
 
     private int lifes = 2;
     private final BehaviorIA behavior;

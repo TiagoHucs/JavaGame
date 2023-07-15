@@ -1,6 +1,6 @@
 package effects;
 
-import entities.Ator;
+import entities.Actor;
 
 import java.awt.geom.Point2D;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,11 +18,11 @@ public class Shake implements Effect {
     }
 
     @Override
-    public void update(float delta, Ator ator) {
+    public void update(float delta, Actor actor) {
         if (trauma > 0.f) {
             trauma = Math.max(trauma - decay * delta, 0.0f);
             shake();
-            shake(ator);
+            shake(actor);
         }
     }
 
@@ -33,10 +33,10 @@ public class Shake implements Effect {
         offSetY = maxOffSetY * amount * randRange();
     }
 
-    private void shake(Ator ator) {
-        ator.setImageOffset(new Point2D.Float(
-                offSetX * ator.getSize().x,
-                offSetY * ator.getSize().y));
+    private void shake(Actor actor) {
+        actor.setImageOffset(new Point2D.Float(
+                offSetX * actor.getSize().x,
+                offSetY * actor.getSize().y));
     }
 
     private float randRange() {

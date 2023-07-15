@@ -1,6 +1,6 @@
 package effects;
 
-import entities.Ator;
+import entities.Actor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +12,13 @@ public class Recoil implements Effect {
     float size = 0.0f;
 
     @Override
-    public void update(float delta, Ator ator) {
+    public void update(float delta, Actor actor) {
         size = Math.max(0.0f, size - 1.0f);
-        recoil(ator);
+        recoil(actor);
     }
 
-    private void recoil(Ator ator) {
-        ator.getImageOffset().y = size;
+    private void recoil(Actor actor) {
+        actor.getImageOffset().y = size;
     }
 
 }

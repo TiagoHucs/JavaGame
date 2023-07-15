@@ -1,6 +1,6 @@
 package effects;
 
-import entities.Ator;
+import entities.Actor;
 import lombok.Getter;
 
 @Getter
@@ -16,7 +16,7 @@ public class Blink implements Effect {
         blinkTimer = 30;
     }
 
-    public void update(float delta, Ator ator) {
+    public void update(float delta, Actor actor) {
 
         if (invencible && blinkTimer > 0) {
             blinkTimer--;

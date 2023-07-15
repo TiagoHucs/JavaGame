@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class Ator {
+public class Actor {
 
     private Point2D.Float size = new Point2D.Float(1.0f, 1.0f);
     private Point2D.Float position = new Point2D.Float(0.0f, 0.0f);

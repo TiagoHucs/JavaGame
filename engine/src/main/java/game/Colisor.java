@@ -1,10 +1,10 @@
 package game;
 
-import entities.Ator;
+import entities.Actor;
 
 public class Colisor {
 
-    public boolean detectaColisao(Ator a, Ator b) {
+    public boolean detectaColisao(Actor a, Actor b) {
 
         float myleft = a.getPosition().x;
         float myright = a.getPosition().x + a.getSize().x;
