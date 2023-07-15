@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GameComponent extends JPanel implements KeyListener, Runnable {
+public abstract class GameComponent extends JPanel implements KeyListener, Runnable {
     public static final float FPS_SET = 60.0f;
     private Config cfg;
     private SoundManager soundManager;

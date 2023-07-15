@@ -1,19 +1,21 @@
+package invaders;
+
 import game.GameComponent;
 import utilities.Config;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
+public class Invaders {
     public static void main(String[] args) {
 
         final boolean debugMode = isDebugMode();
 
         Config cfg = new Config(Toolkit.getDefaultToolkit().getScreenSize(), debugMode);
 
-        GameComponent game = new GameComponent(cfg);
+        GameComponent game = new InvadersGameComponent(cfg);
 
-        JFrame gameWindow = new JFrame("Java Shooter Game 2D");
+        JFrame gameWindow = new JFrame("Bug Invaders");
         cfg.setup(gameWindow);
 
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
