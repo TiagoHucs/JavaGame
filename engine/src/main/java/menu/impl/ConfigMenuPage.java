@@ -13,8 +13,8 @@ public class ConfigMenuPage extends AbstractMenuPage {
     private static final String OPT_SOUND = "SOUND";
     private static final String OPT_CONTROLLER = "CONTROLLER";
 
-    public ConfigMenuPage(String title,GameComponent gameComponent, MainMenu mainMenu) {
-        super(title);
+    public ConfigMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
+        super(title, gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_GRAPHICS) {

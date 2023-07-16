@@ -39,23 +39,23 @@ public class PlayerState {
         lifeIcon = ResourceManager.get().getImage("/image/UI/icon-ship.png");
     }
 
-    public void draw(Graphics g, GameComponent game) {
-        drawBullets(g, game);
-        drawShip(g, game);
-        drawHUD(g, game);
+    public void draw(Graphics g) {
+        drawBullets(g);
+        drawShip(g);
+        drawHUD(g);
     }
 
-    private void drawHUD(Graphics g, GameComponent game) {
+    private void drawHUD(Graphics g) {
 
         int lifeStartX = lifeIcon.getWidth();
         int lifeStartY = lifeIcon.getHeight() + (lifeIcon.getHeight() * id);
 
         for (int i = 0; i < ship.getLifes(); i++) {
-            g.drawImage(lifeIcon, lifeStartX * i, lifeStartY, game);
+            g.drawImage(lifeIcon, lifeStartX * i, lifeStartY, null);
         }
     }
 
-    private void drawShip(Graphics g, GameComponent game) {
+    private void drawShip(Graphics g) {
 
         updateAnimationFrame();
 
@@ -70,7 +70,7 @@ public class PlayerState {
                     0, 360);
 
         } else {
-            ship.drawImage(g, game);
+            ship.drawImage(g);
         }
     }
 
@@ -93,10 +93,10 @@ public class PlayerState {
         playerAnimationFrame++;
     }
 
-    private void drawBullets(Graphics g, GameComponent game) {
+    private void drawBullets(Graphics g) {
 
         for (Shot tiro : bullets) {
-            tiro.drawImage(g, game);
+            tiro.drawImage(g);
         }
     }
 

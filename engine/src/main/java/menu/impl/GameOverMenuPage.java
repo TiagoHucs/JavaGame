@@ -19,7 +19,8 @@ public class GameOverMenuPage extends AbstractMenuPage {
     public static final String OPT_RETURN_MENU = "PRESS ENTER TO RETURN";
 
     public GameOverMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title);
+        super(title, gameComponent);
+
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_RETURN_MENU) {
                     @Override
@@ -32,8 +33,8 @@ public class GameOverMenuPage extends AbstractMenuPage {
     }
 
     @Override
-    public void draw(Graphics g, GameComponent gameComponent) {
-        super.draw(g, gameComponent);
+    public void draw(Graphics g) {
+        super.draw(g);
 
         WaveController waveController = ((SinglePlayerGameLogic) gameComponent.currentGameLogic).getWaveController();
 
@@ -48,9 +49,11 @@ public class GameOverMenuPage extends AbstractMenuPage {
 
         g.setColor(Color.LIGHT_GRAY);
 
+        int w = gameComponent.getCfg().getGameWidth();
+
         for (String txt : text) {
             int larguraTexto = metrics.stringWidth(txt);
-            int x = (gameComponent.getCfg().getGameWidth() - larguraTexto) / 2;
+            int x = (w - larguraTexto) / 2;
             g.drawString(txt, x, line);
             nextLine(font.getSize());
         }

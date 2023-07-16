@@ -93,10 +93,10 @@ public class StarFieldEffect {
 
     }
 
-    public void draw(Graphics graphics, GameComponent game) {
+    public void draw(Graphics graphics) {
 
         if (starList == null) {
-            drawStaticStars(graphics, game, false);
+            drawStaticStars(graphics, false);
 
         } else {
             drawDynamicStars(graphics);
@@ -104,17 +104,17 @@ public class StarFieldEffect {
 
     }
 
-    private void drawStaticStars(Graphics graphics, GameComponent game, boolean parallaxEffect) {
+    private void drawStaticStars(Graphics graphics, boolean parallaxEffect) {
 
         // TODO: no futuro pode ter efeito parallax
         if (parallaxEffect) {
 
             for (BufferedImage layer : layers) {
-                graphics.drawImage(layer, 0, 0, game);
+                graphics.drawImage(layer, 0, 0, null);
             }
 
         } else {
-            graphics.drawImage(staticBackground, 0, 0, game);
+            graphics.drawImage(staticBackground, 0, 0, null);
         }
 
     }

@@ -32,8 +32,8 @@ public class Explosion2 {
         );
     }
 
-    public void update(Graphics g, GameComponent game) {
-        g.drawImage(animation.getCurrentImage(), (int) origem.getPosition().x, (int) origem.getPosition().y, game);
+    public void update(Graphics g) {
+        g.drawImage(animation.getCurrentImage(), (int) origem.getPosition().x, (int) origem.getPosition().y, null);
         animation.updateAnimationFrame();
     }
 

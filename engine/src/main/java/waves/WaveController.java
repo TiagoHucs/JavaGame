@@ -16,7 +16,10 @@ public class WaveController {
     private List<WaveStatics> statics;
     private final Font font = ResourceManager.get().getFont();
 
-    public void init() {
+    private Dimension screenCenter;
+
+    public void init(Dimension gameSize) {
+        this.screenCenter = new Dimension(gameSize.width / 2, gameSize.height / 2);
         this.statics = new ArrayList<WaveStatics>();
         this.nextWave();
     }
@@ -40,26 +43,18 @@ public class WaveController {
         this.resetTimers();
     }
 
-    public void updateStatics() {
-
-        float delta = 1.0f / GameComponent.FPS_SET;
-
+    public void updateStatics(float delta) {
         this.timeToClean += delta;
         this.timeToStart = Math.max(0, timeToStart - delta);
     }
 
-    public void draw(Graphics graphics, GameComponent gameComponent) {
+    public void draw(Graphics graphics) {
 
         if (timeToStart > 0) {
 
             // Preparando graphics
             graphics.setFont(font);
             graphics.setColor(Color.CYAN);
-
-            // Descobrindo o centro da tela
-            Dimension screenCenter = new Dimension (
-                    gameComponent.getCfg().getGameWidth() / 2,
-                    gameComponent.getCfg().getGameHeight() / 2);
 
             // Texto 1
             String waveText = "Wave " + String.format("%02d", currentWave.getNumber());

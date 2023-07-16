@@ -29,6 +29,10 @@ public class SinglePlayerGameLogic implements GameLogic {
     private ScoreAnimation scoreAnimation = new ScoreAnimation();
     private CollisionController collisionController = new CollisionController();
 
+    public SinglePlayerGameLogic(GameComponent gameComponent) {
+        this.init(gameComponent);
+    }
+
     public final WaveController getWaveController() {
         return waveController;
     }
@@ -56,25 +60,25 @@ public class SinglePlayerGameLogic implements GameLogic {
         behaviorIA[1] = new LeftRightIA();
 
         this.waveController = new WaveController();
-        this.waveController.init();
+        this.waveController.init(gameComponent.getCfg().getGameResolution());
 
         // Limpa enimigos
         this.enemies.clear();
     }
 
     @Override
-    public void draw(Graphics g, GameComponent gameComponent) {
+    public void draw(Graphics g) {
 
         for (Enemy i : enemies) {
-            i.draw(g, gameComponent);
+            i.draw(g);
         }
 
         for (PlayerState playerState : players) {
-            playerState.draw(g, gameComponent);
+            playerState.draw(g);
         }
 
         for (PowerUp powerUp : powerUps) {
-            powerUp.drawImage(g, gameComponent);
+            powerUp.drawImage(g);
         }
 
         Iterator<Explosion2> explosionItr = explosions.iterator();
@@ -83,21 +87,20 @@ public class SinglePlayerGameLogic implements GameLogic {
 
             Explosion2 explosion = explosionItr.next();
 
-            explosion.update(g, gameComponent);
+            explosion.update(g);
 
             if (explosion.isFinished()) {
                 explosionItr.remove();
             }
         }
 
-        scoreAnimation.draw(g, gameComponent);
-
-        waveController.draw(g, gameComponent);
+        scoreAnimation.draw(g);
+        waveController.draw(g);
     }
 
     @Override
-    public void update(GameComponent gameComponent) {
-        updateWaveController(gameComponent);
+    public void update(GameComponent gameComponent, float delta) {
+        updateWaveController(gameComponent, delta);
         updatePowerUps(gameComponent);
         updateInimigos(gameComponent);
         updatePlayers(gameComponent);
@@ -105,7 +108,7 @@ public class SinglePlayerGameLogic implements GameLogic {
         checkForGameOver(gameComponent);
     }
 
-    private void updateWaveController(GameComponent gameComponent) {
+    private void updateWaveController(GameComponent gameComponent, float delta) {
 
         if (enemies.isEmpty()) {
 
@@ -124,7 +127,7 @@ public class SinglePlayerGameLogic implements GameLogic {
             waveController.finishCurrentWave();
         }
 
-        waveController.updateStatics();
+        waveController.updateStatics(delta);
     }
 
     private void checkForGameOver(GameComponent gameComponent) {

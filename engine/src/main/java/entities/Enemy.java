@@ -49,11 +49,11 @@ public class Enemy extends Actor {
 
     }
 
-    public void draw(Graphics g, GameComponent gameComponent) {
+    public void draw(Graphics g) {
 
         g.drawImage(animation.getCurrentImage(),
                 getPositionWithOffsetX(),
-                getPositionWithOffsetY(), gameComponent);
+                getPositionWithOffsetY(), null);
 
         animation.updateAnimationFrame();
     }

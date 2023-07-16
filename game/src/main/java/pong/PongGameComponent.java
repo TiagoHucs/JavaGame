@@ -14,32 +14,29 @@ public class PongGameComponent extends GameComponent {
     private float x = f;
     private float y = f;
 
-
-    public PongGameComponent(Config cfg) {
-        super(cfg);
+    @Override
+    public void draw(Graphics g2d) {
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(ball.getPositionWithOffsetX(), ball.getPositionWithOffsetY(), 10, 10);
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0,getCfg().getGameWidth(),getHeight());
-        g.setColor(Color.WHITE);
-        g.fillRect(ball.getPositionWithOffsetX(),ball.getPositionWithOffsetY(),10,10);
-    }
+    public void update(float delta) {
 
-    @Override
-    public void update() {
         ball.setVelocity(new Point2D.Float(x, y));
         ball.move();
-        if(ball.getPosition().getY() > getCfg().getGameHeight()){
+
+        if (ball.getPosition().getY() > getCfg().getGameHeight()) {
             y = -f;
-        } else if(ball.getPosition().getY() < 0){
+        } else if (ball.getPosition().getY() < 0) {
             y = f;
         }
-        if(ball.getPosition().getX() > getCfg().getGameWidth()){
+
+        if (ball.getPosition().getX() > getCfg().getGameWidth()) {
             x = -f;
-        } else if(ball.getPosition().getX() < 0){
+        } else if (ball.getPosition().getX() < 0) {
             x = f;
         }
     }

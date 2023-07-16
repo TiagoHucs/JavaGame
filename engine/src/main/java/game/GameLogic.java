@@ -7,9 +7,9 @@ public interface GameLogic {
 
     void init(GameComponent gameComponent);
 
-    void draw(Graphics g, GameComponent gameComponent);
+    void draw(Graphics g);
 
-    void update(GameComponent gameComponent);
+    void update(GameComponent gameComponent, float delta);
 
     void keyPressed(KeyEvent e);
 

@@ -14,7 +14,7 @@ public class SoundMenuPage extends AbstractMenuPage {
     private static final String OPT_SOUND_LEVEL = "LEVEL VOLUME";
 
     public SoundMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title);
+        super(title, gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOptionLevel(OPT_MUTED) {

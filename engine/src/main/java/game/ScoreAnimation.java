@@ -12,7 +12,7 @@ public class ScoreAnimation {
     private final Font font = ResourceManager.get().getFont();
     private List<PointEffect> points = new LinkedList<PointEffect>();
 
-    public void draw(Graphics g, GameComponent gameComponent) {
+    public void draw(Graphics g) {
 
         g.setFont(font);
 

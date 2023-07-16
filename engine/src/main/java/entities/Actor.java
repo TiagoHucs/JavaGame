@@ -132,10 +132,10 @@ public class Actor {
         this.direction = direction;
     }
 
-    public void drawImage(Graphics g, GameComponent game) {
+    public void drawImage(Graphics g) {
 
         if (direction == null) {
-            g.drawImage(image, getPositionWithOffsetX(), getPositionWithOffsetY(), game);
+            g.drawImage(image, getPositionWithOffsetX(), getPositionWithOffsetY(), null);
 
         } else {
 
@@ -150,7 +150,7 @@ public class Actor {
 
             g2d.drawImage(filtro.filter(getImage(), null),
                     (int) getPosition().getX(),
-                    (int) getPosition().getY(), game);
+                    (int) getPosition().getY(), null);
         }
 
     }

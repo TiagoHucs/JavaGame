@@ -24,7 +24,7 @@ public class MainMenu implements GameLogic {
     public MainMenu(GameComponent gameComponent) {
 
         registerMenu(new StartMenuPage(KEY_GAME_MENU, gameComponent, this));
-        registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent, this));
+        registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent,this));
         registerMenu(new SoundMenuPage(KEY_SOUND_MENU, gameComponent, this));
         registerMenu(new GameOverMenuPage(KEY_GAME_OVER, gameComponent, this));
 
@@ -41,12 +41,12 @@ public class MainMenu implements GameLogic {
     }
 
     @Override
-    public void draw(Graphics g, GameComponent gameComponent) {
-        selectedPage.draw(g, gameComponent);
+    public void draw(Graphics g) {
+        selectedPage.draw(g);
     }
 
     @Override
-    public void update(GameComponent gameComponent) {
+    public void update(GameComponent gameComponent, float delta) {
 
     }
 

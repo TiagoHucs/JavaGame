@@ -15,7 +15,7 @@ public class StartMenuPage extends AbstractMenuPage {
     private static final String OPT_EXIT_GAME = "EXIT TO DESKTOP";
 
     public StartMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title);
+        super(title, gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_BACK_GAME) {
