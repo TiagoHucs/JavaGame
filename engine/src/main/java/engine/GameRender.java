@@ -7,18 +7,14 @@ import java.awt.geom.Point2D;
 
 public class GameRender extends Canvas {
     private Point2D.Double scale;
-    private final GameComponent game;
+    private final GameWindow gameWindow;
 
-    public GameRender(GameWindow gameWindow, GameComponent game) {
-        this.game = game;
+    public GameRender(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
 
         setSize(gameWindow.getSize());
         setMinimumSize(gameWindow.getSize());
         setMaximumSize(gameWindow.getSize());
-
-        // Forçar acelerção via Hardware
-        System.setProperty("sun.java2d.noddraw", Boolean.TRUE.toString());
-        System.setProperty("sun.java2d.opengl", Boolean.TRUE.toString());
 
         // Escala do Render
         this.scale = calculateScale(gameWindow);
@@ -40,7 +36,7 @@ public class GameRender extends Canvas {
         graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
         graphics.scale(scale.x, scale.y);
 
-        game.draw(graphics);
+        gameWindow.paint(graphics);
     }
 
 

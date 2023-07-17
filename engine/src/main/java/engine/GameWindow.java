@@ -18,6 +18,7 @@ public class GameWindow extends JFrame {
         this.setUndecorated(true);
         this.setIgnoreRepaint(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setBackground(Color.BLACK);
 
         this.config = new Config(getGameSize());
 
@@ -36,7 +37,7 @@ public class GameWindow extends JFrame {
 
         this.addKeyListener(this.game);
 
-        this.render = new GameRender(this, this.game);
+        this.render = new GameRender(this);
         this.render.setVisible(true);
         this.render.setFocusable(false);
 
@@ -62,6 +63,11 @@ public class GameWindow extends JFrame {
         Dimension tileCount = new Dimension(20, 10);
 
         return new Dimension(playerSize.width * tileCount.width, playerSize.height * tileCount.height);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        game.draw(g);
     }
 
     public void play() {
