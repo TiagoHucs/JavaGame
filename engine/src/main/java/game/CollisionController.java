@@ -1,11 +1,11 @@
 package game;
 
-import entities.Actor;
+import entities.GameObject;
 
 public class CollisionController {
     private final Colisor boxCollider = new Colisor();
 
-    public boolean detectaColisao(Actor a, Actor b) {
+    public boolean detectaColisao(GameObject a, GameObject b) {
         return boxCollider.detectaColisao(a, b);
     }
 }

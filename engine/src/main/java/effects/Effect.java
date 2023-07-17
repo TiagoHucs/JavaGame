@@ -1,7 +1,7 @@
 package effects;
 
-import entities.Actor;
+import entities.GameObject;
 
 public interface Effect {
-    void update(float delta, Actor actor);
+    void update(float delta, GameObject gameObject);
 }

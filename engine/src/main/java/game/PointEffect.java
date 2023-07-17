@@ -1,7 +1,7 @@
 package game;
 
 
-import entities.Actor;
+import entities.GameObject;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class PointEffect {
     private String text;
     private Color color;
 
-    public static PointEffectBuilder scoreBuilder(Actor actor, int pts) {
+    public static PointEffectBuilder scoreBuilder(GameObject gameObject, int pts) {
 
-        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
-        float py = actor.getPosition().y;
+        float px = gameObject.getPosition().x + (gameObject.getSize().x / 2.0f);
+        float py = gameObject.getPosition().y;
 
         return PointEffect.builder()
                 .life(10)
@@ -31,10 +31,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder extraLifeBuilder(Actor actor) {
+    public static PointEffectBuilder extraLifeBuilder(GameObject gameObject) {
 
-        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
-        float py = actor.getPosition().y;
+        float px = gameObject.getPosition().x + (gameObject.getSize().x / 2.0f);
+        float py = gameObject.getPosition().y;
 
         return PointEffect.builder()
                 .life(100)
@@ -44,10 +44,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder powerUpBuilder(Actor actor) {
+    public static PointEffectBuilder powerUpBuilder(GameObject gameObject) {
 
-        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
-        float py = actor.getPosition().y;
+        float px = gameObject.getPosition().x + (gameObject.getSize().x / 2.0f);
+        float py = gameObject.getPosition().y;
 
         return PointEffect.builder()
                 .life(50)
@@ -57,10 +57,10 @@ public class PointEffect {
                 .y((int) py);
     }
 
-    public static PointEffectBuilder powerDownBuilder(Actor actor) {
+    public static PointEffectBuilder powerDownBuilder(GameObject gameObject) {
 
-        float px = actor.getPosition().x + (actor.getSize().x / 2.0f);
-        float py = actor.getPosition().y;
+        float px = gameObject.getPosition().x + (gameObject.getSize().x / 2.0f);
+        float py = gameObject.getPosition().y;
 
         return PointEffect.builder()
                 .life(50)

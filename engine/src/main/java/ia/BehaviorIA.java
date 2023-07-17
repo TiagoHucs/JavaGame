@@ -1,11 +1,11 @@
 package ia;
 
-import entities.Actor;
+import entities.GameObject;
 import game.GameComponent;
 import game.PlayerState;
 
 public interface BehaviorIA {
-    void setSpeed(Actor actor, GameComponent gameComponent);
-    void clampMove(Actor actor, GameComponent gameComponent);
-    void damage(Actor actor, PlayerState playerState, GameComponent gameComponent);
+    void setSpeed(GameObject gameObject, GameComponent gameComponent);
+    void clampMove(GameObject gameObject, GameComponent gameComponent);
+    void damage(GameObject gameObject, PlayerState playerState, GameComponent gameComponent);
 }

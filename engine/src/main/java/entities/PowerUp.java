@@ -5,8 +5,8 @@ import game.ScoreAnimation;
 
 import java.awt.geom.Point2D;
 
-public class PowerUp extends Actor {
-    public PowerUp(Actor child) {
+public class PowerUp extends GameObject {
+    public PowerUp(GameObject child) {
         super();
         this.setImage("/image/UI/icon-powerup.png");
         this.setPosition(new Point2D.Float(

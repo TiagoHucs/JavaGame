@@ -1,6 +1,6 @@
 package ia;
 
-import entities.Actor;
+import entities.GameObject;
 import game.GameComponent;
 import game.PlayerState;
 
@@ -9,21 +9,21 @@ import java.awt.geom.Point2D;
 public class FallDownIA implements BehaviorIA {
 
     @Override
-    public void setSpeed(Actor actor, GameComponent gameComponent) {
-        actor.setVelocity(new Point2D.Float(0.0f, 0.8f));
+    public void setSpeed(GameObject gameObject, GameComponent gameComponent) {
+        gameObject.setVelocity(new Point2D.Float(0.0f, 0.8f));
     }
 
     @Override
-    public void clampMove(Actor actor, GameComponent gameComponent) {
-        if (actor.getPosition().y > gameComponent.getCfg().getGameHeight()) {
-            actor.getPosition().y = -actor.getSize().y;
+    public void clampMove(GameObject gameObject, GameComponent gameComponent) {
+        if (gameObject.getPosition().y > gameComponent.getCfg().getGameHeight()) {
+            gameObject.getPosition().y = -gameObject.getSize().y;
         }
     }
 
     @Override
-    public void damage(Actor actor, PlayerState playerState, GameComponent gameComponent) {
+    public void damage(GameObject gameObject, PlayerState playerState, GameComponent gameComponent) {
 
-        if (actor.getPosition().y > gameComponent.getCfg().getGameHeight()) {
+        if (gameObject.getPosition().y > gameComponent.getCfg().getGameHeight()) {
             playerState.getShip().sofreDano(10);
         }
     }

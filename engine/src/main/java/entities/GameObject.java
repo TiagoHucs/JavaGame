@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class Actor {
+public class GameObject {
 
     private Point2D.Float size = new Point2D.Float(1.0f, 1.0f);
     private Point2D.Float position = new Point2D.Float(0.0f, 0.0f);
@@ -97,6 +97,10 @@ public class Actor {
         }
     }
 
+    public void stop(){
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+    }
     public float getVerticalLimit(GameComponent gameComponent){
         return gameComponent.getCfg().getGameHeight() - this.size.y;
     }

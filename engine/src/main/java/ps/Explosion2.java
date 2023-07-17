@@ -1,8 +1,7 @@
 package ps;
 
-import entities.Actor;
+import entities.GameObject;
 import entities.ImageAnimation;
-import game.GameComponent;
 import lombok.SneakyThrows;
 import utilities.ResourceManager;
 
@@ -10,15 +9,15 @@ import java.awt.*;
 
 public class Explosion2 {
     private ImageAnimation animation;
-    private Actor origem = null;
+    private GameObject origem = null;
 
     @SneakyThrows
-    public Explosion2(Actor origem) {
+    public Explosion2(GameObject origem) {
         this.init(origem);
     }
 
     @SneakyThrows
-    public void init(Actor origem) {
+    public void init(GameObject origem) {
         this.origem = origem;
         this.animation = new ImageAnimation(
                 ResourceManager.get().getImage("/image/Explosion/explosion-1.png"),

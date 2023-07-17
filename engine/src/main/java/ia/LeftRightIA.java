@@ -1,38 +1,38 @@
 package ia;
 
-import entities.Actor;
+import entities.GameObject;
 import game.GameComponent;
 import game.PlayerState;
 
 public class LeftRightIA implements BehaviorIA {
 
     @Override
-    public void setSpeed(Actor actor, GameComponent gameComponent) {
+    public void setSpeed(GameObject gameObject, GameComponent gameComponent) {
 
-        if (actor.getPosition().x <= 0) {
-            actor.getVelocity().x = 2.0f;
+        if (gameObject.getPosition().x <= 0) {
+            gameObject.getVelocity().x = 2.0f;
         } else {
-            actor.getVelocity().x = -2.0f;
+            gameObject.getVelocity().x = -2.0f;
         }
 
     }
     @Override
-    public void clampMove(Actor actor, GameComponent gameComponent) {
+    public void clampMove(GameObject gameObject, GameComponent gameComponent) {
 
-        if (actor.isOutOfScreenX(gameComponent)) {
-            actor.getVelocity().x = actor.getVelocity().x * -1.0f;
-            actor.getPosition().y += actor.getSize().y;
+        if (gameObject.isOutOfScreenX(gameComponent)) {
+            gameObject.getVelocity().x = gameObject.getVelocity().x * -1.0f;
+            gameObject.getPosition().y += gameObject.getSize().y;
         }
 
-        if (actor.isOutOfScreenY(gameComponent)) {
-            actor.getPosition().y = -actor.getSize().y * 2;
+        if (gameObject.isOutOfScreenY(gameComponent)) {
+            gameObject.getPosition().y = -gameObject.getSize().y * 2;
         }
 
     }
 
     @Override
-    public void damage(Actor actor, PlayerState playerState, GameComponent gameComponent) {
-        if (actor.getPosition().y > gameComponent.getCfg().getGameHeight()) {
+    public void damage(GameObject gameObject, PlayerState playerState, GameComponent gameComponent) {
+        if (gameObject.getPosition().y > gameComponent.getCfg().getGameHeight()) {
             playerState.getShip().sofreDano(10);
         }
     }
