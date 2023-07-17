@@ -12,6 +12,7 @@ public class GameWindow extends JFrame {
     private final Config config;
     private GameComponent game;
     private GameRender render;
+    private Canvas canvas;
 
     public GameWindow(GameComponent game) {
 
@@ -23,12 +24,23 @@ public class GameWindow extends JFrame {
         this.config = new Config(getGameSize());
 
         if (Config.isDebugMode()) {
+
+            canvas = new Canvas();
+            canvas.setSize(config.getGameResolution());
+            canvas.setPreferredSize(config.getGameResolution());
+
             this.setSize(config.getGameResolution());
             this.setPreferredSize(config.getGameResolution());
+            this.add(canvas);
+            this.pack();
+
+            canvas.createBufferStrategy(2);
+
         } else {
             this.setSize(config.getScreenResolution());
             this.setPreferredSize(config.getScreenResolution());
             this.setFullScreen();
+            this.createBufferStrategy(2);
         }
 
         this.game = game;
@@ -36,16 +48,10 @@ public class GameWindow extends JFrame {
         this.game.init();
 
         this.addKeyListener(this.game);
-
-        this.render = new GameRender(this);
-        this.render.setVisible(true);
-        this.render.setFocusable(false);
-
-        this.add(render);
-        this.pack();
-
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        this.render = new GameRender(this);
     }
 
     public void setFullScreen() {
@@ -65,12 +71,25 @@ public class GameWindow extends JFrame {
         return new Dimension(playerSize.width * tileCount.width, playerSize.height * tileCount.height);
     }
 
-    @Override
-    public void paint(Graphics g) {
-        game.draw(g);
-    }
-
     public void play() {
         game.startAndPlay(FPS, render);
+    }
+
+    @Override
+    public void paint(Graphics graphics) {
+        // Só para ficar mais fácil na classe GameWindow, pois estou renderizando frame a frame manualmente
+        game.draw(graphics);
+    }
+
+    @Override
+    public BufferStrategy getBufferStrategy() {
+
+        // Modo Exclusivo para FullScreen
+        if (canvas == null) {
+            return super.getBufferStrategy();
+        }
+
+        // Modo Janela
+        return canvas.getBufferStrategy();
     }
 }

@@ -135,7 +135,7 @@ public abstract class GameComponent implements KeyListener {
 
             if (delta >= 1) {
                 update(delta / targetFps);
-                graphics.repaint();
+                graphics.render();
                 delta--;
             }
         }
