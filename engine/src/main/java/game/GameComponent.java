@@ -1,15 +1,13 @@
 package game;
 
 import effects.StarFieldEffect;
-import lombok.SneakyThrows;
+import engine.GameRender;
 import menu.MainMenu;
 import utilities.Config;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
 
 public abstract class GameComponent implements KeyListener {
     private Config cfg;
@@ -118,5 +116,28 @@ public abstract class GameComponent implements KeyListener {
                 break;
         }
 
+    }
+
+    public void startAndPlay(float targetFps, GameRender graphics) {
+
+        final float timePerFrame = 1000000000.0f / targetFps;
+
+        long previousTime = System.nanoTime();
+
+        float delta = 0.0f;
+
+        while (gameState.isGameRunning()) {
+
+            long currentTime = System.nanoTime();
+
+            delta += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
+
+            if (delta >= 1) {
+                update(delta / targetFps);
+                graphics.repaint();
+                delta--;
+            }
+        }
     }
 }

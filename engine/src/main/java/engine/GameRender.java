@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class GameRender extends Canvas {
-    public static final float FPS = 60.0f;
     private Point2D.Double scale;
     private final GameComponent game;
 

@@ -5,24 +5,21 @@ import utilities.Config;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class GameWindow extends JFrame {
+    public static final float FPS = 60.0f;
     private final Config config;
-    private volatile float delta = 0.0f;
     private GameComponent game;
+    private GameRender render;
 
     public GameWindow(GameComponent game) {
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setUndecorated(true);
         this.setIgnoreRepaint(true);
-        this.setBackground(Color.BLACK);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.config = new Config(getGameSize());
-        game.setConfig(config);
-        game.init();
-        this.addKeyListener(game);
-        this.game = game;
 
         if (Config.isDebugMode()) {
             this.setSize(config.getGameResolution());
@@ -33,12 +30,21 @@ public class GameWindow extends JFrame {
             this.setFullScreen();
         }
 
-        this.add(new GameRender(this, game));
-        this.setResizable(false);
+        this.game = game;
+        this.game.setConfig(config);
+        this.game.init();
+
+        this.addKeyListener(this.game);
+
+        this.render = new GameRender(this, this.game);
+        this.render.setVisible(true);
+        this.render.setFocusable(false);
+
+        this.add(render);
         this.pack();
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.requestFocusInWindow();
     }
 
     public void setFullScreen() {
@@ -59,23 +65,6 @@ public class GameWindow extends JFrame {
     }
 
     public void play() {
-
-        final float timePerFrame = 1000000000.0f / GameRender.FPS;
-
-        long previousTime = System.nanoTime();
-
-        while (true) {
-
-            long currentTime = System.nanoTime();
-
-            delta += (currentTime - previousTime) / timePerFrame;
-            previousTime = currentTime;
-
-            if (delta >= 1) {
-                game.update(delta / GameRender.FPS);
-                repaint();
-                delta--;
-            }
-        }
+        game.startAndPlay(FPS, render);
     }
 }
