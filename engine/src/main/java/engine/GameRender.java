@@ -9,15 +9,14 @@ public class GameRender {
     private final GameWindow gameWindow;
     private BufferStrategy bufferStrategy;
 
-    public GameRender(GameWindow gameWindow) {
+    public GameRender(GameWindow gameWindow, Dimension viewport) {
         this.gameWindow = gameWindow;
-        this.scale = calculateScale(gameWindow);
+        this.scale = calculateScale(gameWindow, viewport);
     }
 
-    private Point2D.Double calculateScale(GameWindow gameWindow) {
+    private Point2D.Double calculateScale(GameWindow gameWindow, Dimension viewport) {
         Dimension screenSize = gameWindow.getSize();
-        Dimension gameSize = gameWindow.getGameSize();
-        return new Point2D.Double((double) screenSize.width / gameSize.width, (double) screenSize.height / gameSize.height);
+        return new Point2D.Double((double) screenSize.width / viewport.width, (double) screenSize.height / viewport.height);
     }
 
     public void render() {

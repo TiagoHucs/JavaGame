@@ -14,14 +14,15 @@ public class GameWindow extends JFrame {
     private GameRender render;
     private Canvas canvas;
 
-    public GameWindow(GameComponent game) {
+    private Dimension viewport;
 
+    public GameWindow(Dimension viewport, GameComponent game) {
         this.setUndecorated(true);
         this.setIgnoreRepaint(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBackground(Color.BLACK);
 
-        this.config = new Config(getGameSize());
+        this.config = new Config(viewport);
 
         if (Config.isDebugMode()) {
 
@@ -51,24 +52,13 @@ public class GameWindow extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        this.render = new GameRender(this);
+        this.render = new GameRender(this, viewport);
     }
 
     public void setFullScreen() {
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
         graphicsDevice.setFullScreenWindow(this);
-    }
-
-    public static Dimension getGameSize() {
-
-        // Numeros mágicos baseados no tamanho da imagem do jogador
-        Dimension playerSize = new Dimension(48, 58);
-
-        // Quantidade de tiles por eixo
-        Dimension tileCount = new Dimension(16, 8);
-
-        return new Dimension(playerSize.width * tileCount.width, playerSize.height * tileCount.height);
     }
 
     public void play() {
