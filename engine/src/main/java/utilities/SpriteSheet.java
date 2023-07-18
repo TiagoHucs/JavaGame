@@ -1,44 +1,69 @@
 package utilities;
 
-import javax.imageio.ImageIO;
+import entities.ImageAnimation;
+import lombok.SneakyThrows;
+
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteSheet {
 
-    private BufferedImage image;
-    private List<BufferedImage> imageList;
+    private List<ImageAnimation> animations;
+    private int currentAnimation = 0;
+    private float animationSpeed = 10.0f;
+    private float animationFrame = 0;
 
-    public SpriteSheet(String path,int columns, int rows){
-        imageList = new ArrayList<>(columns * rows);
+    @SneakyThrows
+    public SpriteSheet(String path, int columns, int rows) {
 
-        try {
-            image = ImageIO.read(getClass().getResource(path));
-            System.out.println("Loading spritesheet");
-        } catch (IOException | IllegalArgumentException e){
-            System.err.println("Error loading spritesheet");
-        }
+        this.animations = new ArrayList<ImageAnimation>(rows);
 
-        int unityWidth = image.getWidth() / columns;
-        int unityHeight = image.getHeight() / rows;
+        BufferedImage sheet = ResourceManager.get().getImage(path);
+        final int unityWidth = sheet.getWidth() / columns;
+        final int unityHeight = sheet.getHeight() / rows;
 
-        for (int x = 0; x < columns; x++) {
-            for (int y = 0; y < rows; y++) {
-                imageList.add(image.getSubimage(
+        for (int y = 0; y < rows; y++) {
+
+            BufferedImage[] animation = new BufferedImage[columns];
+
+            for (int x = 0; x < columns; x++) {
+
+                animation[x] = sheet.getSubimage(
                         x == 0 ? 0 : x * unityWidth,
                         y == 0 ? 0 : y * unityHeight,
                         unityWidth,
-                        unityHeight));
+                        unityHeight);
+
             }
+
+            animations.add(new ImageAnimation(animation));
         }
 
-
+        this.currentAnimation = 0;
+        this.animationFrame = 0;
+        this.animationSpeed = 10.0f;
     }
 
-    public BufferedImage getSprite(int n){
-        return imageList.get(n);
+    public BufferedImage getCurrentImage() {
+        return animations.get(currentAnimation).getCurrentImage();
     }
 
+    public void play(int row) {
+        this.currentAnimation = Math.min(row, animations.size());
+    }
+
+    public void updateAnimations(float delta) {
+
+        this.animationFrame += Lerp.twoPoints(animationFrame, animationSpeed, delta);
+
+        if (animationFrame > 1) {
+            animations.get(currentAnimation).updateAnimationFrame();
+            animationFrame = 0;
+        }
+
+    }
+    public void setAnimationSpeed(float animationSpeed) {
+        this.animationSpeed = animationSpeed;
+    }
 }

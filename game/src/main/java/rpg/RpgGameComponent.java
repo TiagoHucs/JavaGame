@@ -1,5 +1,6 @@
 package rpg;
 
+import engine.GameWindow;
 import entities.GameObject;
 import game.GameComponent;
 import game.GameState;
@@ -19,6 +20,8 @@ public class RpgGameComponent extends GameComponent {
 
     private GameObject p1;
 
+    private SpriteSheet spriteSheet;
+
     @Override
     public void init() {
 
@@ -28,9 +31,14 @@ public class RpgGameComponent extends GameComponent {
         p1 = new GameObject();
         p1.setSize(new Point2D.Float(10, 100));
         p1.setPosition(new Point2D.Float(0, getCfg().getGameHeight() / 2));
-        SpriteSheet spriteSheet = new SpriteSheet("/image/pngegg.png",4,4);
-        p1.setImage(spriteSheet.getSprite(2));
 
+        spriteSheet = new SpriteSheet("/image/pngegg.png",4,4);
+        spriteSheet.play(1);
+
+        // troca de frame por segundos
+        spriteSheet.setAnimationSpeed(1);
+
+        p1.setImage(spriteSheet.getCurrentImage());
     }
 
     @Override
@@ -39,12 +47,12 @@ public class RpgGameComponent extends GameComponent {
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
-        g2d.drawImage(p1.getImage(),0,0, null);
+        g2d.drawImage(spriteSheet.getCurrentImage(),0,0, null);
     }
 
     @Override
     public void update(float delta) {
-
+        spriteSheet.updateAnimations(delta);
     }
 
     @Override
