@@ -9,16 +9,13 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
-public class PongGameComponent extends GameComponent {
+import static game.PlayerActions.DOWN;
+import static game.PlayerActions.UP;
 
+public class PongGameComponent extends GameComponent {
     private PlayerActions p1Actions = new PlayerActions();
     private PlayerActions p2Actions = new PlayerActions();
-    private GameObject ball = new GameObject();
-    private float f = 5.0f;
-    private float x = f;
-    private float y = f;
-
-    private GameObject p1, p2;
+    private GameObject p1, p2, ball;
 
     @Override
     public void init() {
@@ -26,13 +23,25 @@ public class PongGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
+        Point2D.Float paddleSize = new Point2D.Float(1, 10);
+
         p1 = new GameObject();
-        p1.setSize(new Point2D.Float(10, 100));
+        p1.setSize(paddleSize);
         p1.setPosition(new Point2D.Float(0, getCfg().getGameHeight() / 2));
+        p1Actions.configureButtons(UP, KeyEvent.VK_W);
+        p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
 
         p2 = new GameObject();
-        p2.setSize(new Point2D.Float(10, 100));
-        p2.setPosition(new Point2D.Float(getCfg().getGameWidth() - 10, getCfg().getGameHeight() / 2));
+        p2.setSize(paddleSize);
+        p2.setPosition(new Point2D.Float(getCfg().getGameWidth() - paddleSize.x, getCfg().getGameHeight() / 2));
+        p2Actions.configureButtons(UP, KeyEvent.VK_UP);
+        p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
+
+        ball = new GameObject();
+        ball.setSize(new Point2D.Float(paddleSize.x, paddleSize.x));
+        ball.setPosition(getCfg().getGameCenterPosition());
+        ball.setVelocityStep(2);
+        ball.setVelocity(new Point2D.Float(2,2));
     }
 
     @Override
@@ -51,80 +60,64 @@ public class PongGameComponent extends GameComponent {
                 (int) p2.getSize().x,
                 (int) p2.getSize().y);
 
-        g2d.fillRect(ball.getPositionWithOffsetX(), ball.getPositionWithOffsetY(), 10, 10);
+        g2d.fillRect(ball.getPositionWithOffsetX(), ball.getPositionWithOffsetY(),
+                (int) ball.getSize().x,
+                (int) ball.getSize().y);
     }
 
     @Override
     public void update(float delta) {
+        updatePlayer(p1Actions, p1, delta);
+        updatePlayer(p2Actions, p2, delta);
+        updateBall(ball, delta);
+    }
 
-        if(p1Actions.isDown()){
-            p1.setVelocity(new Point2D.Float(0,4f));
-        }
-        if (p1Actions.isUp()){
-            p1.setVelocity(new Point2D.Float(0,-4f));
-        }
-        if(!p1Actions.isUp() && !p1Actions.isDown()){
-            p1.stop();
-        }
-        p1.move(delta);
+    private void updateBall(GameObject ball, float delta) {
 
-        if(p2Actions.isDown()){
-            p2.setVelocity(new Point2D.Float(0,4f));
-        }
-
-        if (p2Actions.isUp()){
-            p2.setVelocity(new Point2D.Float(0,-4f));
-        }
-        if(!p2Actions.isUp() && !p2Actions.isDown()){
-            p2.stop();
-        }
-        p2.move(delta);
-
-        ball.setVelocity(new Point2D.Float(x, y));
         ball.move(delta);
 
-        if (ball.getPosition().getY() > getCfg().getGameHeight()) {
-            y = -f;
-        } else if (ball.getPosition().getY() < 0) {
-            y = f;
+        if (ball.getPosition().y > getCfg().getGameHeight()) {
+            ball.getVelocity().y = -ball.getVelocityStep();
+
+        } else if (ball.getPosition().y < 0) {
+            ball.getVelocity().y = ball.getVelocityStep();
         }
 
-        if (ball.getPosition().getX() > getCfg().getGameWidth()) {
-            x = -f;
-        } else if (ball.getPosition().getX() < 0) {
-            x = f;
+        if (ball.getPosition().x > getCfg().getGameWidth()) {
+            ball.getVelocity().x = -ball.getVelocityStep();
+
+        } else if (ball.getPosition().x < 0) {
+            ball.getVelocity().x = ball.getVelocityStep();
         }
+    }
+
+    private void updatePlayer(PlayerActions actions, GameObject player, float delta) {
+
+        if (actions.isDown()) {
+            player.setVelocity(new Point2D.Float(0, 4f));
+        }
+
+        if (actions.isUp()) {
+            player.setVelocity(new Point2D.Float(0, -4f));
+        }
+
+        if (!actions.isUp() && !actions.isDown()) {
+            player.stop();
+        }
+
+        player.move(delta);
+        player.limitToScreenBounds(this);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(KeyEvent.VK_UP == e.getKeyCode()){
-            p2Actions.setUp(true);
-        }
-        if(KeyEvent.VK_DOWN == e.getKeyCode()){
-            p2Actions.setDown(true);
-        }
-        if(KeyEvent.VK_W == e.getKeyCode()){
-            p1Actions.setUp(true);
-        }
-        if(KeyEvent.VK_S == e.getKeyCode()){
-            p1Actions.setDown(true);
-        }
+        p2Actions.keyPressed(e);
+        p1Actions.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(KeyEvent.VK_UP == e.getKeyCode()){
-            p2Actions.setUp(false);
-        }
-        if(KeyEvent.VK_DOWN == e.getKeyCode()){
-            p2Actions.setDown(false);
-        }
-        if(KeyEvent.VK_W == e.getKeyCode()){
-            p1Actions.setUp(false);
-        }
-        if(KeyEvent.VK_S == e.getKeyCode()){
-            p1Actions.setDown(false);
-        }
+        p2Actions.keyReleased(e);
+        p1Actions.keyReleased(e);
     }
 }

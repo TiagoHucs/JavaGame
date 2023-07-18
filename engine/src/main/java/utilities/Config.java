@@ -1,6 +1,7 @@
 package utilities;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Config {
@@ -27,6 +28,10 @@ public class Config {
 
     public final int getGameHeight() {
         return gameResolution.height;
+    }
+
+    public final Point2D.Float getGameCenterPosition() {
+        return new Point2D.Float(getGameWidth() / 2, getGameHeight() / 2);
     }
 
     public boolean isMuted() {
