@@ -160,4 +160,28 @@ public class GameObject {
         }
 
     }
+
+    public void limitToScreenBounds(GameComponent gameComponent) {
+
+        float maxPositionX = getHorizonntalLimit(gameComponent);
+        float maxPositionY = getVerticalLimit(gameComponent);
+
+        if (position.x < 0) {
+            position.x = 0;
+            velocity.x = 0;
+
+        } else if (position.x > maxPositionX) {
+            position.x = maxPositionX;
+            velocity.x = 0;
+        }
+
+        if (position.y < 0) {
+            position.y = 0;
+            velocity.y = 0;
+
+        } else if (position.y > maxPositionY) {
+            position.y = maxPositionY;
+            velocity.y = 0;
+        }
+    }
 }

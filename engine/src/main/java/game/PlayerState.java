@@ -130,21 +130,8 @@ public class PlayerState {
         }
 
         ship.move(delta);
+        ship.limitToScreenBounds(game);
         ship.checkWeapon();
-
-        if (ship.getPosition().x > ship.getHorizonntalLimit(game)) {
-            ship.getPosition().x = ship.getHorizonntalLimit(game);
-
-        } else if (ship.getPosition().x < 0.0f) {
-            ship.getPosition().x = 0.0f;
-        }
-
-        if (ship.getPosition().y > ship.getVerticalLimit(game)) {
-            ship.getPosition().y = ship.getVerticalLimit(game);
-
-        } else if (ship.getPosition().y < 0.0f) {
-            ship.getPosition().y = 0.0f;
-        }
     }
 
     private void updateBullets(GameComponent game, float delta) {

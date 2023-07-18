@@ -22,7 +22,7 @@ public class RpgGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
-        spriteSheet = new SpriteSheet("/image/pngegg.png",4,4);
+        spriteSheet = new SpriteSheet("/image/pngegg.png",4,4, 0.1f);
         spriteSheet.play(0);
         spriteSheet.setAnimationSpeed(1);
 
@@ -64,6 +64,7 @@ public class RpgGameComponent extends GameComponent {
         }
 
         player.move(delta);
+        player.limitToScreenBounds(this);
     }
 
     @Override
