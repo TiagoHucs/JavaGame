@@ -33,7 +33,7 @@ public class PlayerActions {
         configureButtons(RIGHT, KeyEvent.VK_RIGHT, KeyEvent.VK_D);
         configureButtons(UP, KeyEvent.VK_UP, KeyEvent.VK_W);
         configureButtons(DOWN, KeyEvent.VK_DOWN, KeyEvent.VK_S);
-        configureButtons(FIRE, KeyEvent.VK_SPACE);
+        configureButtons(FIRE, KeyEvent.VK_SPACE, KeyEvent.VK_CONTROL);
     }
 
     public void configureButtons(String action, Integer ...keys) {
