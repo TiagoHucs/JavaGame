@@ -61,19 +61,11 @@ public class ResourceManager {
 
     @SneakyThrows
     public synchronized Font getFont() {
-
         if (font == null) {
-
-            Dimension game = GameWindow.getGameSize();
-            Dimension tile = new Dimension(20, 10);
-            int scale = ((game.width / tile.width) + (game.height / tile.height)) / tile.height;
-
             try (InputStream stream = getClass().getResourceAsStream("/fonts/PressStart2P-Regular.ttf")) {
-                font = Font.createFont(Font.TRUETYPE_FONT, stream)
-                        .deriveFont(Font.PLAIN, scale);
+                font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 10.0f);
             }
         }
-
         return font;
     }
 

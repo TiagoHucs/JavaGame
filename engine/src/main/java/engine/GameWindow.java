@@ -66,7 +66,7 @@ public class GameWindow extends JFrame {
         Dimension playerSize = new Dimension(48, 58);
 
         // Quantidade de tiles por eixo
-        Dimension tileCount = new Dimension(20, 10);
+        Dimension tileCount = new Dimension(16, 8);
 
         return new Dimension(playerSize.width * tileCount.width, playerSize.height * tileCount.height);
     }
