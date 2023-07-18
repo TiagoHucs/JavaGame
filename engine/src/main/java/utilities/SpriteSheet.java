@@ -1,6 +1,8 @@
 package utilities;
 
+import entities.GameObject;
 import entities.ImageAnimation;
+import game.GameComponent;
 import lombok.SneakyThrows;
 
 import java.awt.*;
@@ -10,14 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteSheet {
-
     private List<ImageAnimation> animations;
     private int currentAnimation = 0;
-    private float animationSpeed = 10.0f;
-    private float animationFrame = 0;
+    private float animationSpeed, animationFrame;
 
     @SneakyThrows
     public SpriteSheet(String path, int columns, int rows, float scale) {
+
+        this.currentAnimation = 0;
+        this.animationFrame = 0.0f;
+        this.animationSpeed = 0.0f;
 
         this.animations = new ArrayList<ImageAnimation>(rows);
 
@@ -41,10 +45,6 @@ public class SpriteSheet {
 
             animations.add(new ImageAnimation(animation));
         }
-
-        this.currentAnimation = 0;
-        this.animationFrame = 0;
-        this.animationSpeed = 10.0f;
     }
 
     public SpriteSheet(String path, int columns, int rows) {
@@ -59,17 +59,17 @@ public class SpriteSheet {
             return sheetOriginal;
         }
 
-        Dimension newSize = new Dimension(
+        Dimension size = new Dimension(
                 (int) (sheetOriginal.getWidth() * scale),
                 (int) (sheetOriginal.getHeight() * scale));
 
-        BufferedImage bufferedImageResized = new BufferedImage(newSize.width, newSize.height, sheetOriginal.getType());
+        BufferedImage sheetScaled = new BufferedImage(size.width, size.height, sheetOriginal.getType());
 
-        Graphics2D graphics2D = bufferedImageResized.createGraphics();
-        graphics2D.drawImage(sheetOriginal, 0, 0, newSize.width, newSize.height, null);
+        Graphics2D graphics2D = sheetScaled.createGraphics();
+        graphics2D.drawImage(sheetOriginal, 0, 0, size.width, size.height, null);
         graphics2D.dispose();
 
-        return bufferedImageResized;
+        return sheetScaled;
     }
 
     public BufferedImage getCurrentImage() {
@@ -77,7 +77,7 @@ public class SpriteSheet {
     }
 
     public void play(int row) {
-        this.currentAnimation = Math.min(row, animations.size());
+        this.currentAnimation = Math.min(Math.max(0, row), animations.size() - 1);
     }
 
     public void updateAnimations(float delta) {
@@ -90,7 +90,18 @@ public class SpriteSheet {
         }
 
     }
+
+    public void updateAnimations(float delta, GameObject gameObject) {
+
+        float speed = Math.abs(gameObject.getVelocity().x)
+                    + Math.abs(gameObject.getVelocity().y);
+
+        this.updateAnimations(speed * delta);
+
+        gameObject.setImage(getCurrentImage());
+    }
+
     public void setAnimationSpeed(float animationSpeed) {
-        this.animationSpeed = animationSpeed;
+        this.animationSpeed = Math.abs(animationSpeed);
     }
 }

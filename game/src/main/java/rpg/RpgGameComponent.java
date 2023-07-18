@@ -37,7 +37,7 @@ public class RpgGameComponent extends GameComponent {
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
-        g2d.drawImage(spriteSheet.getCurrentImage(),
+        g2d.drawImage(player.getImage(),
                 player.getPositionWithOffsetX(),
                 player.getPositionWithOffsetY(), null);
     }
@@ -45,9 +45,7 @@ public class RpgGameComponent extends GameComponent {
     @Override
     public void update(float delta) {
 
-        float speed = Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().y);
-
-        spriteSheet.updateAnimations( speed * delta);
+        spriteSheet.updateAnimations(delta, player);
 
         if (playerInput.isUp()) {
             player.decreaseYVelocity();
