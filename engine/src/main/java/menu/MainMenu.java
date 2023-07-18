@@ -2,10 +2,7 @@ package menu;
 
 import game.GameComponent;
 import game.GameLogic;
-import menu.impl.ConfigMenuPage;
-import menu.impl.GameOverMenuPage;
-import menu.impl.SoundMenuPage;
-import menu.impl.StartMenuPage;
+import menu.impl.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,6 +17,7 @@ public class MainMenu implements GameLogic {
     public static final String KEY_CONFIGURATIONS_MENU = "CONFIGURATIONS MENU";
     public static final String KEY_SOUND_MENU = "SOUND MENU";
     public static final String KEY_GAME_OVER = "GAME OVER";
+    public static final String KEY_CREDITS = "CREDITS";
 
     public MainMenu(GameComponent gameComponent) {
 
@@ -27,6 +25,7 @@ public class MainMenu implements GameLogic {
         registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent,this));
         registerMenu(new SoundMenuPage(KEY_SOUND_MENU, gameComponent, this));
         registerMenu(new GameOverMenuPage(KEY_GAME_OVER, gameComponent, this));
+        registerMenu(new CreditsMenuPage(KEY_CREDITS, gameComponent, this));
 
         setMenuPage(KEY_GAME_MENU);
     }

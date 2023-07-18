@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractMenuPage implements MenuPage {
@@ -45,7 +46,13 @@ public abstract class AbstractMenuPage implements MenuPage {
         setStartLine(gameComponent);
         drawGameLogo(g, gameComponent);
         drawTitle(g, gameComponent);
-        drawOptions(g, gameComponent);
+        if(haveOptions()){
+            drawOptions(g, gameComponent);
+        }
+    }
+
+    private boolean haveOptions() {
+        return options != null && !options.isEmpty();
     }
 
     protected void drawOptions(Graphics g, GameComponent gameComponent) {
@@ -80,6 +87,23 @@ public abstract class AbstractMenuPage implements MenuPage {
         nextLine(font.getSize());
     }
 
+    protected void drawText(Graphics g, GameComponent gameComponent, List<String> text) {
+
+        if (metrics == null) {
+            metrics = g.getFontMetrics(font);
+        }
+
+        int w = gameComponent.getCfg().getGameWidth();
+
+        g.setColor(Color.WHITE);
+        for (String textLine : text) {
+            int textWidth = metrics.stringWidth(textLine);
+            int x = (w - textWidth) / 2;
+            g.drawString(textLine, x, line);
+            nextLine(font.getSize());
+        }
+    }
+
     private void drawGameLogo(Graphics g, GameComponent gameComponent) {
 
         int w = gameComponent.getCfg().getGameWidth();
@@ -98,11 +122,35 @@ public abstract class AbstractMenuPage implements MenuPage {
         line = line + heigh + 20;
     }
 
-    private void setStartLine(GameComponent gameComponent) {
+    protected void setStartLine(GameComponent gameComponent) {
         line = gameComponent.getCfg().getGameHeight() / 3;
     }
 
     public void sendEvent(KeyEvent e) {
+        if(haveOptions()){
+            moveBetweenOptions(e);
+
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                selectedOption.execute();
+            }
+
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                if (selectedOption instanceof MenuOptionLevel) {
+                    ((MenuOptionLevel) selectedOption).decrease();
+                }
+            }
+
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                if (selectedOption instanceof MenuOptionLevel) {
+                    ((MenuOptionLevel) selectedOption).increase();
+                }
+            }
+        }
+
+
+    }
+
+    private void moveBetweenOptions(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             int index = options.indexOf(selectedOption);
             if (index > 0) {
@@ -116,22 +164,6 @@ public abstract class AbstractMenuPage implements MenuPage {
             if (index < options.size() - 1) {
                 MenuOption nextOption = options.get(index + 1);
                 selectedOption = nextOption;
-            }
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            selectedOption.execute();
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (selectedOption instanceof MenuOptionLevel) {
-                ((MenuOptionLevel) selectedOption).decrease();
-            }
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (selectedOption instanceof MenuOptionLevel) {
-                ((MenuOptionLevel) selectedOption).increase();
             }
         }
     }
