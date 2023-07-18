@@ -1,6 +1,5 @@
 package rpg;
 
-import engine.GameWindow;
 import entities.GameObject;
 import game.GameComponent;
 import game.GameState;
@@ -10,9 +9,7 @@ import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.TileLayer;
 import org.mapeditor.io.TMXMapReader;
-import org.mapeditor.view.MapRenderer;
 import org.mapeditor.view.OrthogonalRenderer;
-import utilities.ResourceManager;
 import utilities.SpriteSheet;
 
 import java.awt.*;
