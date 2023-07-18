@@ -40,6 +40,7 @@ public class RpgGameComponent extends GameComponent {
         spriteSheet.setAnimationSpeed(1);
 
         player = new GameObject();
+        player.setVelocityStep(0.04f);
         player.setImage(spriteSheet.getCurrentImage());
         player.setPosition(new Point2D.Float(getCfg().getGameWidth() / 2, getCfg().getGameHeight() / 2));
     }

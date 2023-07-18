@@ -27,6 +27,7 @@ public class GameObject {
     private Point2D.Float maxVelocity = new Point2D.Float(15.0f, 15.0f);
     private Point2D.Float imageOffset = new Point2D.Float(0.0f, 0.0f);
     private Double direction;
+    private float velocityStep = 1.0f;
 
     private BufferedImage image;
     private Map<Class, Effect> effectList = new HashMap<Class, Effect>();
@@ -65,19 +66,19 @@ public class GameObject {
     }
 
     public void increaseXVelocity() {
-        this.velocity.x = Math.min(this.maxVelocity.x, this.velocity.x + 1.0f);
+        this.velocity.x = Math.min(this.maxVelocity.x, this.velocity.x + velocityStep);
     }
 
     public void decreaseXVelocity() {
-        this.velocity.x = Math.max(-this.maxVelocity.x, this.velocity.x - 1.0f);
+        this.velocity.x = Math.max(-this.maxVelocity.x, this.velocity.x - velocityStep);
     }
 
     public void increaseYVelocity() {
-        this.velocity.y = Math.min(this.maxVelocity.y, this.velocity.y + 1.0f);
+        this.velocity.y = Math.min(this.maxVelocity.y, this.velocity.y + velocityStep);
     }
 
     public void decreaseYVelocity() {
-        this.velocity.y = Math.max(-this.maxVelocity.y, this.velocity.y - 1.0f);
+        this.velocity.y = Math.max(-this.maxVelocity.y, this.velocity.y - velocityStep);
     }
 
     public void slowDownX() {
