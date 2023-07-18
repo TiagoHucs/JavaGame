@@ -19,11 +19,6 @@
             <groupId>br.eftgames</groupId>
             <artifactId>engine</artifactId>
         </dependency>
-        <dependency>
-            <groupId>br.eftgames</groupId>
-            <artifactId>engine</artifactId>
-        </dependency>
     </dependencies>
-
 
 </project>

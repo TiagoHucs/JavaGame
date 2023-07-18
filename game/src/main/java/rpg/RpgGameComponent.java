@@ -5,19 +5,35 @@ import entities.GameObject;
 import game.GameComponent;
 import game.GameState;
 import game.PlayerActions;
+import lombok.SneakyThrows;
+import org.mapeditor.core.Map;
+import org.mapeditor.core.MapLayer;
+import org.mapeditor.core.TileLayer;
+import org.mapeditor.io.TMXMapReader;
+import org.mapeditor.view.MapRenderer;
+import org.mapeditor.view.OrthogonalRenderer;
+import utilities.ResourceManager;
 import utilities.SpriteSheet;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 
 public class RpgGameComponent extends GameComponent {
     private PlayerActions playerInput = new PlayerActions();
     private GameObject player;
     private SpriteSheet spriteSheet;
+    private Map map;
+    private OrthogonalRenderer mapRender;
 
+    @SneakyThrows
     @Override
     public void init() {
+
+        // Carregando mapa
+        this.map = new TMXMapReader().readMap(getClass().getResource("/maps/Tiled/sampleMap.tmx"));
+        this.mapRender = new OrthogonalRenderer(map);
 
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
@@ -36,6 +52,14 @@ public class RpgGameComponent extends GameComponent {
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
+        g2d.setClip(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
+
+        Iterator<MapLayer> mapLayerIterator = map.iterator();
+
+        while (mapLayerIterator.hasNext()) {
+            TileLayer layer = (TileLayer) mapLayerIterator.next();
+            mapRender.paintTileLayer((Graphics2D) g2d, layer);
+        }
 
         g2d.drawImage(player.getImage(),
                 player.getPositionWithOffsetX(),
