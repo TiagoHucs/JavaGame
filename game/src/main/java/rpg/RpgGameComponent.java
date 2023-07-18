@@ -12,14 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
 public class RpgGameComponent extends GameComponent {
-    private PlayerActions p1Actions = new PlayerActions();
-    private GameObject ball = new GameObject();
-    private float f = 5.0f;
-    private float x = f;
-    private float y = f;
-
-    private GameObject p1;
-
+    private PlayerActions playerInput = new PlayerActions();
+    private GameObject player;
     private SpriteSheet spriteSheet;
 
     @Override
@@ -28,17 +22,13 @@ public class RpgGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
-        p1 = new GameObject();
-        p1.setSize(new Point2D.Float(10, 100));
-        p1.setPosition(new Point2D.Float(0, getCfg().getGameHeight() / 2));
-
         spriteSheet = new SpriteSheet("/image/pngegg.png",4,4);
-        spriteSheet.play(1);
-
-        // troca de frame por segundos
+        spriteSheet.play(0);
         spriteSheet.setAnimationSpeed(1);
 
-        p1.setImage(spriteSheet.getCurrentImage());
+        player = new GameObject();
+        player.setImage(spriteSheet.getCurrentImage());
+        player.setPosition(new Point2D.Float(getCfg().getGameWidth() / 2, getCfg().getGameHeight() / 2));
     }
 
     @Override
@@ -47,32 +37,58 @@ public class RpgGameComponent extends GameComponent {
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
-        g2d.drawImage(spriteSheet.getCurrentImage(),0,0, null);
+        g2d.drawImage(spriteSheet.getCurrentImage(),
+                player.getPositionWithOffsetX(),
+                player.getPositionWithOffsetY(), null);
     }
 
     @Override
     public void update(float delta) {
+
         spriteSheet.updateAnimations(delta);
+
+        if (playerInput.isUp()) {
+            player.decreaseYVelocity();
+        }
+
+        if (playerInput.isDown()) {
+            player.increaseYVelocity();
+        }
+
+        if (playerInput.isLeft()) {
+            player.decreaseXVelocity();
+        }
+
+        if (playerInput.isRight()) {
+            player.increaseXVelocity();
+        }
+
+        player.move(delta);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if(KeyEvent.VK_W == e.getKeyCode()){
-            p1Actions.setUp(true);
-        }
-        if(KeyEvent.VK_S == e.getKeyCode()){
-            p1Actions.setDown(true);
+        playerInput.keyPressed(e);
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_DOWN:
+                spriteSheet.play(0);
+                break;
+            case KeyEvent.VK_RIGHT:
+                spriteSheet.play(1);
+                break;
+            case KeyEvent.VK_LEFT:
+                spriteSheet.play(2);
+                break;
+            case KeyEvent.VK_UP:
+                spriteSheet.play(3);
+                break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(KeyEvent.VK_W == e.getKeyCode()){
-            p1Actions.setUp(false);
-        }
-        if(KeyEvent.VK_S == e.getKeyCode()){
-            p1Actions.setDown(false);
-        }
+        playerInput.keyReleased(e);
     }
 }
