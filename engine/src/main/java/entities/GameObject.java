@@ -44,8 +44,8 @@ public class GameObject {
 
     public void move(float delta) {
 
-        this.position.x = Lerp.twoPoints(position.x, position.x + this.velocity.x * GameWindow.FPS, delta);
-        this.position.y = Lerp.twoPoints(position.y, position.y + this.velocity.y * GameWindow.FPS, delta);
+        this.position.x += velocity.x;
+        this.position.y += velocity.y;
 
         for (Effect effect : effectList.values()) {
             effect.update(delta, this);
