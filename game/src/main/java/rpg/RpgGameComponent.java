@@ -40,7 +40,7 @@ public class RpgGameComponent extends GameComponent {
         spriteSheet.setAnimationSpeed(1);
 
         player = new GameObject();
-        player.setVelocityStep(0.04f);
+        player.setVelocityStep(1.5f);
         player.setImage(spriteSheet.getCurrentImage());
         player.setPosition(new Point2D.Float(getCfg().getGameWidth() / 2, getCfg().getGameHeight() / 2));
     }
@@ -68,6 +68,9 @@ public class RpgGameComponent extends GameComponent {
     public void update(float delta) {
 
         spriteSheet.updateAnimations(delta, player);
+
+        // Parar com o efeito "pista de gelo"
+        player.stop();
 
         if (playerInput.isUp()) {
             player.decreaseYVelocity();
