@@ -29,7 +29,7 @@ public class RpgGameComponent extends GameComponent {
         p1.setSize(new Point2D.Float(10, 100));
         p1.setPosition(new Point2D.Float(0, getCfg().getGameHeight() / 2));
         SpriteSheet spriteSheet = new SpriteSheet("/image/pngegg.png",4,4);
-        p1.setImage(spriteSheet.getSprite(0));
+        p1.setImage(spriteSheet.getSprite(2));
 
     }
 

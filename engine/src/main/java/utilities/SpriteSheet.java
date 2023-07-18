@@ -10,12 +10,8 @@ public class SpriteSheet {
 
     private BufferedImage image;
     private List<BufferedImage> imageList;
-    private int columns;
-    private int rows;
 
     public SpriteSheet(String path,int columns, int rows){
-        this.columns = columns;
-        this.rows = rows;
         imageList = new ArrayList<>(columns * rows);
 
         try {
@@ -31,18 +27,14 @@ public class SpriteSheet {
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
                 imageList.add(image.getSubimage(
-                        x,
-                        y,
+                        x == 0 ? 0 : x * unityWidth,
+                        y == 0 ? 0 : y * unityHeight,
                         unityWidth,
                         unityHeight));
             }
         }
 
 
-    }
-
-    public BufferedImage getImage(){
-        return image;
     }
 
     public BufferedImage getSprite(int n){
