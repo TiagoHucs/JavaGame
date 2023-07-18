@@ -66,7 +66,7 @@ public class PongGameComponent extends GameComponent {
         if(!p1Actions.isUp() && !p1Actions.isDown()){
             p1.stop();
         }
-        p1.move();
+        p1.move(delta);
 
         if(p2Actions.isDown()){
             p2.setVelocity(new Point2D.Float(0,4f));
@@ -78,10 +78,10 @@ public class PongGameComponent extends GameComponent {
         if(!p2Actions.isUp() && !p2Actions.isDown()){
             p2.stop();
         }
-        p2.move();
+        p2.move(delta);
 
         ball.setVelocity(new Point2D.Float(x, y));
-        ball.move();
+        ball.move(delta);
 
         if (ball.getPosition().getY() > getCfg().getGameHeight()) {
             y = -f;

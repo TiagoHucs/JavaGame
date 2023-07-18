@@ -1,10 +1,17 @@
 package utilities;
 
+import engine.GameWindow;
+import lombok.SneakyThrows;
+
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,17 +59,21 @@ public class ResourceManager {
         return getImage(resourceName);
     }
 
+    @SneakyThrows
     public synchronized Font getFont() {
-        if(font == null){
-            File fontFile = new File("game/src/main/resources/fonts/PressStart2P-Regular.ttf");
-            try {
-                font =  Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(Font.PLAIN, 16);
-            } catch (FontFormatException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+        if (font == null) {
+
+            Dimension game = GameWindow.getGameSize();
+            Dimension tile = new Dimension(20, 10);
+            int scale = ((game.width / tile.width) + (game.height / tile.height)) / tile.height;
+
+            try (InputStream stream = getClass().getResourceAsStream("/fonts/PressStart2P-Regular.ttf")) {
+                font = Font.createFont(Font.TRUETYPE_FONT, stream)
+                        .deriveFont(Font.PLAIN, scale);
             }
         }
+
         return font;
     }
 
@@ -73,4 +84,22 @@ public class ResourceManager {
         resources.put(resourceName, getClass().getResource(resourceName));
         return getResource(resourceName);
     }
+
+    public void loadImages(String folder) {
+        try {
+            URL folderURL = getClass().getResource(folder);
+            File file = new File(folderURL.toURI());
+            File[] files = file.listFiles();
+
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    getImage(folder + "/" + files[i].getName());
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
 }

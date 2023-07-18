@@ -100,12 +100,12 @@ public class PlayerState {
         }
     }
 
-    public void update(GameComponent game) {
-        updateBullets(game);
-        updateShip(game);
+    public void update(GameComponent game, float delta) {
+        updateBullets(game, delta);
+        updateShip(game, delta);
     }
 
-    private void updateShip(GameComponent game) {
+    private void updateShip(GameComponent game, float delta) {
 
         //Horizontalmente
         if (actions.isLeft() == actions.isRight()) {
@@ -129,7 +129,7 @@ public class PlayerState {
             ship.increaseYVelocity();
         }
 
-        ship.move();
+        ship.move(delta);
         ship.checkWeapon();
 
         if (ship.getPosition().x > ship.getHorizonntalLimit(game)) {
@@ -147,7 +147,7 @@ public class PlayerState {
         }
     }
 
-    private void updateBullets(GameComponent game) {
+    private void updateBullets(GameComponent game, float delta) {
 
         if (actions.isFire() && ship.isCanFire()) {
             game.getSoundManager().playSound("bling.wav");
@@ -164,7 +164,7 @@ public class PlayerState {
                 shotIterator.remove();
 
             } else {
-                tiro.move();
+                tiro.move(delta);
             }
         }
     }

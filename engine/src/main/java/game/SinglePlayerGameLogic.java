@@ -9,6 +9,7 @@ import ia.FallDownIA;
 import ia.LeftRightIA;
 import ps.Explosion2;
 import utilities.Config;
+import utilities.ResourceManager;
 import waves.WaveController;
 
 import java.awt.*;
@@ -30,6 +31,12 @@ public class SinglePlayerGameLogic implements GameLogic {
     private CollisionController collisionController = new CollisionController();
 
     public SinglePlayerGameLogic(GameComponent gameComponent) {
+
+        ResourceManager.get().loadImages("/image");
+        ResourceManager.get().loadImages("/image/Explosion");
+        ResourceManager.get().loadImages("/image/Space Background");
+        ResourceManager.get().loadImages("/image/UI");
+
         this.init(gameComponent);
     }
 
@@ -101,9 +108,9 @@ public class SinglePlayerGameLogic implements GameLogic {
     @Override
     public void update(GameComponent gameComponent, float delta) {
         updateWaveController(gameComponent, delta);
-        updatePowerUps(gameComponent);
-        updateInimigos(gameComponent);
-        updatePlayers(gameComponent);
+        updatePowerUps(gameComponent, delta);
+        updateInimigos(gameComponent, delta);
+        updatePlayers(gameComponent, delta);
         checkCollisions(gameComponent);
         checkForGameOver(gameComponent);
     }
@@ -149,25 +156,25 @@ public class SinglePlayerGameLogic implements GameLogic {
         }
     }
 
-    private void updatePlayers(GameComponent gameComponent) {
+    private void updatePlayers(GameComponent gameComponent, float delta) {
 
         for (PlayerState playerState : players) {
-            playerState.update(gameComponent);
+            playerState.update(gameComponent, delta);
         }
 
     }
 
-    private void updateInimigos(GameComponent gameComponent) {
+    private void updateInimigos(GameComponent gameComponent, float delta) {
 
         for (Enemy inimigo : enemies) {
-            inimigo.move();
+            inimigo.move(delta);
             inimigo.damage(players, gameComponent);
             inimigo.clampMove(gameComponent);
         }
 
     }
 
-    private void updatePowerUps(GameComponent gameComponent) {
+    private void updatePowerUps(GameComponent gameComponent, float delta) {
 
         Iterator<PowerUp> powerUpItr = powerUps.iterator();
 
@@ -175,7 +182,7 @@ public class SinglePlayerGameLogic implements GameLogic {
 
             PowerUp powerUp = powerUpItr.next();
 
-            powerUp.move();
+            powerUp.move(delta);
 
             for (PlayerState playerState : players) {
 

@@ -1,9 +1,11 @@
 package entities;
 
 import effects.Effect;
+import engine.GameWindow;
 import game.GameComponent;
 import lombok.Getter;
 import lombok.Setter;
+import utilities.Lerp;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -39,13 +41,13 @@ public class GameObject {
         return (T) this.effectList.get(type);
     }
 
-    public void move() {
+    public void move(float delta) {
 
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        this.position.x = Lerp.twoPoints(position.x, position.x + this.velocity.x * GameWindow.FPS, delta);
+        this.position.y = Lerp.twoPoints(position.y, position.y + this.velocity.y * GameWindow.FPS, delta);
 
         for (Effect effect : effectList.values()) {
-            effect.update(1.0f / 60.0f, this);
+            effect.update(delta, this);
         }
     }
 
@@ -147,14 +149,14 @@ public class GameObject {
 
             AffineTransform transform =
                     AffineTransform.getRotateInstance(Math.toRadians(direction),
-                    size.getX() / 2.0,
-                    size.getY() / 2.0);
+                    size.x / 2.0,
+                    size.y / 2.0);
 
             AffineTransformOp filtro = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
-            g2d.drawImage(filtro.filter(getImage(), null),
-                    (int) getPosition().getX(),
-                    (int) getPosition().getY(), null);
+            g2d.drawImage(filtro.filter(image, null),
+                    (int) getPosition().x,
+                    (int) getPosition().y, null);
         }
 
     }

@@ -60,7 +60,7 @@ public class GameWindow extends JFrame {
         graphicsDevice.setFullScreenWindow(this);
     }
 
-    public Dimension getGameSize() {
+    public static Dimension getGameSize() {
 
         // Numeros mágicos baseados no tamanho da imagem do jogador
         Dimension playerSize = new Dimension(48, 58);
