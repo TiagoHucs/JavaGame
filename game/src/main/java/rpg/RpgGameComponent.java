@@ -45,7 +45,9 @@ public class RpgGameComponent extends GameComponent {
     @Override
     public void update(float delta) {
 
-        spriteSheet.updateAnimations(delta);
+        float speed = Math.abs(player.getVelocity().x) + Math.abs(player.getVelocity().y);
+
+        spriteSheet.updateAnimations( speed * delta);
 
         if (playerInput.isUp()) {
             player.decreaseYVelocity();
