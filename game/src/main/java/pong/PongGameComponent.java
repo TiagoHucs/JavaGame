@@ -5,6 +5,7 @@ import entities.GameObject;
 import game.GameComponent;
 import game.GameState;
 import game.PlayerActions;
+import invaders.menu.InvadersMenu;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,7 +25,7 @@ public class PongGameComponent extends GameComponent {
 
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
-
+        this.menu = new InvadersMenu(this);
         float ballSize = 2.0f;
         Point2D.Float center = getCfg().getGameCenterPosition();
         Point2D.Float paddleSize = new Point2D.Float(ballSize, ballSize * 10.0f);

@@ -1,9 +1,9 @@
-package menu.impl;
+package invaders.menu;
 
 import game.GameComponent;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
-import menu.MainMenu;
+import menu.AbstractMenu;
 
 import java.util.Arrays;
 
@@ -13,8 +13,8 @@ public class ConfigMenuPage extends AbstractMenuPage {
     private static final String OPT_SOUND = "SOUND";
     private static final String OPT_CONTROLLER = "CONTROLLER";
 
-    public ConfigMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title, gameComponent);
+    public ConfigMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
+        super(title, gameComponent,"KEY_CONFIGURATIONS_MENU");
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_GRAPHICS) {
@@ -26,7 +26,7 @@ public class ConfigMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_SOUND) {
                     @Override
                     public void execute() {
-                       mainMenu.setMenuPage(MainMenu.KEY_SOUND_MENU);
+                       menu.setMenuPage(SoundMenuPage.KEY);
                     }
                 },
                 new AbstractMenuOption(OPT_CONTROLLER) {
@@ -38,7 +38,7 @@ public class ConfigMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_BACK) {
                     @Override
                     public void execute() {
-                        mainMenu.setMenuPage(MainMenu.KEY_GAME_MENU);
+                        menu.setMenuPage(StartMenuPage.KEY);
                     }
                 }
         ));

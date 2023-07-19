@@ -1,65 +1,31 @@
-package menu;
+package invaders.menu;
 
 import game.GameComponent;
 import game.GameLogic;
-import menu.impl.*;
+import menu.AbstractMenu;
+import menu.AbstractMenuPage;
+import menu.MenuPage;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-public class Menu implements GameLogic {
+public class InvadersMenu extends AbstractMenu {
 
-    private HashMap<String, MenuPage> pages = new HashMap<>(4);
-    private MenuPage selectedPage;
+    public static final String TIT_GAME_MENU = "GAME MENU";
+    public static final String TIT_CONFIGURATIONS_MENU = "CONFIGURATIONS MENU";
+    public static final String TIT_SOUND_MENU = "SOUND MENU";
+    public static final String TIT_GAME_OVER = "GAME OVER";
+    public static final String TIT_CREDITS = "CREDITS";
 
-    public static final String KEY_GAME_MENU = "GAME MENU";
-    public static final String KEY_CONFIGURATIONS_MENU = "CONFIGURATIONS MENU";
-    public static final String KEY_SOUND_MENU = "SOUND MENU";
-    public static final String KEY_GAME_OVER = "GAME OVER";
-    public static final String KEY_CREDITS = "CREDITS";
+    public InvadersMenu(GameComponent gameComponent) {
 
-    public Menu(GameComponent gameComponent) {
-
-        registerMenu(new StartMenuPage(KEY_GAME_MENU, gameComponent, this));
-        registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent,this));
-        registerMenu(new SoundMenuPage(KEY_SOUND_MENU, gameComponent, this));
-        registerMenu(new GameOverMenuPage(KEY_GAME_OVER, gameComponent, this));
-        registerMenu(new CreditsMenuPage(KEY_CREDITS, gameComponent, this));
-
-        setMenuPage(KEY_GAME_MENU);
+        registerMenu(new StartMenuPage(TIT_GAME_MENU, gameComponent, this));
+        registerMenu(new ConfigMenuPage(TIT_CONFIGURATIONS_MENU, gameComponent,this));
+        registerMenu(new SoundMenuPage(TIT_SOUND_MENU, gameComponent, this));
+        registerMenu(new GameOverMenuPage(TIT_GAME_OVER, gameComponent, this));
+        registerMenu(new CreditsMenuPage(TIT_CREDITS, gameComponent, this));
+        setMenuPage(StartMenuPage.KEY);
     }
 
-    private void registerMenu(AbstractMenuPage menu) {
-        pages.put(menu.getTitle(), menu);
-    }
-
-    @Override
-    public void init(GameComponent gameComponent) {
-        setMenuPage(KEY_GAME_MENU);
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        selectedPage.draw(g);
-    }
-
-    @Override
-    public void update(GameComponent gameComponent, float delta) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        selectedPage.sendEvent(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    public void setMenuPage(String menuPageKey) {
-        selectedPage = pages.get(menuPageKey);
-    }
 }

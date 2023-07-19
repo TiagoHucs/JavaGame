@@ -1,8 +1,8 @@
-package menu.impl;
+package invaders.menu;
 
 import game.GameComponent;
 import menu.AbstractMenuPage;
-import menu.MainMenu;
+import menu.AbstractMenu;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,8 +15,8 @@ public class CreditsMenuPage extends AbstractMenuPage {
     private static final String OPT_CONFIGURATIONS = "CONFIGURATIONS";
     private static final String OPT_EXIT_GAME = "EXIT TO DESKTOP";
 
-    public CreditsMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title, gameComponent);
+    public CreditsMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
+        super(title, gameComponent,"KEY_CREDITS");
     }
 
     @Override

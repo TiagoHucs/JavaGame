@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public abstract class AbstractMenuPage implements MenuPage {
+
+    //TODO: Cada pagina nao deveria ser um singleton ???
+    public static String KEY = null;
     protected static final String OPT_BACK = "BACK";
     private String title;
     private List<MenuOption> options;
@@ -22,10 +25,11 @@ public abstract class AbstractMenuPage implements MenuPage {
     protected final GameComponent gameComponent;
 
     @SneakyThrows
-    public AbstractMenuPage(String title, GameComponent gameComponent) {
+    public AbstractMenuPage(String title, GameComponent gameComponent, String key) {
         this.title = title;
         this.gameComponent = gameComponent;
         this.logo = ResourceManager.get().getImage("/image/logo.png");
+        this.KEY = key;
     }
 
     protected void setOptions(List<MenuOption> options) {

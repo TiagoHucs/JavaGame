@@ -1,11 +1,11 @@
-package menu.impl;
+package invaders.menu;
 
 import game.GameComponent;
 import game.GameState;
 import game.SinglePlayerGameLogic;
+import menu.AbstractMenu;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
-import menu.MainMenu;
 import waves.WaveController;
 import waves.WaveStatics;
 
@@ -18,15 +18,15 @@ public class GameOverMenuPage extends AbstractMenuPage {
 
     public static final String OPT_RETURN_MENU = "PRESS ENTER TO RETURN";
 
-    public GameOverMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title, gameComponent);
+    public GameOverMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
+        super(title, gameComponent,"KEY_GAME_OVER_MENU");
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_RETURN_MENU) {
                     @Override
                     public void execute() {
                         gameComponent.gameState.state = GameState.State.MENU;
-                        mainMenu.setMenuPage(MainMenu.KEY_GAME_MENU);
+                        menu.setMenuPage(StartMenuPage.KEY);
                     }
                 }
         ));

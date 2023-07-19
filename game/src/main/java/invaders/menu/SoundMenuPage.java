@@ -1,10 +1,10 @@
-package menu.impl;
+package invaders.menu;
 
 import game.GameComponent;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuOptionLevel;
 import menu.AbstractMenuPage;
-import menu.MainMenu;
+import menu.AbstractMenu;
 
 import java.util.Arrays;
 
@@ -13,8 +13,8 @@ public class SoundMenuPage extends AbstractMenuPage {
     public static final String OPT_MUTED = "MUTED";
     private static final String OPT_SOUND_LEVEL = "LEVEL VOLUME";
 
-    public SoundMenuPage(String title, GameComponent gameComponent, MainMenu mainMenu) {
-        super(title, gameComponent);
+    public SoundMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
+        super(title, gameComponent,"KEY_SOUND_MENU");
 
         setOptions(Arrays.asList(
                 new AbstractMenuOptionLevel(OPT_MUTED) {
@@ -71,7 +71,7 @@ public class SoundMenuPage extends AbstractMenuPage {
                 new AbstractMenuOption(OPT_BACK) {
                     @Override
                     public void execute() {
-                        mainMenu.setMenuPage(MainMenu.KEY_CONFIGURATIONS_MENU);
+                        menu.setMenuPage(ConfigMenuPage.KEY);
                     }
                 }
         ));

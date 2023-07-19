@@ -2,7 +2,7 @@ package game;
 
 import effects.StarFieldEffect;
 import engine.GameRender;
-import menu.MainMenu;
+import menu.AbstractMenu;
 import utilities.Config;
 
 import java.awt.*;
@@ -11,11 +11,11 @@ import java.awt.event.KeyListener;
 
 public abstract class GameComponent implements KeyListener {
     private Config cfg;
-    private SoundManager soundManager;
+    protected SoundManager soundManager;
     private StarFieldEffect starFieldEffect;
     public GameState gameState;
     public GameLogic currentGameLogic;
-    public MainMenu mainMenu;
+    protected AbstractMenu menu;
 
     public final SoundManager getSoundManager() {
         return soundManager;
@@ -36,7 +36,6 @@ public abstract class GameComponent implements KeyListener {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.MENU;
         this.currentGameLogic = new SinglePlayerGameLogic(this);
-        this.mainMenu = new MainMenu(this);
         this.starFieldEffect = new StarFieldEffect(this, true);
     }
 
@@ -44,14 +43,13 @@ public abstract class GameComponent implements KeyListener {
 
         switch (gameState.state) {
             case MENU:
-                mainMenu.update(this, delta);
+                menu.update(this, delta);
                 break;
             case PLAY:
                 currentGameLogic.update(this, delta);
                 break;
             case GAMEOVER:
-                mainMenu.update(this, delta);
-                mainMenu.setMenuPage(MainMenu.KEY_GAME_OVER);
+                menu.update(this, delta);
                 break;
             case QUIT:
                 System.exit(0);
@@ -62,12 +60,12 @@ public abstract class GameComponent implements KeyListener {
 
     public void draw(Graphics graphics) {
 
-        starFieldEffect.draw(graphics);
+        //starFieldEffect.draw(graphics);
 
         switch (gameState.state) {
             case MENU:
             case GAMEOVER:
-                mainMenu.draw(graphics);
+                menu.draw(graphics);
                 break;
             case PLAY:
                 currentGameLogic.draw(graphics);
@@ -97,7 +95,7 @@ public abstract class GameComponent implements KeyListener {
 
             case MENU:
             case GAMEOVER:
-                mainMenu.keyPressed(e);
+                menu.keyPressed(e);
                 break;
         }
     }
@@ -112,7 +110,7 @@ public abstract class GameComponent implements KeyListener {
 
             case MENU:
             case GAMEOVER:
-                mainMenu.keyReleased(e);
+                menu.keyReleased(e);
                 break;
         }
 
