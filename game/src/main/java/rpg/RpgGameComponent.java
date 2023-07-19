@@ -42,15 +42,15 @@ public class RpgGameComponent extends GameComponent {
         player = new GameObject();
         player.setVelocityStep(1.5f);
         player.setImage(spriteSheet.getCurrentImage());
-        player.setPosition(new Point2D.Float(getCfg().getGameWidth() / 2, getCfg().getGameHeight() / 2));
+        player.setPosition(getCfg().getGameCenterPosition());
     }
 
     @Override
     public void draw(Graphics g2d) {
 
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
         g2d.setClip(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
+        g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
         Iterator<MapLayer> mapLayerIterator = map.iterator();
 
