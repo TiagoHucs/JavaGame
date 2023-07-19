@@ -6,6 +6,7 @@ import game.GameComponent;
 import game.GameState;
 import game.PlayerActions;
 import invaders.menu.InvadersMenu;
+import pong.menu.PongMenu;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -25,7 +26,7 @@ public class PongGameComponent extends GameComponent {
 
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
-        this.menu = new InvadersMenu(this);
+        this.menu = new PongMenu(this);
         float ballSize = 2.0f;
         Point2D.Float center = getCfg().getGameCenterPosition();
         Point2D.Float paddleSize = new Point2D.Float(ballSize, ballSize * 10.0f);
@@ -62,6 +63,14 @@ public class PongGameComponent extends GameComponent {
 
     @Override
     public void draw(Graphics g2d) {
+        if (gameState.state == GameState.State.MENU){
+            drawMenu(g2d);
+        }else {
+            drawGame(g2d);
+        }
+    }
+
+    public void drawGame(Graphics g2d) {
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
@@ -87,11 +96,19 @@ public class PongGameComponent extends GameComponent {
         g2d.drawString(String.format("%02d", p2Points), center + size * 2, size);
     }
 
+    public void drawMenu(Graphics g2d) {
+        menu.draw(g2d);
+    }
+
     @Override
     public void update(float delta) {
-        updatePlayer(p1Actions, p1, delta);
-        updatePlayer(p2Actions, p2, delta);
-        updateBall(ball, delta);
+        if(gameState.state == GameState.State.MENU){
+
+        } else {
+            updatePlayer(p1Actions, p1, delta);
+            updatePlayer(p2Actions, p2, delta);
+            updateBall(ball, delta);
+        }
     }
 
     private void updateBall(GameObject ball, float delta) {
@@ -148,6 +165,13 @@ public class PongGameComponent extends GameComponent {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(KeyEvent.VK_ESCAPE == e.getKeyCode()){
+            if(gameState.state == GameState.State.MENU){
+                gameState.state = GameState.State.PLAY;
+            } else {
+                gameState.state = GameState.State.MENU;
+            }
+        }
         p2Actions.keyPressed(e);
         p1Actions.keyPressed(e);
     }

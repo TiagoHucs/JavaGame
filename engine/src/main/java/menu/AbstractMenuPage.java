@@ -30,7 +30,7 @@ public abstract class AbstractMenuPage implements MenuPage {
 
     public abstract String getKey();
 
-    protected void setOptions(List<MenuOption> options) {
+    public void setOptions(List<MenuOption> options) {
         this.options = options;
         this.selectedOption = options.get(0);
     }
