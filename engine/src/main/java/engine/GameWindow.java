@@ -83,4 +83,9 @@ public class GameWindow extends JFrame {
         // Modo Janela
         return canvas.getBufferStrategy();
     }
+
+    public Config getConfig() {
+        return config;
+    }
+
 }

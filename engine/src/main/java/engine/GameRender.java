@@ -68,6 +68,7 @@ public class GameRender {
     }
 
     public boolean isVsync() {
-        return false;
+        return gameWindow.getConfig().isVsync();
     }
+
 }

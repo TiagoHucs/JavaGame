@@ -121,6 +121,7 @@ public abstract class GameComponent implements KeyListener {
     public void startAndPlay(float targetFps, GameRender graphics) {
 
         final float timePerFrame = 1000000000F / targetFps;
+        final float fixedDeltaTime = 1.0F / targetFps;
 
         long previousTime = System.nanoTime();
 
@@ -134,7 +135,14 @@ public abstract class GameComponent implements KeyListener {
             previousTime = currentTime;
 
             if (delta >= 1F) {
-                update(delta / targetFps);
+
+                if (graphics.isVsync()) {
+                    update(fixedDeltaTime);
+
+                } else {
+                    update(delta / targetFps);
+                }
+
                 graphics.render();
                 delta--;
             }

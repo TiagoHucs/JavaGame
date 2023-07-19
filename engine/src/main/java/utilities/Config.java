@@ -9,6 +9,7 @@ public class Config {
     private boolean muted = false;
     private final Dimension gameResolution;
     private final Random randomGenerator = new Random();
+    private boolean vsync = true;
 
     public Config(Dimension gameResolution) {
         this.gameResolution = gameResolution;
@@ -56,6 +57,14 @@ public class Config {
 
     public float getGlobalVolume() {
         return (float) getSoundVolume() / 100.0f;
+    }
+
+    public boolean isVsync() {
+        return vsync;
+    }
+
+    public void setVsync(boolean vsync) {
+        this.vsync = vsync;
     }
 
     public static boolean isDebugMode() {
