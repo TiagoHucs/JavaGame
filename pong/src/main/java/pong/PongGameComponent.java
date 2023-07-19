@@ -56,9 +56,12 @@ public class PongGameComponent extends GameComponent {
         p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
 
         collisionController.watchForCollision(ball, p1, (a, b) -> {
+
             a.getVelocity().x *= -1;
             a.getVelocity().y *= -1;
             b.getEffect(Shake.class).addTrauma(b.getSize().y);
+
+            return false;
         });
     }
 
@@ -73,9 +76,12 @@ public class PongGameComponent extends GameComponent {
         p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
 
         collisionController.watchForCollision(ball, p2, (a, b) -> {
+
             a.getVelocity().x *= -1;
             a.getVelocity().y *= -1;
             b.getEffect(Shake.class).addTrauma(b.getSize().y);
+
+            return false;
         });
     }
 
