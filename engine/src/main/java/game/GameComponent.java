@@ -60,7 +60,7 @@ public abstract class GameComponent implements KeyListener {
 
     public void draw(Graphics graphics) {
 
-        //starFieldEffect.draw(graphics);
+        starFieldEffect.draw(graphics);
 
         switch (gameState.state) {
             case MENU:
