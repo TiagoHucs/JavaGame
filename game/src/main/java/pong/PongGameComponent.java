@@ -1,5 +1,6 @@
 package pong;
 
+import effects.Shake;
 import entities.GameObject;
 import game.GameComponent;
 import game.GameState;
@@ -16,6 +17,7 @@ public class PongGameComponent extends GameComponent {
     private PlayerActions p1Actions = new PlayerActions();
     private PlayerActions p2Actions = new PlayerActions();
     private GameObject p1, p2, ball;
+    private int p1Points, p2Points;
 
     @Override
     public void init() {
@@ -23,25 +25,40 @@ public class PongGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
-        Point2D.Float paddleSize = new Point2D.Float(1, 10);
+        float maxVelocity = 2.0f;
+        Point2D.Float center = getCfg().getGameCenterPosition();
+        Point2D.Float paddleSize = new Point2D.Float(maxVelocity, 20);
 
-        p1 = new GameObject();
-        p1.setSize(paddleSize);
-        p1.setPosition(new Point2D.Float(0, getCfg().getGameHeight() / 2));
-        p1Actions.configureButtons(UP, KeyEvent.VK_W);
-        p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
+        configurePlayerOne(center, paddleSize);
+        configurePlayerTwo(center, paddleSize);
+        configureBall(maxVelocity);
+    }
 
+    private void configureBall(float maxVelocity) {
+        ball = new GameObject();
+        ball.setSize(new Point2D.Float(maxVelocity, maxVelocity));
+        ball.setPosition(getCfg().getGameCenterPosition());
+        ball.setVelocity(new Point2D.Float(maxVelocity, maxVelocity));
+    }
+
+    private void configurePlayerTwo(Point2D.Float center, Point2D.Float paddleSize) {
         p2 = new GameObject();
         p2.setSize(paddleSize);
-        p2.setPosition(new Point2D.Float(getCfg().getGameWidth() - paddleSize.x, getCfg().getGameHeight() / 2));
+        p2.setPosition(new Point2D.Float(center.x * 2.0f - paddleSize.x, center.y));
+        p2.addEffect(new Shake());
+
         p2Actions.configureButtons(UP, KeyEvent.VK_UP);
         p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
+    }
 
-        ball = new GameObject();
-        ball.setSize(new Point2D.Float(paddleSize.x, paddleSize.x));
-        ball.setPosition(getCfg().getGameCenterPosition());
-        ball.setVelocityStep(2);
-        ball.setVelocity(new Point2D.Float(2,2));
+    private void configurePlayerOne(Point2D.Float center, Point2D.Float paddleSize) {
+        p1 = new GameObject();
+        p1.setSize(paddleSize);
+        p1.setPosition(new Point2D.Float(0.0f, center.y));
+        p1.addEffect(new Shake());
+
+        p1Actions.configureButtons(UP, KeyEvent.VK_W);
+        p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
     }
 
     @Override
@@ -63,6 +80,12 @@ public class PongGameComponent extends GameComponent {
         g2d.fillRect(ball.getPositionWithOffsetX(), ball.getPositionWithOffsetY(),
                 (int) ball.getSize().x,
                 (int) ball.getSize().y);
+
+        int size = g2d.getFont().getSize();
+        int center = getCfg().getGameWidth() / 2;
+
+        g2d.drawString(String.format("%02d", p1Points), center - size * 2, size);
+        g2d.drawString(String.format("%02d", p2Points), center + size * 2, size);
     }
 
     @Override
@@ -76,37 +99,59 @@ public class PongGameComponent extends GameComponent {
 
         ball.move(delta);
 
-        if (ball.getPosition().y > getCfg().getGameHeight()) {
-            ball.getVelocity().y = -ball.getVelocityStep();
-
-        } else if (ball.getPosition().y < 0) {
-            ball.getVelocity().y = ball.getVelocityStep();
-        }
-
         if (ball.getPosition().x > getCfg().getGameWidth()) {
-            ball.getVelocity().x = -ball.getVelocityStep();
+            p1Points++;
+            ball.getVelocity().x *= -1;
 
         } else if (ball.getPosition().x < 0) {
-            ball.getVelocity().x = ball.getVelocityStep();
+            p2Points++;
+            ball.getVelocity().x *= -1;
         }
+
+        if (ball.getPosition().y < 0 || ball.getPosition().y > getCfg().getGameHeight()) {
+            ball.getVelocity().y *= -1;
+        }
+
+    }
+
+    private void checkCollision(GameObject ball, GameObject paddle) {
+
+        Rectangle ballCollision = new Rectangle(
+                (int) ball.getPosition().x,
+                (int) ball.getPosition().y,
+                (int) ball.getSize().x,
+                (int) ball.getSize().y);
+
+        Rectangle paddleCollision = new Rectangle(
+                (int) paddle.getPosition().x,
+                (int) paddle.getPosition().y,
+                (int) paddle.getSize().x,
+                (int) paddle.getSize().y);
+
+        if (paddleCollision.intersects(ballCollision)) {
+            ball.getVelocity().x *= -1;
+            ball.getVelocity().y *= -1;
+
+            paddle.getEffect(Shake.class).addTrauma(10f);
+        }
+
     }
 
     private void updatePlayer(PlayerActions actions, GameObject player, float delta) {
 
         if (actions.isDown()) {
-            player.setVelocity(new Point2D.Float(0, 4f));
+            player.getVelocity().y += 4.0f;
         }
 
         if (actions.isUp()) {
-            player.setVelocity(new Point2D.Float(0, -4f));
-        }
-
-        if (!actions.isUp() && !actions.isDown()) {
-            player.stop();
+            player.getVelocity().y -= 4.0f;
         }
 
         player.move(delta);
+        player.stop();
         player.limitToScreenBounds(this);
+
+        checkCollision(ball, player);
     }
 
     @Override
