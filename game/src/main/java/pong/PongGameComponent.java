@@ -25,30 +25,20 @@ public class PongGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
-        float maxVelocity = 2.0f;
+        float ballSize = 2.0f;
         Point2D.Float center = getCfg().getGameCenterPosition();
-        Point2D.Float paddleSize = new Point2D.Float(maxVelocity, 20);
+        Point2D.Float paddleSize = new Point2D.Float(ballSize, ballSize * 10.0f);
 
+        configureBall(center, ballSize);
         configurePlayerOne(center, paddleSize);
         configurePlayerTwo(center, paddleSize);
-        configureBall(maxVelocity);
     }
 
-    private void configureBall(float maxVelocity) {
+    private void configureBall(Point2D.Float center, float ballSize) {
         ball = new GameObject();
-        ball.setSize(new Point2D.Float(maxVelocity, maxVelocity));
-        ball.setPosition(getCfg().getGameCenterPosition());
-        ball.setVelocity(new Point2D.Float(maxVelocity, maxVelocity));
-    }
-
-    private void configurePlayerTwo(Point2D.Float center, Point2D.Float paddleSize) {
-        p2 = new GameObject();
-        p2.setSize(paddleSize);
-        p2.setPosition(new Point2D.Float(center.x * 2.0f - paddleSize.x, center.y));
-        p2.addEffect(new Shake());
-
-        p2Actions.configureButtons(UP, KeyEvent.VK_UP);
-        p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
+        ball.setSize(new Point2D.Float(ballSize, ballSize));
+        ball.setPosition(center);
+        ball.setVelocity(new Point2D.Float(ballSize, ballSize));
     }
 
     private void configurePlayerOne(Point2D.Float center, Point2D.Float paddleSize) {
@@ -56,9 +46,17 @@ public class PongGameComponent extends GameComponent {
         p1.setSize(paddleSize);
         p1.setPosition(new Point2D.Float(0.0f, center.y));
         p1.addEffect(new Shake());
-
         p1Actions.configureButtons(UP, KeyEvent.VK_W);
         p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
+    }
+
+    private void configurePlayerTwo(Point2D.Float center, Point2D.Float paddleSize) {
+        p2 = new GameObject();
+        p2.setSize(paddleSize);
+        p2.setPosition(new Point2D.Float(center.x * 2.0f - paddleSize.x, center.y));
+        p2.addEffect(new Shake());
+        p2Actions.configureButtons(UP, KeyEvent.VK_UP);
+        p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
     }
 
     @Override
@@ -108,7 +106,7 @@ public class PongGameComponent extends GameComponent {
             ball.getVelocity().x *= -1;
         }
 
-        if (ball.getPosition().y < 0 || ball.getPosition().y > getCfg().getGameHeight()) {
+        if (ball.getPosition().y > getCfg().getGameHeight() || ball.getPosition().y < 0) {
             ball.getVelocity().y *= -1;
         }
 
@@ -131,20 +129,22 @@ public class PongGameComponent extends GameComponent {
         if (paddleCollision.intersects(ballCollision)) {
             ball.getVelocity().x *= -1;
             ball.getVelocity().y *= -1;
-
-            paddle.getEffect(Shake.class).addTrauma(10f);
+            paddle.getEffect(Shake.class).addTrauma(paddle.getSize().y);
         }
 
     }
 
     private void updatePlayer(PlayerActions actions, GameObject player, float delta) {
 
+        // Player é só uma unidade mais rápido que a bolinha
+        float ballVelocity = Math.abs(ball.getVelocity().y) + 1.0f;
+
         if (actions.isDown()) {
-            player.getVelocity().y += 4.0f;
+            player.getVelocity().y += ballVelocity;
         }
 
         if (actions.isUp()) {
-            player.getVelocity().y -= 4.0f;
+            player.getVelocity().y -= ballVelocity;
         }
 
         player.move(delta);
