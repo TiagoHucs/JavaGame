@@ -3,7 +3,6 @@
 *.iws
 *.iml
 *.ipr
-
 ### Classes compiladas ###
 /target/
 /target/**
