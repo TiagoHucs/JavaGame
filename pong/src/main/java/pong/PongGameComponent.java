@@ -2,6 +2,7 @@ package pong;
 
 import effects.Shake;
 import entities.GameObject;
+import game.CollisionController;
 import game.GameComponent;
 import game.GameState;
 import game.PlayerActions;
@@ -19,6 +20,7 @@ public class PongGameComponent extends GameComponent {
     private PlayerActions p2Actions = new PlayerActions();
     private GameObject p1, p2, ball;
     private int p1Points, p2Points;
+    private CollisionController collisionController = new CollisionController();
 
     @Override
     public void init() {
@@ -26,6 +28,7 @@ public class PongGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
         this.menu = new PongMenu(this);
+
         float ballSize = 2.0f;
         Point2D.Float center = getCfg().getGameCenterPosition();
         Point2D.Float paddleSize = new Point2D.Float(ballSize, ballSize * 10.0f);
@@ -43,29 +46,51 @@ public class PongGameComponent extends GameComponent {
     }
 
     private void configurePlayerOne(Point2D.Float center, Point2D.Float paddleSize) {
+
         p1 = new GameObject();
         p1.setSize(paddleSize);
         p1.setPosition(new Point2D.Float(0.0f, center.y));
         p1.addEffect(new Shake());
+
         p1Actions.configureButtons(UP, KeyEvent.VK_W);
         p1Actions.configureButtons(DOWN, KeyEvent.VK_S);
+
+        collisionController.watchForCollision(ball, p1, (a, b) -> {
+            a.getVelocity().x *= -1;
+            a.getVelocity().y *= -1;
+            b.getEffect(Shake.class).addTrauma(b.getSize().y);
+        });
     }
 
     private void configurePlayerTwo(Point2D.Float center, Point2D.Float paddleSize) {
+
         p2 = new GameObject();
         p2.setSize(paddleSize);
         p2.setPosition(new Point2D.Float(center.x * 2.0f - paddleSize.x, center.y));
         p2.addEffect(new Shake());
+
         p2Actions.configureButtons(UP, KeyEvent.VK_UP);
         p2Actions.configureButtons(DOWN, KeyEvent.VK_DOWN);
+
+        collisionController.watchForCollision(ball, p2, (a, b) -> {
+            a.getVelocity().x *= -1;
+            a.getVelocity().y *= -1;
+            b.getEffect(Shake.class).addTrauma(b.getSize().y);
+        });
     }
 
     @Override
     public void draw(Graphics g2d) {
-        if (gameState.state == GameState.State.MENU){
-            drawMenu(g2d);
-        }else {
-            drawGame(g2d);
+
+        switch (gameState.state) {
+
+            case MENU:
+                drawMenu(g2d);
+                break;
+
+            case PLAY:
+                drawGame(g2d);
+                break;
         }
     }
 
@@ -101,13 +126,25 @@ public class PongGameComponent extends GameComponent {
 
     @Override
     public void update(float delta) {
-        if(gameState.state == GameState.State.MENU){
 
-        } else {
-            updatePlayer(p1Actions, p1, delta);
-            updatePlayer(p2Actions, p2, delta);
-            updateBall(ball, delta);
+        switch (gameState.state) {
+
+            case MENU:
+                menu.update(this, delta);
+                break;
+
+            case PLAY:
+                updatePlayer(p1Actions, p1, delta);
+                updatePlayer(p2Actions, p2, delta);
+                updateBall(ball, delta);
+                collisionController.doBruteForceCheck();
+                break;
+
+            case QUIT:
+                System.exit(0);
+                break;
         }
+
     }
 
     private void updateBall(GameObject ball, float delta) {
@@ -129,19 +166,6 @@ public class PongGameComponent extends GameComponent {
 
     }
 
-    private void checkCollision(GameObject ball, GameObject paddle) {
-
-        Rectangle ballCollision = ball.getBounds();
-        Rectangle paddleCollision = paddle.getBounds();
-
-        if (paddleCollision.intersects(ballCollision)) {
-            ball.getVelocity().x *= -1;
-            ball.getVelocity().y *= -1;
-            paddle.getEffect(Shake.class).addTrauma(paddle.getSize().y);
-        }
-
-    }
-
     private void updatePlayer(PlayerActions actions, GameObject player, float delta) {
 
         // Player é só uma unidade mais rápido que a bolinha
@@ -158,26 +182,45 @@ public class PongGameComponent extends GameComponent {
         player.move(delta);
         player.stop();
         player.limitToScreenBounds(this);
-
-        checkCollision(ball, player);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(KeyEvent.VK_ESCAPE == e.getKeyCode()){
-            if(gameState.state == GameState.State.MENU){
-                gameState.state = GameState.State.PLAY;
-            } else {
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
                 gameState.state = GameState.State.MENU;
-            }
+                break;
         }
-        p2Actions.keyPressed(e);
-        p1Actions.keyPressed(e);
+
+        switch (gameState.state) {
+
+            case MENU:
+                menu.keyPressed(e);
+                break;
+
+            case PLAY:
+                p2Actions.keyPressed(e);
+                p1Actions.keyPressed(e);
+                break;
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        p2Actions.keyReleased(e);
-        p1Actions.keyReleased(e);
+
+        switch (gameState.state) {
+
+            case MENU:
+                menu.keyReleased(e);
+                break;
+
+            case PLAY:
+                p2Actions.keyReleased(e);
+                p1Actions.keyReleased(e);
+                break;
+        }
+
     }
 }

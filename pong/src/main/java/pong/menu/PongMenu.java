@@ -29,7 +29,6 @@ public class PongMenu extends AbstractMenu {
                     @Override
                     public void execute() {
                         gameComponent.gameState.state = GameState.State.PLAY;
-                        gameComponent.currentGameLogic.init(gameComponent);
                     }
                 },
                 new AbstractMenuOption("Exit Game") {
@@ -39,6 +38,7 @@ public class PongMenu extends AbstractMenu {
                     }
                 }
         ));
+
         return pongMenuPage;
     }
 
