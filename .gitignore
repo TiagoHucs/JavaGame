@@ -4,5 +4,7 @@ idea
 *.iml
 /target/
 
-/game/target/
+/pong/target/
 /engine/target/
+/invaders/target/
+/rpg/target/
