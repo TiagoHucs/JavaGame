@@ -13,4 +13,8 @@ public class GameState {
     public boolean isGameRunning() {
         return !this.equals(State.QUIT);
     }
+
+    public void toggle(State a, State b) {
+        this.state = this.state == a ? b : a;
+    }
 }

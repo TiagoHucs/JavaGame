@@ -195,7 +195,7 @@ public class PongGameComponent extends GameComponent {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
-                gameState.state = GameState.State.MENU;
+                gameState.toggle(GameState.State.MENU, GameState.State.PLAY);
                 break;
         }
 
