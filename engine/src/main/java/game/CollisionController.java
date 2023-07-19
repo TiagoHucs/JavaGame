@@ -9,7 +9,13 @@ import java.util.LinkedList;
 
 public class CollisionController {
     public interface CollisionEvent {
-        void onCollision(GameObject a, GameObject b);
+        /**
+         * Evento disparado quando ocorrer uma colisão entre os 2 objetos
+         * @param a Primeiro objeto da checagem
+         * @param b Segundo objeto da checagem
+         * @return Remover a verificação de colisão entre a e b
+         */
+        boolean onCollision(GameObject a, GameObject b);
     };
     private class CollisionPair {
         protected GameObject a, b;
@@ -23,19 +29,19 @@ public class CollisionController {
 
     private final Colisor boxCollider = new Colisor();
 
-    private LinkedList<CollisionPair> forceBruteCheck = new LinkedList<CollisionPair>();
+    private LinkedList<CollisionPair> collisionPairs = new LinkedList<CollisionPair>();
 
     public boolean detectaColisao(GameObject a, GameObject b) {
         return boxCollider.detectaColisao(a, b);
     }
 
     public void watchForCollision(@NonNull GameObject a, @NonNull GameObject b, @NonNull CollisionEvent event) {
-        forceBruteCheck.add(new CollisionPair(a, b, event));
+        collisionPairs.add(new CollisionPair(a, b, event));
     }
 
     public void doBruteForceCheck() {
 
-        Iterator<CollisionPair> iterator = forceBruteCheck.iterator();
+        Iterator<CollisionPair> iterator = collisionPairs.iterator();
 
         while (iterator.hasNext()) {
 
@@ -44,8 +50,8 @@ public class CollisionController {
             Rectangle aBounds = pair.a.getBounds();
             Rectangle bBounds = pair.b.getBounds();
 
-            if (aBounds.intersects(bBounds)) {
-                pair.event.onCollision(pair.a, pair.b);
+            if (aBounds.intersects(bBounds) && pair.event.onCollision(pair.a, pair.b)) {
+                iterator.remove();
             }
         }
     }
