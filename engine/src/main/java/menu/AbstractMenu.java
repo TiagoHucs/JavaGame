@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-public class MainMenu implements GameLogic {
+public class Menu implements GameLogic {
 
     private HashMap<String, MenuPage> pages = new HashMap<>(4);
     private MenuPage selectedPage;
@@ -19,7 +19,7 @@ public class MainMenu implements GameLogic {
     public static final String KEY_GAME_OVER = "GAME OVER";
     public static final String KEY_CREDITS = "CREDITS";
 
-    public MainMenu(GameComponent gameComponent) {
+    public Menu(GameComponent gameComponent) {
 
         registerMenu(new StartMenuPage(KEY_GAME_MENU, gameComponent, this));
         registerMenu(new ConfigMenuPage(KEY_CONFIGURATIONS_MENU, gameComponent,this));
