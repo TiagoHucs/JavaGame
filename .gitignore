@@ -1,10 +1,11 @@
-idea
-/.idea/
-../.idea/
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
-/target/
+*.ipr
 
-/pong/target/
-/engine/target/
-/invaders/target/
-/rpg/target/
+### Classes compiladas ###
+/target/
+/target/**
+*/target/*
+*/target/**
