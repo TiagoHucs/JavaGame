@@ -18,6 +18,6 @@ public class InvadersGameComponent extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.MENU;
         this.currentGameLogic = new SinglePlayerGameLogic(this);
-        //this.starFieldEffect = new StarFieldEffect(this, true);
+        this.starFieldEffect = new StarFieldEffect(this, true);
     }
 }

@@ -8,4 +8,5 @@ public interface MenuPage {
     void draw(Graphics g);
 
     void sendEvent(KeyEvent e);
+
 }

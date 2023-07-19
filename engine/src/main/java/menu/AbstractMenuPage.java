@@ -11,8 +11,6 @@ import java.util.List;
 
 public abstract class AbstractMenuPage implements MenuPage {
 
-    //TODO: Cada pagina nao deveria ser um singleton ???
-    public static String KEY = null;
     protected static final String OPT_BACK = "BACK";
     private String title;
     private List<MenuOption> options;
@@ -25,12 +23,12 @@ public abstract class AbstractMenuPage implements MenuPage {
     protected final GameComponent gameComponent;
 
     @SneakyThrows
-    public AbstractMenuPage(String title, GameComponent gameComponent, String key) {
-        this.title = title;
+    public AbstractMenuPage(GameComponent gameComponent) {
         this.gameComponent = gameComponent;
         this.logo = ResourceManager.get().getImage("/image/logo.png");
-        this.KEY = key;
     }
+
+    public abstract String getKey();
 
     protected void setOptions(List<MenuOption> options) {
         this.options = options;
@@ -47,7 +45,7 @@ public abstract class AbstractMenuPage implements MenuPage {
 
         setStartLine(gameComponent);
         drawGameLogo(g, gameComponent);
-        drawTitle(g, gameComponent);
+       // drawTitle(g, gameComponent);
         if(haveOptions()){
             drawOptions(g, gameComponent);
         }
@@ -173,4 +171,5 @@ public abstract class AbstractMenuPage implements MenuPage {
     public String getTitle() {
         return title;
     }
+
 }

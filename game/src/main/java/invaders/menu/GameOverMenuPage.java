@@ -16,10 +16,12 @@ import java.util.List;
 
 public class GameOverMenuPage extends AbstractMenuPage {
 
+    public static final String KEY = "KEY_GAME_OVER";
+
     public static final String OPT_RETURN_MENU = "PRESS ENTER TO RETURN";
 
-    public GameOverMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
-        super(title, gameComponent,"KEY_GAME_OVER_MENU");
+    public GameOverMenuPage(GameComponent gameComponent, AbstractMenu menu) {
+        super(gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_RETURN_MENU) {
@@ -30,6 +32,11 @@ public class GameOverMenuPage extends AbstractMenuPage {
                     }
                 }
         ));
+    }
+
+    @Override
+    public String getKey() {
+        return KEY;
     }
 
     @Override

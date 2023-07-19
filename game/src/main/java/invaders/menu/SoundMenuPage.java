@@ -10,11 +10,13 @@ import java.util.Arrays;
 
 public class SoundMenuPage extends AbstractMenuPage {
 
+    public static final String KEY = "KEY_SOUND_MENU";
+
     public static final String OPT_MUTED = "MUTED";
     private static final String OPT_SOUND_LEVEL = "LEVEL VOLUME";
 
-    public SoundMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
-        super(title, gameComponent,"KEY_SOUND_MENU");
+    public SoundMenuPage(GameComponent gameComponent, AbstractMenu menu) {
+        super( gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOptionLevel(OPT_MUTED) {
@@ -78,4 +80,8 @@ public class SoundMenuPage extends AbstractMenuPage {
     }
 
 
+    @Override
+    public String getKey() {
+        return KEY;
+    }
 }

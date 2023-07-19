@@ -12,7 +12,7 @@ import java.awt.event.KeyListener;
 public abstract class GameComponent implements KeyListener {
     private Config cfg;
     protected SoundManager soundManager;
-    private StarFieldEffect starFieldEffect;
+    protected StarFieldEffect starFieldEffect;
     public GameState gameState;
     public GameLogic currentGameLogic;
     protected AbstractMenu menu;

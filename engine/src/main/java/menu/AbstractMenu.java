@@ -10,15 +10,10 @@ import java.util.HashMap;
 public abstract class AbstractMenu implements GameLogic {
 
     protected HashMap<String, MenuPage> pages = new HashMap<>(4);
-    protected MenuPage selectedPage;
+    private MenuPage selectedPage;
 
     protected void registerMenu(AbstractMenuPage menu) {
-        pages.put(menu.getTitle(), menu);
-    }
-
-    @Override
-    public void init(GameComponent gameComponent) {
-
+        pages.put(menu.getKey(), menu);
     }
 
     @Override

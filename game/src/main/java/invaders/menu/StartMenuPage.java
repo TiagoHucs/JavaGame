@@ -10,13 +10,15 @@ import java.util.Arrays;
 
 public class StartMenuPage extends AbstractMenuPage {
 
+    public static final String KEY = "KEY_START_MENU";
+
     public static final String OPT_BACK_GAME = "CONTINUE/RETURN GAME";
     private static final String OPT_CONFIGURATIONS = "CONFIGURATIONS";
     private static final String OPT_CREDITS = "GAME CREDITS";
     private static final String OPT_EXIT_GAME = "EXIT TO DESKTOP";
 
-    public StartMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
-        super(title, gameComponent, "KEY_START_MENU");
+    public StartMenuPage(GameComponent gameComponent, AbstractMenu menu) {
+        super( gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_BACK_GAME) {
@@ -49,4 +51,8 @@ public class StartMenuPage extends AbstractMenuPage {
     }
 
 
+    @Override
+    public String getKey() {
+        return KEY;
+    }
 }

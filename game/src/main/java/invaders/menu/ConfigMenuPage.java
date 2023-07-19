@@ -1,20 +1,22 @@
 package invaders.menu;
 
 import game.GameComponent;
+import menu.AbstractMenu;
 import menu.AbstractMenuOption;
 import menu.AbstractMenuPage;
-import menu.AbstractMenu;
 
 import java.util.Arrays;
 
 public class ConfigMenuPage extends AbstractMenuPage {
 
+    public static final String KEY = "KEY_CONFIGURATIONS_MENU";
+
     public static final String OPT_GRAPHICS = "GRAPHICS";
     private static final String OPT_SOUND = "SOUND";
     private static final String OPT_CONTROLLER = "CONTROLLER";
 
-    public ConfigMenuPage(String title, GameComponent gameComponent, AbstractMenu menu) {
-        super(title, gameComponent,"KEY_CONFIGURATIONS_MENU");
+    public ConfigMenuPage(GameComponent gameComponent, AbstractMenu menu) {
+        super(gameComponent);
 
         setOptions(Arrays.asList(
                 new AbstractMenuOption(OPT_GRAPHICS) {
@@ -45,4 +47,8 @@ public class ConfigMenuPage extends AbstractMenuPage {
     }
 
 
+    @Override
+    public String getKey() {
+        return KEY;
+    }
 }
