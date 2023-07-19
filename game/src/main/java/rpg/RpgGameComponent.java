@@ -14,7 +14,6 @@ import utilities.SpriteSheet;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 public class RpgGameComponent extends GameComponent {

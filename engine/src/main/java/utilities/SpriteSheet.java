@@ -2,7 +2,6 @@ package utilities;
 
 import entities.GameObject;
 import entities.ImageAnimation;
-import game.GameComponent;
 import lombok.SneakyThrows;
 
 import java.awt.*;

@@ -25,6 +25,11 @@ public class GameRender {
             bufferStrategy = gameWindow.getBufferStrategy();
 
         renderBufferStrategy();
+
+        if (isVsync()) {
+            Toolkit.getDefaultToolkit().sync();
+        }
+
     }
 
     public void renderBufferStrategy() {
@@ -32,8 +37,10 @@ public class GameRender {
         do {
 
             do {
+
                 Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
                 render(graphics);
+
             } while (bufferStrategy.contentsRestored());
 
             bufferStrategy.show();
@@ -58,5 +65,9 @@ public class GameRender {
             graphics.dispose();
         }
 
+    }
+
+    public boolean isVsync() {
+        return false;
     }
 }

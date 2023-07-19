@@ -114,17 +114,8 @@ public class PongGameComponent extends GameComponent {
 
     private void checkCollision(GameObject ball, GameObject paddle) {
 
-        Rectangle ballCollision = new Rectangle(
-                (int) ball.getPosition().x,
-                (int) ball.getPosition().y,
-                (int) ball.getSize().x,
-                (int) ball.getSize().y);
-
-        Rectangle paddleCollision = new Rectangle(
-                (int) paddle.getPosition().x,
-                (int) paddle.getPosition().y,
-                (int) paddle.getSize().x,
-                (int) paddle.getSize().y);
+        Rectangle ballCollision = ball.getBounds();
+        Rectangle paddleCollision = paddle.getBounds();
 
         if (paddleCollision.intersects(ballCollision)) {
             ball.getVelocity().x *= -1;

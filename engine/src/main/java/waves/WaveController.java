@@ -1,6 +1,5 @@
 package waves;
 
-import game.GameComponent;
 import game.PlayerState;
 import utilities.GameUtil;
 import utilities.ResourceManager;

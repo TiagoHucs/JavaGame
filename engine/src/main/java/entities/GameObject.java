@@ -1,11 +1,9 @@
 package entities;
 
 import effects.Effect;
-import engine.GameWindow;
 import game.GameComponent;
 import lombok.Getter;
 import lombok.Setter;
-import utilities.Lerp;
 import utilities.ResourceManager;
 
 import java.awt.*;
@@ -185,4 +183,9 @@ public class GameObject {
             velocity.y = 0;
         }
     }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int) position.x, (int) position.y, (int) size.x, (int) size.y);
+    }
+
 }

@@ -29,6 +29,7 @@ public class GameWindow extends JFrame {
             canvas = new Canvas();
             canvas.setSize(config.getGameResolution());
             canvas.setPreferredSize(config.getGameResolution());
+            canvas.setIgnoreRepaint(true);
 
             this.setSize(config.getGameResolution());
             this.setPreferredSize(config.getGameResolution());
