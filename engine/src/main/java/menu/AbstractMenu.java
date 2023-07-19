@@ -39,4 +39,6 @@ public abstract class AbstractMenu implements GameLogic {
     public void setMenuPage(String menuPageKey) {
         selectedPage = pages.get(menuPageKey);
     }
+
+
 }

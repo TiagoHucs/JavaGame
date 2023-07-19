@@ -14,7 +14,7 @@ public class PongMenuPage extends AbstractMenuPage {
 
     public PongMenuPage(GameComponent gameComponent) {
         super(gameComponent);
-
+        setFontSize(5);
         setOptions(Arrays.asList(
                 new AbstractMenuOption("Back Game") {
                     @Override

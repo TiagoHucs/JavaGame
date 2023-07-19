@@ -15,7 +15,7 @@ public abstract class AbstractMenuPage implements MenuPage {
     private String title;
     private List<MenuOption> options;
     private MenuOption selectedOption;
-    protected final Font font = ResourceManager.get().getFont();
+    protected Font font = ResourceManager.get().getFont();
     protected FontMetrics metrics;
     protected int line = 0;
     private final BufferedImage logo;
@@ -115,11 +115,11 @@ public abstract class AbstractMenuPage implements MenuPage {
                 null,
                 null);
 
-        nextLine(logo.getHeight() / 2);
+        nextLine(logo.getHeight());
     }
 
     protected void nextLine(int heigh) {
-        line = line + heigh + 20;
+        line = line + (heigh + 3);
     }
 
     protected void setStartLine(GameComponent gameComponent) {
@@ -168,8 +168,8 @@ public abstract class AbstractMenuPage implements MenuPage {
         }
     }
 
-    public String getTitle() {
-        return title;
+    public void setFontSize(float size) {
+        font = ResourceManager.get().getFont().deriveFont(size);
     }
 
 }
