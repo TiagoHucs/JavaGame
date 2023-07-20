@@ -50,6 +50,7 @@ public class GameWindow extends JFrame {
         this.game.init();
 
         this.addKeyListener(this.game);
+        this.addMouseListener(this.game);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 

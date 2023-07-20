@@ -1,44 +1,42 @@
 package partition;
 
+import entities.GameObject;
+
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Quadtree {
-
-    private Rectangle size;
-
     private int capacity;
+    private Rectangle bounds;
+    private ArrayList<Quadtree> childs = new ArrayList<Quadtree>(4);
+    private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 
-    private Quadtree[] childs = new Quadtree[4];
-
-    private boolean divided = false;
-
-    private ArrayList<Point> points = new ArrayList<>();
-
-    public Quadtree(Rectangle size, int capacity) {
-        this.size = size;
+    public Quadtree(Rectangle bounds, int capacity) {
+        this.bounds = bounds;
         this.capacity = capacity;
     }
 
-    public boolean insert(Point point) {
+    public boolean insert(GameObject gameObject) {
 
-        if (!size.contains(point)) {
+        if (!bounds.intersects(gameObject.getBounds())) {
             return false;
         }
 
-        if (points.size() < capacity) {
-            points.add(point);
+        if (objects.size() < capacity) {
+            objects.add(gameObject);
             return true;
         }
 
-        if (!divided) {
+        if (childs.isEmpty()) {
             subdivide();
         }
 
-        for (int i = 0; i < childs.length; i++) {
+        for (Quadtree child: childs) {
 
-            if (childs[i].insert(point))
+            if (child.insert(gameObject)) {
                 return true;
+            }
+
         }
 
         return false;
@@ -46,51 +44,42 @@ public class Quadtree {
 
     public void subdivide() {
 
-        int x = size.x;
-        int y = size.y;
-        int w = size.width;
-        int h = size.height;
+        int x = bounds.x / 2;
+        int y = bounds.y / 2;
+        int w = bounds.width / 2;
+        int h = bounds.height / 2;
 
-        childs[0] = new Quadtree(
-                new Rectangle((x + w) / 2, (y - h) / 2, w / 2, h / 2),
-                this.capacity);
-
-        childs[1] = new Quadtree(
-                new Rectangle((x - w) / 2, (y - h) / 2, w / 2, h / 2),
-                this.capacity);
-
-        childs[2] = new Quadtree(
-                new Rectangle((x + w) / 2, (y + h) / 2, w / 2, h / 2),
-                this.capacity);
-
-        childs[3] = new Quadtree(
-                new Rectangle((x - w) / 2, (y + h) / 2, w / 2, h / 2),
-                this.capacity);
-
-        divided = true;
+        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y, w, h), this.capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y, w, h), this.capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y + h, w, h), this.capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y + h, w, h), this.capacity));
     }
 
     public void draw(Graphics g) {
 
         g.setColor(Color.WHITE);
-        g.drawRect(size.x, size.y, size.width * 2, size.height * 2);
+        g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
         g.setColor(Color.BLUE);
 
-        for (Point p : points) {
-            g.fillRect(p.x, p.y, 2,2);
+        for (GameObject gameObject : objects) {
+
+            g.fillRect(
+                    gameObject.getPositionWithOffsetX(),
+                    gameObject.getPositionWithOffsetY(),
+                    (int) gameObject.getSize().y,
+                    (int) gameObject.getSize().y);
+
         }
 
-        if (divided) {
-            for (int i = 0; i < childs.length; i++) {
-                childs[i].draw(g);
-            }
+        for (Quadtree child : childs) {
+            child.draw(g);
         }
-    }
-
-    public void query() {
 
     }
 
+    public ArrayList<GameObject> query(Rectangle bounds) {
+        return null;
+    }
 
 }

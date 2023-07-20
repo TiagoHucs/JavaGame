@@ -8,8 +8,10 @@ import utilities.Config;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public abstract class GameComponent implements KeyListener {
+public abstract class GameComponent implements KeyListener, MouseListener {
     private Config cfg;
     protected SoundManager soundManager;
     protected StarFieldEffect starFieldEffect;
@@ -145,5 +147,41 @@ public abstract class GameComponent implements KeyListener {
                 delta--;
             }
         }
+    }
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    /**
+     * Invoked when a mouse button has been pressed on a component.
+     * @param e the event to be processed
+     */
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    /**
+     * Invoked when a mouse button has been released on a component.
+     * @param e the event to be processed
+     */
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    /**
+     * Invoked when the mouse enters a component.
+     * @param e the event to be processed
+     */
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    /**
+     * Invoked when the mouse exits a component.
+     * @param e the event to be processed
+     */
+    public void mouseExited(MouseEvent e) {
+
     }
 }
