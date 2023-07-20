@@ -4,6 +4,7 @@ import entities.GameObject;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Quadtree {
     private int capacity;
@@ -44,15 +45,13 @@ public class Quadtree {
 
     public void subdivide() {
 
-        int x = bounds.x / 2;
-        int y = bounds.y / 2;
         int w = bounds.width / 2;
         int h = bounds.height / 2;
 
-        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y, w, h), this.capacity));
-        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y, w, h), this.capacity));
-        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y + h, w, h), this.capacity));
-        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y + h, w, h), this.capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y, w, h), capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y, w, h), capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x, bounds.y + h, w, h), capacity));
+        childs.add(new Quadtree(new Rectangle(bounds.x + w, bounds.y + h, w, h), capacity));
     }
 
     public void draw(Graphics g) {
@@ -78,8 +77,21 @@ public class Quadtree {
 
     }
 
-    public ArrayList<GameObject> query(Rectangle bounds) {
-        return null;
+    public void query(Rectangle bounds, List<GameObject> result) {
+
+        if (!this.bounds.intersects(bounds))
+            return;
+
+        for (GameObject gameObject : objects) {
+            if (gameObject.getBounds().intersects(bounds)) {
+                result.add(gameObject);
+            }
+        }
+
+        for (Quadtree child : childs) {
+            child.query(bounds, result);
+        }
+
     }
 
 }
