@@ -4,13 +4,14 @@ import entities.GameObject;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Quadtree {
     private int capacity;
     private Rectangle bounds;
-    private ArrayList<Quadtree> childs = new ArrayList<Quadtree>(4);
-    private ArrayList<GameObject> objects = new ArrayList<GameObject>();
+    private List<Quadtree> childs = new ArrayList<Quadtree>(4);
+    private List<GameObject> objects = new LinkedList<>();
 
     public Quadtree(Rectangle bounds, int capacity) {
         this.bounds = bounds;
@@ -24,8 +25,7 @@ public class Quadtree {
         }
 
         if (objects.size() < capacity) {
-            objects.add(gameObject);
-            return true;
+            return objects.add(gameObject);
         }
 
         if (childs.isEmpty()) {
@@ -40,7 +40,7 @@ public class Quadtree {
 
         }
 
-        return false;
+        return objects.add(gameObject);
     }
 
     public void subdivide() {
@@ -61,7 +61,9 @@ public class Quadtree {
 
         g.setColor(Color.BLUE);
 
-        for (GameObject gameObject : objects) {
+        for (int i = 0; i < objects.size(); i++) {
+
+            GameObject gameObject = objects.get(i);
 
             g.fillRect(
                     gameObject.getPositionWithOffsetX(),
@@ -71,8 +73,8 @@ public class Quadtree {
 
         }
 
-        for (Quadtree child : childs) {
-            child.draw(g);
+        for (int i = 0; i < childs.size(); i++) {
+            childs.get(i).draw(g);
         }
 
     }

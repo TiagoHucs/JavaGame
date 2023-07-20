@@ -14,15 +14,10 @@ import java.util.List;
 import java.util.Random;
 
 public class QuadtreeDemo extends GameComponent {
-
     private Quadtree quadtree;
-
     private final Random rand = new Random();
-
     private Rectangle queryBounds = new Rectangle(0,0, 256, 256);
     private List<GameObject> queryResult = new ArrayList<>();
-
-
     @Override
     public void init() {
 
@@ -55,7 +50,10 @@ public class QuadtreeDemo extends GameComponent {
 
             g.drawRect(queryBounds.x, queryBounds.y, queryBounds.width, queryBounds.height);
 
-            for (GameObject gameObject : queryResult) {
+
+            for (int i = 0; i < queryResult.size(); i++)  {
+
+                GameObject gameObject = queryResult.get(i);
 
                 g.drawRect(
                         gameObject.getPositionWithOffsetX(),
@@ -66,6 +64,8 @@ public class QuadtreeDemo extends GameComponent {
             }
 
         }
+
+        g.drawString("Objetos encontrados: " + queryResult.size(), 2, g.getFont().getSize());
     }
 
     @Override
@@ -91,8 +91,6 @@ public class QuadtreeDemo extends GameComponent {
 
         // Faz a pesquisa
         quadtree.query(queryBounds, queryResult);
-
-        System.out.println("Encontrei " + queryResult.size() + " objetos.");
     }
 
     private GameObject createGameObject(Point position) {
