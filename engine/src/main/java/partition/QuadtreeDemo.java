@@ -152,16 +152,15 @@ public class QuadtreeDemo extends GameComponent {
     private void removeGameObjectsInMouseBounds() {
 
         // Limpa consulta anterior
-        selectedParticles.clear();
+        List<GameObject> particlesToRemove = new LinkedList<>();
 
         // Faz a pesquisa
-        quadtree.query(mouseBounds, selectedParticles);
+        quadtree.query(mouseBounds, particlesToRemove);
 
-        quadtree.removeAll(selectedParticles);
+        quadtree.removeAll(particlesToRemove);
 
-        particles.removeAll(selectedParticles);
+        particles.removeAll(particlesToRemove);
 
-        selectedParticles.clear();
     }
 
     private Particle createGameObject(Point position) {

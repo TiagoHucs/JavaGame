@@ -49,8 +49,17 @@ public class GameWindow extends JFrame {
         this.game.setConfig(config);
         this.game.init();
 
-        this.addKeyListener(this.game);
-        this.addMouseListener(this.game);
+        if (canvas == null) {
+            this.addKeyListener(this.game);
+            this.addMouseListener(this.game);
+            this.requestFocusInWindow();
+
+        } else {
+            canvas.addKeyListener(this.game);
+            canvas.addMouseListener(this.game);
+            canvas.requestFocusInWindow();
+        }
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
