@@ -136,14 +136,21 @@ public abstract class GameComponent implements KeyListener, MouseListener {
 
             if (delta >= 1F) {
 
-                if (graphics.isVsync()) {
-                    update(fixedDeltaTime);
+                try {
 
-                } else {
-                    update(delta / targetFps);
+                    if (graphics.isVsync()) {
+                        update(fixedDeltaTime);
+
+                    } else {
+                        update(delta / targetFps);
+                    }
+
+                    graphics.render();
+
+                } catch (Exception error) {
+                    error.printStackTrace(System.err);
                 }
 
-                graphics.render();
                 delta--;
             }
         }
@@ -155,6 +162,7 @@ public abstract class GameComponent implements KeyListener, MouseListener {
 
     /**
      * Invoked when a mouse button has been pressed on a component.
+     *
      * @param e the event to be processed
      */
     public void mousePressed(MouseEvent e) {
@@ -163,6 +171,7 @@ public abstract class GameComponent implements KeyListener, MouseListener {
 
     /**
      * Invoked when a mouse button has been released on a component.
+     *
      * @param e the event to be processed
      */
     public void mouseReleased(MouseEvent e) {
@@ -171,6 +180,7 @@ public abstract class GameComponent implements KeyListener, MouseListener {
 
     /**
      * Invoked when the mouse enters a component.
+     *
      * @param e the event to be processed
      */
     public void mouseEntered(MouseEvent e) {
@@ -179,6 +189,7 @@ public abstract class GameComponent implements KeyListener, MouseListener {
 
     /**
      * Invoked when the mouse exits a component.
+     *
      * @param e the event to be processed
      */
     public void mouseExited(MouseEvent e) {
