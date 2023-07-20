@@ -27,10 +27,7 @@ public class QuadtreeDemo extends GameComponent {
             if (collided) g.setColor(Color.RED);
             else g.setColor(Color.BLUE);
 
-            g.fillRect((int) getPosition().x, (int) getPosition().y, (int) getSize().x, (int) getSize().y);
-
-            g.setColor(Color.WHITE);
-            g.drawRect((int) getPosition().x, (int) getPosition().y, (int) getSize().x, (int) getSize().y);
+            drawBordered(g, Color.WHITE, this);
         }
     }
 
@@ -108,6 +105,18 @@ public class QuadtreeDemo extends GameComponent {
         g.drawString(text, x + 1, y + 1);
     }
 
+    private void drawBordered(Graphics g, Color border, GameObject object) {
+
+        int x = (int) object.getPosition().x;
+        int y = (int) object.getPosition().y;
+        int w = (int) object.getSize().x;
+        int h = (int) object.getSize().y;
+
+        g.fillRect(x, y, w, h);
+        g.setColor(border);
+        g.drawRect(x, y, w, h);
+    }
+
     private void highlightSelectedParticles(Graphics g) {
 
         g.setColor(Color.GREEN);
@@ -139,10 +148,7 @@ public class QuadtreeDemo extends GameComponent {
                 break;
 
             default:
-                // Cria particulas
-                Particle object = createGameObject(position);
-                quadtree.insert(object);
-                particles.add(object);
+                particles.add(createGameObject(position));
                 break;
         }
 
