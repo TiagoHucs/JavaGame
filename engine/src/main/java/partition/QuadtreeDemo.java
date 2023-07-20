@@ -55,9 +55,17 @@ public class QuadtreeDemo extends GameComponent {
     @Override
     public void update(float delta) {
 
+        quadtree.clear();
+
         for (Particle p : particles) {
+
             p.move(delta);
-            quadtree.update(p);
+            p.limitToScreenBounds(this);
+
+            quadtree.insert(p);
+        }
+
+        for (Particle p : particles) {
             p.collided = quadtree.query(p, new ArrayList<>(8));
         }
 

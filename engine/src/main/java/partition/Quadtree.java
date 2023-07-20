@@ -37,20 +37,17 @@ public class Quadtree {
             return true;
         }
 
-        return removeBruteForce(gameObject);
+        return false;
     }
 
-    private boolean removeBruteForce(GameObject gameObject) {
+    public void clear() {
 
-        System.out.println("Objeto saiu da grid, usando força bruta!");
-
-        this.objects.remove(gameObject);
+        this.objects.clear();
 
         for (int i = 0; i < this.childs.size(); i++) {
-            this.childs.get(i).removeBruteForce(gameObject);
+            this.childs.get(i).clear();
         }
 
-        return true;
     }
 
     public void removeAll(List<GameObject> gameObjectList) {
