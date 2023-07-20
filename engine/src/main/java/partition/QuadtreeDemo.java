@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadtreeDemo extends GameComponent {
@@ -26,14 +27,17 @@ public class QuadtreeDemo extends GameComponent {
             if (collided) g.setColor(Color.RED);
             else g.setColor(Color.BLUE);
 
-            g.fillRect((int) getPosition().x, (int) getPosition().y, (int) getSize().y, (int) getSize().y);
+            g.fillRect((int) getPosition().x, (int) getPosition().y, (int) getSize().x, (int) getSize().y);
+
+            g.setColor(Color.WHITE);
+            g.drawRect((int) getPosition().x, (int) getPosition().y, (int) getSize().x, (int) getSize().y);
         }
     }
 
     private Quadtree quadtree;
-    private Set<Particle> particles = new LinkedHashSet<>();
-    private Set<GameObject> selectedParticles = new LinkedHashSet<>();
-    private Rectangle mouseBounds = new Rectangle(0, 0, 256, 256);
+    private Rectangle mouseBounds;
+    private List<Particle> particles = new ArrayList<>(1000);
+    private List<GameObject> selectedParticles = new ArrayList<>(0);
 
     @Override
     public void init() {
@@ -44,24 +48,20 @@ public class QuadtreeDemo extends GameComponent {
         int w = getCfg().getGameWidth();
         int h = getCfg().getGameHeight();
 
-        Rectangle screenBounds = new Rectangle(0, 0, w, h);
-        this.quadtree = new Quadtree(screenBounds, 4);
+        this.quadtree = new Quadtree(new Rectangle(0, 0, w, h), 4);
+        this.mouseBounds = new Rectangle( (w / 2) - 64, (h / 2) - 64, 128, 128);
     }
 
     @Override
     public void update(float delta) {
 
-        // 1 - Movimento todo mundo
-        particles.forEach(p -> {
+        for (Particle p : particles) {
             p.move(delta);
             quadtree.update(p);
-        });
+            p.collided = quadtree.query(p, new ArrayList<>(8));
+        }
 
-        // 2 - Busco por colisoes
-        particles.forEach(p -> {
-            p.collided = quadtree.query(p, new LinkedHashSet<>());
-        });
-
+        findGameObjectsInMouseBounds();
     }
 
     private float randRange() {
@@ -69,8 +69,8 @@ public class QuadtreeDemo extends GameComponent {
     }
 
     private Point2D.Float randSize() {
-        float w = (float) ThreadLocalRandom.current().nextDouble(8, 64);
-        float h = (float) ThreadLocalRandom.current().nextDouble(8, 64);
+        float w = (float) ThreadLocalRandom.current().nextDouble(8, mouseBounds.width);
+        float h = (float) ThreadLocalRandom.current().nextDouble(8, mouseBounds.height);
         return new Point2D.Float(w, h);
     }
 
@@ -80,30 +80,28 @@ public class QuadtreeDemo extends GameComponent {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
-        quadtree.draw(g);
-
-        particles.forEach(p -> {
-            p.draw(g);
-        });
+        for (Particle particle : particles) {
+            particle.draw(g);
+        }
 
         highlightSelectedParticles(g);
+
+        quadtree.draw(g);
     }
 
     private void highlightSelectedParticles(Graphics g) {
 
-        if (selectedParticles.isEmpty())
-            return;
-
         g.setColor(Color.GREEN);
+
         g.drawRect(mouseBounds.x, mouseBounds.y, mouseBounds.width, mouseBounds.height);
 
-        selectedParticles.forEach(gameObject -> {
+        for (GameObject particle : selectedParticles) {
             g.drawRect(
-                    gameObject.getPositionWithOffsetX(),
-                    gameObject.getPositionWithOffsetY(),
-                    (int) gameObject.getSize().y,
-                    (int) gameObject.getSize().y);
-        });
+                    (int) particle.getPosition().x,
+                    (int) particle.getPosition().y,
+                    (int) particle.getSize().x,
+                    (int) particle.getSize().y);
+        }
 
         g.drawString("Objetos encontrados: " + selectedParticles.size(), 2, g.getFont().getSize());
     }
@@ -113,24 +111,48 @@ public class QuadtreeDemo extends GameComponent {
 
         Point position = e.getPoint();
 
-        Particle object = createGameObject(position);
-        quadtree.insert(object);
-        particles.add(object);
-
-        findGameObjectsInMouseBounds(position);
-    }
-
-    private void findGameObjectsInMouseBounds(Point position) {
-
-        // Limpa consulta anterior
-        selectedParticles.clear();
-
         // Atualiza area de pesquisa para posicao atual do mouse
         mouseBounds.x = position.x - (mouseBounds.width / 2);
         mouseBounds.y = position.y - (mouseBounds.height / 2);
 
+        switch (e.getButton()) {
+
+            case MouseEvent.BUTTON2:
+                removeGameObjectsInMouseBounds();
+                break;
+
+            default:
+                // Cria particulas
+                Particle object = createGameObject(position);
+                quadtree.insert(object);
+                particles.add(object);
+                break;
+        }
+
+    }
+
+    private void findGameObjectsInMouseBounds() {
+
+        // Limpa consulta anterior
+        selectedParticles.clear();
+
         // Faz a pesquisa
         quadtree.query(mouseBounds, selectedParticles);
+    }
+
+    private void removeGameObjectsInMouseBounds() {
+
+        // Limpa consulta anterior
+        selectedParticles.clear();
+
+        // Faz a pesquisa
+        quadtree.query(mouseBounds, selectedParticles);
+
+        quadtree.removeAll(selectedParticles);
+
+        particles.removeAll(selectedParticles);
+
+        selectedParticles.clear();
     }
 
     private Particle createGameObject(Point position) {
