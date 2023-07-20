@@ -87,6 +87,17 @@ public class QuadtreeDemo extends GameComponent {
         highlightSelectedParticles(g);
 
         quadtree.draw(g);
+
+        drawShadowText(g, Color.GREEN, "Utilize o botão esquerdo do mouse para criar novos objetos na área verde, ou para remover utilizando os demais botões do mouse.", 2, g.getFont().getSize());
+        drawShadowText(g, Color.GREEN, "Objetos encontrados na area verde: " + selectedParticles.size(), 2, g.getFont().getSize() * 2);
+    }
+
+    private void drawShadowText(Graphics g, Color color, String text, int x, int y) {
+        g.setColor(Color.BLACK);
+        g.drawString(text, x, y);
+
+        g.setColor(color);
+        g.drawString(text, x + 1, y + 1);
     }
 
     private void highlightSelectedParticles(Graphics g) {
@@ -102,8 +113,6 @@ public class QuadtreeDemo extends GameComponent {
                     (int) particle.getSize().x,
                     (int) particle.getSize().y);
         }
-
-        g.drawString("Objetos encontrados: " + selectedParticles.size(), 2, g.getFont().getSize());
     }
 
     @Override
@@ -117,7 +126,7 @@ public class QuadtreeDemo extends GameComponent {
 
         switch (e.getButton()) {
 
-            case MouseEvent.BUTTON2:
+            case MouseEvent.BUTTON3:
                 removeGameObjectsInMouseBounds();
                 break;
 
