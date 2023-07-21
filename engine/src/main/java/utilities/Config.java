@@ -9,7 +9,7 @@ public class Config {
     private boolean muted = false;
     private final Dimension gameResolution;
     private final Random randomGenerator = new Random();
-    private boolean vsync = true;
+    private boolean vsync = false;
 
     public Config(Dimension gameResolution) {
         this.gameResolution = gameResolution;

@@ -6,7 +6,8 @@ import java.awt.*;
 
 public class Invaders {
     public static void main(String[] args) {
-        new GameWindow(getViewPort(), new InvadersGameComponent()).play();
+        GameWindow game = new GameWindow(getViewPort(), new InvadersGameComponent());
+        game.run();
     }
 
     public static Dimension getViewPort() {

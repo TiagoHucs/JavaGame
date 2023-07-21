@@ -3,11 +3,15 @@ package engine;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class GameRender {
     private Point2D.Double scale;
     private final GameWindow gameWindow;
     private BufferStrategy bufferStrategy;
+    private BufferedImage screenBuffer;
+
+    private boolean manualRender = false;
 
     public GameRender(GameWindow gameWindow, Dimension viewport) {
         this.gameWindow = gameWindow;
@@ -21,8 +25,19 @@ public class GameRender {
 
     public void render() {
 
-        if (bufferStrategy == null)
+        if (bufferStrategy == null) {
+
             bufferStrategy = gameWindow.getBufferStrategy();
+
+            if (manualRender) {
+
+                screenBuffer = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                        .getDefaultScreenDevice()
+                        .getDefaultConfiguration()
+                        .createCompatibleImage(gameWindow.getWidth(), gameWindow.getHeight());
+            }
+
+        }
 
         renderBufferStrategy();
 
@@ -38,15 +53,27 @@ public class GameRender {
 
             do {
 
-                Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
-                render(graphics);
+                if (manualRender) {
+
+                    Graphics2D graphics = screenBuffer.createGraphics();
+                    render(graphics);
+
+                    Graphics finalBuffer = bufferStrategy.getDrawGraphics();
+                    finalBuffer.drawImage(screenBuffer, 0, 0, null);
+                    finalBuffer.dispose();
+
+                } else {
+
+                    Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
+                    render(graphics);
+
+                }
 
             } while (bufferStrategy.contentsRestored());
 
             bufferStrategy.show();
 
         } while (bufferStrategy.contentsLost());
-
     }
 
     public void render(Graphics2D graphics) {

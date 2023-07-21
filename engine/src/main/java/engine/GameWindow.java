@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame implements Runnable {
     public static final float FPS = 60.0f;
     private final Config config;
     private GameComponent game;
@@ -17,6 +17,7 @@ public class GameWindow extends JFrame {
     private Dimension viewport;
 
     public GameWindow(Dimension viewport, GameComponent game) {
+        this.setFocusable(true);
         this.setUndecorated(true);
         this.setIgnoreRepaint(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,6 +30,7 @@ public class GameWindow extends JFrame {
             canvas = new Canvas();
             canvas.setSize(config.getGameResolution());
             canvas.setPreferredSize(config.getGameResolution());
+            canvas.setFocusable(true);
             canvas.setIgnoreRepaint(true);
 
             this.setSize(config.getGameResolution());
@@ -71,8 +73,8 @@ public class GameWindow extends JFrame {
         GraphicsDevice graphicsDevice = environment.getDefaultScreenDevice();
         graphicsDevice.setFullScreenWindow(this);
     }
-
-    public void play() {
+    @Override
+    public void run() {
         game.startAndPlay(FPS, render);
     }
 

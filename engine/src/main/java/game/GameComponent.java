@@ -117,7 +117,6 @@ public abstract class GameComponent implements KeyListener, MouseListener {
         }
 
     }
-
     public void startAndPlay(float targetFps, GameRender graphics) {
 
         final float timePerFrame = 1000000000F / targetFps;
@@ -137,14 +136,7 @@ public abstract class GameComponent implements KeyListener, MouseListener {
             if (delta >= 1F) {
 
                 try {
-
-                    if (graphics.isVsync()) {
-                        update(fixedDeltaTime);
-
-                    } else {
-                        update(delta / targetFps);
-                    }
-
+                    update(fixedDeltaTime);
                     graphics.render();
 
                 } catch (Exception error) {
