@@ -22,6 +22,7 @@ public class QuadtreeDemo extends GameComponent {
         public void move(float delta) {
             getPosition().x += randRange();
             getPosition().y += randRange();
+            this.collided = false;
         }
         public void draw(Graphics g) {
 
@@ -34,7 +35,18 @@ public class QuadtreeDemo extends GameComponent {
             p.item.move(delta);
             p.item.limitToScreenBounds(QuadtreeDemo.this);
             p.bounds = p.item.getBounds();
-            p.item.collided = false;
+        }
+
+        public void handleCollisions(QuadTreeItem<Particle> p) {
+
+            List<QuadTreeItem<Particle>> result = new LinkedList<>();
+            quadtree.query(p, result);
+
+            for (QuadTreeItem<Particle> other : result) {
+                p.item.collided = true;
+                other.item.collided = true;
+            }
+
         }
     }
     private Rectangle mouseBounds;
@@ -70,16 +82,10 @@ public class QuadtreeDemo extends GameComponent {
         }
 
         for (QuadTreeItem<Particle> p : particles) {
-            List<QuadTreeItem<Particle>> result = new LinkedList<>();
-            p.item.collided = quadtree.query(p, result);
-            onCollision(result);
+            p.item.handleCollisions(p);
         }
 
         findGameObjectsInMouseBounds();
-    }
-
-    private void onCollision(List<QuadTreeItem<Particle>> result) {
-        result.forEach(p->p.item.collided = true);
     }
 
     private float randRange() {

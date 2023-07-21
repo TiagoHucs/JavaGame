@@ -1,9 +1,7 @@
 package partition;
 
-import entities.GameObject;
-
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Quadtree<T> {
@@ -24,8 +22,7 @@ public class Quadtree<T> {
     }
 
     public boolean realocate(QuadTreeItem<T> item) {
-        this.remove(item);
-        return this.insert(item);
+        return this.remove(item) && this.insert(item);
     }
 
     public boolean remove(QuadTreeItem<T> item) {
@@ -72,7 +69,9 @@ public class Quadtree<T> {
                 return true;
         }
 
-        return false;
+        // Cheguei no limite, adicionar aqui mesmo!
+        item.quadtree = this;
+        return items.add(item);
     }
 
     public void subdivide() {
@@ -97,16 +96,16 @@ public class Quadtree<T> {
         }
     }
 
-    public boolean query(Rectangle area, List<QuadTreeItem<T>> result) {
+    public void query(Rectangle area, List<QuadTreeItem<T>> result) {
 
         if (!this.bounds.intersects(area))
-            return !result.isEmpty();
+            return;
 
         for (int i = 0; i < this.items.size(); i++) {
 
             QuadTreeItem<T> item = this.items.get(i);
 
-            if (area.intersects(item.bounds)) {
+            if (item.bounds.intersects(area)) {
                 result.add(item);
             }
 
@@ -116,23 +115,22 @@ public class Quadtree<T> {
             this.childs.get(i).query(area, result);
         }
 
-        return !result.isEmpty();
     }
 
-    public boolean query(QuadTreeItem<T> item, List<QuadTreeItem<T>> result) {
+    public void query(QuadTreeItem<T> item, List<QuadTreeItem<T>> result) {
 
         if (!this.bounds.intersects(item.bounds))
-            return !result.isEmpty();
+            return;
 
         for (int i = 0; i < this.items.size(); i++) {
 
             QuadTreeItem<T> quadtreeItem = this.items.get(i);
 
-            if (item == quadtreeItem || item.equals(quadtreeItem)) {
+            if (quadtreeItem == item) {
                 continue;
             }
 
-            if (item.bounds.intersects(quadtreeItem.bounds)) {
+            if (quadtreeItem.bounds.intersects(item.bounds)) {
                 result.add(quadtreeItem);
             }
         }
@@ -141,6 +139,5 @@ public class Quadtree<T> {
             this.childs.get(i).query(item, result);
         }
 
-        return !result.isEmpty();
     }
 }
