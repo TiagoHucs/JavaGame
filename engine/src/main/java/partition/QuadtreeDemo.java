@@ -40,7 +40,7 @@ public class QuadtreeDemo extends GameComponent {
         public void handleCollisions(QuadTreeItem<Particle> p) {
 
             List<QuadTreeItem<Particle>> result = new LinkedList<>();
-            quadtree.query(p, result);
+            quadtree.search(p, result);
 
             for (QuadTreeItem<Particle> other : result) {
                 p.item.collided = true;
@@ -64,6 +64,8 @@ public class QuadtreeDemo extends GameComponent {
         int h = getCfg().getGameHeight();
 
         this.quadtree = new Quadtree<Particle>(new Rectangle(0, 0, w, h), 8);
+        this.quadtree.subdivide();
+
         this.mouseBounds = new Rectangle( (w / 2) - 32, (h / 2) - 32, 64, 64);
 
         for (int i = 0; i < 400; i++) {
@@ -180,7 +182,7 @@ public class QuadtreeDemo extends GameComponent {
         selectedParticles.clear();
 
         // Faz a pesquisa
-        quadtree.query(mouseBounds, selectedParticles);
+        quadtree.search(mouseBounds, selectedParticles);
     }
 
     private void removeGameObjectsInMouseBounds() {
@@ -189,12 +191,17 @@ public class QuadtreeDemo extends GameComponent {
         List<QuadTreeItem<Particle>> particlesToRemove = new ArrayList<>(0);
 
         // Faz a pesquisa
-        quadtree.query(mouseBounds, particlesToRemove);
+        quadtree.search(mouseBounds, particlesToRemove);
 
-        quadtree.removeAll(particlesToRemove);
-        // quadtree.clear();
+        // quadtree.removeAll(particlesToRemove);
 
         particles.removeAll(particlesToRemove);
+
+        quadtree.clear();
+
+        for (QuadTreeItem<Particle> p : particles) {
+            quadtree.insert(p);
+        }
     }
 
     private QuadTreeItem<Particle> createGameObject(Point position) {

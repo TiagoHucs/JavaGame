@@ -5,20 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Quadtree<T> {
-    private int capacity;
+    private int depth, maxDepth;
     private Rectangle bounds;
     private List<Quadtree<T>> childs;
     private List<QuadTreeItem<T>> items;
 
-    public Quadtree(Rectangle bounds, int capacity) {
+    public Quadtree(Rectangle bounds, int maxDepth) {
+        this.depth = 0;
+        this.maxDepth = maxDepth;
         this.bounds = bounds;
-        this.capacity = capacity;
         this.childs = new ArrayList<>(4);
         this.items = new ArrayList<>(1000);
     }
 
     private Quadtree(Rectangle bounds, Quadtree<T> parent) {
-        this(bounds, parent.capacity);
+        this(bounds, parent.maxDepth);
+        this.depth = parent.depth + 1;
     }
 
     public boolean realocate(QuadTreeItem<T> item) {
@@ -50,23 +52,20 @@ public class Quadtree<T> {
 
     public boolean insert(QuadTreeItem<T> item) {
 
-        if (!bounds.intersects(item.bounds)) {
-            return false;
-        }
+        for (int i = 0; i < this.childs.size(); i++) {
 
-        if (items.size() < capacity) {
-            item.quadtree = this;
-            return items.add(item);
+            Quadtree<T> quadtree = childs.get(i);
+
+            if (quadtree.bounds.contains(item.bounds)) {
+
+                if (depth + 1 < maxDepth) {
+                    return quadtree.insert(item);
+                }
+            }
         }
 
         if (childs.isEmpty()) {
             subdivide();
-        }
-
-        for (int i = 0; i < this.childs.size(); i++) {
-
-            if (childs.get(i).insert(item))
-                return true;
         }
 
         // Cheguei no limite, adicionar aqui mesmo!
@@ -96,7 +95,7 @@ public class Quadtree<T> {
         }
     }
 
-    public void query(Rectangle area, List<QuadTreeItem<T>> result) {
+    public void search(Rectangle area, List<QuadTreeItem<T>> result) {
 
         if (!this.bounds.intersects(area))
             return;
@@ -112,12 +111,12 @@ public class Quadtree<T> {
         }
 
         for (int i = 0; i < this.childs.size(); i++) {
-            this.childs.get(i).query(area, result);
+            this.childs.get(i).search(area, result);
         }
 
     }
 
-    public void query(QuadTreeItem<T> item, List<QuadTreeItem<T>> result) {
+    public void search(QuadTreeItem<T> item, List<QuadTreeItem<T>> result) {
 
         if (!this.bounds.intersects(item.bounds))
             return;
@@ -136,7 +135,7 @@ public class Quadtree<T> {
         }
 
         for (int i = 0; i < this.childs.size(); i++) {
-            this.childs.get(i).query(item, result);
+            this.childs.get(i).search(item, result);
         }
 
     }
