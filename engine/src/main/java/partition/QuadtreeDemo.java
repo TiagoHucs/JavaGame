@@ -9,9 +9,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuadtreeDemo extends GameComponent {
@@ -39,8 +38,7 @@ public class QuadtreeDemo extends GameComponent {
 
         public void handleCollisions(QuadTreeItem<Particle> p) {
 
-            List<QuadTreeItem<Particle>> result = new LinkedList<>();
-            quadtree.search(p, result);
+            List<QuadTreeItem<Particle>> result = quadtree.search(p);
 
             for (QuadTreeItem<Particle> other : result) {
                 p.item.collided = true;
@@ -51,8 +49,8 @@ public class QuadtreeDemo extends GameComponent {
     }
     private Rectangle mouseBounds;
     private Quadtree<Particle> quadtree;
-    private List<QuadTreeItem<Particle>> particles = new ArrayList<>(1000);
-    private List<QuadTreeItem<Particle>> selectedParticles = new ArrayList<>(0);
+    private List<QuadTreeItem<Particle>> particles = new CopyOnWriteArrayList<>();
+    private List<QuadTreeItem<Particle>> selectedParticles = new CopyOnWriteArrayList<>();
 
     @Override
     public void init() {
@@ -64,8 +62,6 @@ public class QuadtreeDemo extends GameComponent {
         int h = getCfg().getGameHeight();
 
         this.quadtree = new Quadtree<Particle>(new Rectangle(0, 0, w, h), 8);
-        this.quadtree.subdivide();
-
         this.mouseBounds = new Rectangle( (w / 2) - 32, (h / 2) - 32, 64, 64);
 
         for (int i = 0; i < 400; i++) {
@@ -116,6 +112,7 @@ public class QuadtreeDemo extends GameComponent {
 
         drawShadowText(g, Color.GREEN, "Utilize o botão esquerdo do mouse para criar novos objetos na área verde, ou para remover utilizando os demais botões do mouse.", 2, g.getFont().getSize());
         drawShadowText(g, Color.GREEN, "Objetos encontrados na area verde: " + selectedParticles.size(), 2, g.getFont().getSize() * 2);
+        drawShadowText(g, Color.GREEN, "Número total de objetos: " + quadtree.size(), 2, g.getFont().getSize() * 3);
     }
 
     private void drawShadowText(Graphics g, Color color, String text, int x, int y) {
@@ -177,31 +174,16 @@ public class QuadtreeDemo extends GameComponent {
     }
 
     private void findGameObjectsInMouseBounds() {
-
-        // Limpa consulta anterior
-        selectedParticles.clear();
-
-        // Faz a pesquisa
-        quadtree.search(mouseBounds, selectedParticles);
+        selectedParticles = quadtree.search(mouseBounds);
     }
 
     private void removeGameObjectsInMouseBounds() {
 
-        // Limpa consulta anterior
-        List<QuadTreeItem<Particle>> particlesToRemove = new ArrayList<>(0);
-
-        // Faz a pesquisa
-        quadtree.search(mouseBounds, particlesToRemove);
-
-        // quadtree.removeAll(particlesToRemove);
+        List<QuadTreeItem<Particle>> particlesToRemove = quadtree.search(mouseBounds);
 
         particles.removeAll(particlesToRemove);
 
-        quadtree.clear();
-
-        for (QuadTreeItem<Particle> p : particles) {
-            quadtree.insert(p);
-        }
+        quadtree.resize(particles);
     }
 
     private QuadTreeItem<Particle> createGameObject(Point position) {
