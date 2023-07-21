@@ -39,6 +39,8 @@ public class QuadtreeDemo extends GameComponent {
     private List<QuadTreeItem<Particle>> particles = new CopyOnWriteArrayList<>();
     private List<QuadTreeItem<Particle>> selectedParticles = new CopyOnWriteArrayList<>();
 
+    private boolean debugQuadtree = true;
+
     @Override
     public void init() {
 
@@ -120,11 +122,13 @@ public class QuadtreeDemo extends GameComponent {
 
         highlightSelectedParticles(g);
 
-        quadtree.draw(g);
+        if (debugQuadtree)
+            quadtree.draw(g);
 
         drawShadowText(g, Color.GREEN, "Utilize o botão esquerdo do mouse para criar novos objetos na área verde, ou para remover utilizando os demais botões do mouse.", 2, g.getFont().getSize());
         drawShadowText(g, Color.GREEN, "Objetos encontrados na area verde: " + selectedParticles.size(), 2, g.getFont().getSize() * 2);
         drawShadowText(g, Color.GREEN, "Número total de objetos: " + quadtree.size(), 2, g.getFont().getSize() * 3);
+        drawShadowText(g, Color.GREEN, "Pressione qualquer tecla para ligar/desligar grid da QuadTree.", 2, g.getFont().getSize() * 4);
     }
 
     private void drawShadowText(Graphics g, Color color, String text, int x, int y) {
@@ -215,6 +219,8 @@ public class QuadtreeDemo extends GameComponent {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        debugQuadtree = !debugQuadtree;
+        removeGameObjectsInMouseBounds();
     }
 
     @Override
