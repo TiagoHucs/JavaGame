@@ -1,8 +1,7 @@
 package partition;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -122,26 +121,36 @@ public class Quadtree<T> {
 
     public List<QuadTreeItem<T>> search(Rectangle area) {
 
-        List<QuadTreeItem<T>> result = new CopyOnWriteArrayList<>();
+        List<QuadTreeItem<T>> result = new LinkedList<>();
 
-        if (!this.bounds.intersects(area))
+        if (!this.bounds.intersects(area) || items == null)
             return result;
 
-        Iterator<QuadTreeItem<T>> iterator = items.iterator();
+        int itemCount = items.size();
 
-        while (iterator.hasNext()) {
+        for (int i = 0; i < itemCount; i++) {
 
-            QuadTreeItem<T> item = iterator.next();
+            QuadTreeItem<T> item = items.get(i);
+
+            // Já era, outra thread já matou!
+            if (item == null)
+                return result;
 
             if (item.bounds.intersects(area)) {
                 result.add(item);
             }
         }
 
-        for (Quadtree<T> quadtree : child) {
+        // Já era, outra thread já matou!
+        if (child == null)
+            return result;
 
-            if (quadtree != null)
-                result.addAll(quadtree.search(area));
+        int childCount = child.length;
+
+        for (int i = 0; i < childCount; i++) {
+
+            if (child[i] != null)
+                result.addAll(child[i].search(area));
 
         }
 
