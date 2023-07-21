@@ -64,18 +64,25 @@ public class QuadtreeDemo extends GameComponent {
     }
 
     public void update(QuadTreeItem<Particle> p, float delta) {
+
+        // Lógica de Negócio do objeto do jogo
         p.item.move(delta);
         p.item.limitToScreenBounds(this);
+
+        // Atualiza Item da Quadtree com as informações atuais do objeto.
         p.bounds = p.item.getBounds();
+
+        // Por fim atualizar item na Quadtree
+        quadtree.realocate(p);
     }
 
-    public void handleCollisions(QuadTreeItem<Particle> p) {
+    public void handleCollisions(QuadTreeItem<Particle> p1) {
 
-        List<QuadTreeItem<Particle>> result = quadtree.search(p);
+        List<QuadTreeItem<Particle>> collisions = quadtree.search(p1);
 
-        for (QuadTreeItem<Particle> other : result) {
-            p.item.collided = true;
-            other.item.collided = true;
+        for (QuadTreeItem<Particle> p2 : collisions) {
+            p1.item.collided = true;
+            p2.item.collided = true;
         }
 
     }
@@ -85,7 +92,6 @@ public class QuadtreeDemo extends GameComponent {
 
         for (QuadTreeItem<Particle> p : particles) {
             update(p, delta);
-            quadtree.realocate(p);
             handleCollisions(p);
         }
 
