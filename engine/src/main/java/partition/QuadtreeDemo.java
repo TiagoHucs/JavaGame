@@ -17,12 +17,14 @@ public class QuadtreeDemo extends GameComponent {
 
     public class Particle extends GameObject {
         public boolean collided;
+
         @Override
         public void move(float delta) {
             getPosition().x += randRange();
             getPosition().y += randRange();
             this.collided = false;
         }
+
         public void draw(Graphics g) {
 
             if (collided) g.setColor(Color.RED);
@@ -30,23 +32,8 @@ public class QuadtreeDemo extends GameComponent {
 
             drawBordered(g, Color.WHITE, this);
         }
-        public void update(QuadTreeItem<Particle> p, float delta) {
-            p.item.move(delta);
-            p.item.limitToScreenBounds(QuadtreeDemo.this);
-            p.bounds = p.item.getBounds();
-        }
-
-        public void handleCollisions(QuadTreeItem<Particle> p) {
-
-            List<QuadTreeItem<Particle>> result = quadtree.search(p);
-
-            for (QuadTreeItem<Particle> other : result) {
-                p.item.collided = true;
-                other.item.collided = true;
-            }
-
-        }
     }
+
     private Rectangle mouseBounds;
     private Quadtree<Particle> quadtree;
     private List<QuadTreeItem<Particle>> particles = new CopyOnWriteArrayList<>();
@@ -76,16 +63,30 @@ public class QuadtreeDemo extends GameComponent {
         }
     }
 
+    public void update(QuadTreeItem<Particle> p, float delta) {
+        p.item.move(delta);
+        p.item.limitToScreenBounds(this);
+        p.bounds = p.item.getBounds();
+    }
+
+    public void handleCollisions(QuadTreeItem<Particle> p) {
+
+        List<QuadTreeItem<Particle>> result = quadtree.search(p);
+
+        for (QuadTreeItem<Particle> other : result) {
+            p.item.collided = true;
+            other.item.collided = true;
+        }
+
+    }
+
     @Override
     public void update(float delta) {
 
         for (QuadTreeItem<Particle> p : particles) {
-            p.item.update(p, delta);
+            update(p, delta);
             quadtree.realocate(p);
-        }
-
-        for (QuadTreeItem<Particle> p : particles) {
-            p.item.handleCollisions(p);
+            handleCollisions(p);
         }
 
         findGameObjectsInMouseBounds();
