@@ -6,66 +6,60 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class Quadtree {
+public class Quadtree<T> {
     private int capacity;
     private Rectangle bounds;
-    private List<Quadtree> childs;
-    private List<GameObject> objects;
+    private List<Quadtree<T>> childs;
+    private List<QuadTreeItem<T>> items;
+
     public Quadtree(Rectangle bounds, int capacity) {
         this.bounds = bounds;
         this.capacity = capacity;
         this.childs = new ArrayList<>(4);
-        this.objects = new ArrayList<>(1000);
+        this.items = new ArrayList<>(1000);
     }
-    private Quadtree(Rectangle bounds, Quadtree parent) {
+
+    private Quadtree(Rectangle bounds, Quadtree<T> parent) {
         this(bounds, parent.capacity);
     }
-    public void update(GameObject gameObject) {
-        this.remove(gameObject);
-        this.insert(gameObject);
+
+    public boolean realocate(QuadTreeItem<T> item) {
+        this.remove(item);
+        return this.insert(item);
     }
-    public boolean remove(GameObject gameObject) {
 
-        if (this.bounds.intersects(gameObject.getBounds())) {
+    public boolean remove(QuadTreeItem<T> item) {
+        return item.quadtree.items.remove(item);
+    }
 
-            this.objects.remove(gameObject);
+    public void removeAll(List<QuadTreeItem<T>> items) {
 
-            for (int i = 0; i < this.childs.size(); i++) {
-                this.childs.get(i).remove(gameObject);
-            }
-
-            return true;
+        for (int i = 0; i < items.size(); i++) {
+            remove(items.get(i));
         }
 
-        return false;
     }
 
     public void clear() {
 
-        this.objects.clear();
+        this.items.clear();
 
         for (int i = 0; i < this.childs.size(); i++) {
             this.childs.get(i).clear();
         }
 
+        this.childs.clear();
     }
 
-    public void removeAll(List<GameObject> gameObjectList) {
+    public boolean insert(QuadTreeItem<T> item) {
 
-        for (int i = 0; i < gameObjectList.size(); i++) {
-            this.remove(gameObjectList.get(i));
-        }
-
-    }
-
-    public boolean insert(GameObject gameObject) {
-
-        if (!bounds.intersects(gameObject.getBounds())) {
+        if (!bounds.intersects(item.bounds)) {
             return false;
         }
 
-        if (objects.size() < capacity) {
-            return objects.add(gameObject);
+        if (items.size() < capacity) {
+            item.quadtree = this;
+            return items.add(item);
         }
 
         if (childs.isEmpty()) {
@@ -73,10 +67,12 @@ public class Quadtree {
         }
 
         for (int i = 0; i < this.childs.size(); i++) {
-            this.childs.get(i).insert(gameObject);
+
+            if (childs.get(i).insert(item))
+                return true;
         }
 
-        return true;
+        return false;
     }
 
     public void subdivide() {
@@ -101,17 +97,17 @@ public class Quadtree {
         }
     }
 
-    public boolean query(Rectangle area, List<GameObject> result) {
+    public boolean query(Rectangle area, List<QuadTreeItem<T>> result) {
 
         if (!this.bounds.intersects(area))
             return !result.isEmpty();
 
-        for (int i = 0; i < this.objects.size(); i++) {
+        for (int i = 0; i < this.items.size(); i++) {
 
-            GameObject gameObject = this.objects.get(i);
+            QuadTreeItem<T> item = this.items.get(i);
 
-            if (area.intersects(gameObject.getBounds())) {
-                result.add(gameObject);
+            if (area.intersects(item.bounds)) {
+                result.add(item);
             }
 
         }
@@ -123,28 +119,26 @@ public class Quadtree {
         return !result.isEmpty();
     }
 
-    public boolean query(GameObject object, List<GameObject> result) {
+    public boolean query(QuadTreeItem<T> item, List<QuadTreeItem<T>> result) {
 
-        Rectangle objectBounds = object.getBounds();
-
-        if (!objectBounds.intersects(this.bounds))
+        if (!this.bounds.intersects(item.bounds))
             return !result.isEmpty();
 
-        for (int i = 0; i < this.objects.size(); i++) {
+        for (int i = 0; i < this.items.size(); i++) {
 
-            GameObject gameObject = this.objects.get(i);
+            QuadTreeItem<T> quadtreeItem = this.items.get(i);
 
-            if (object == gameObject || object.equals(gameObject)) {
+            if (item == quadtreeItem || item.equals(quadtreeItem)) {
                 continue;
             }
 
-            if (objectBounds.intersects(gameObject.getBounds())) {
-                result.add(gameObject);
+            if (item.bounds.intersects(quadtreeItem.bounds)) {
+                result.add(quadtreeItem);
             }
         }
 
         for (int i = 0; i < this.childs.size(); i++) {
-            this.childs.get(i).query(object, result);
+            this.childs.get(i).query(item, result);
         }
 
         return !result.isEmpty();

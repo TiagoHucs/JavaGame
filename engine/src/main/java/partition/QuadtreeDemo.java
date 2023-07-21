@@ -1,5 +1,6 @@
 package partition;
 
+import effects.Star;
 import engine.GameWindow;
 import entities.GameObject;
 import game.GameComponent;
@@ -29,12 +30,17 @@ public class QuadtreeDemo extends GameComponent {
 
             drawBordered(g, Color.WHITE, this);
         }
+        public void update(QuadTreeItem<Particle> p, float delta) {
+            p.item.move(delta);
+            p.item.limitToScreenBounds(QuadtreeDemo.this);
+            p.bounds = p.item.getBounds();
+            p.item.collided = false;
+        }
     }
-
-    private Quadtree quadtree;
     private Rectangle mouseBounds;
-    private List<Particle> particles = new ArrayList<>(1000);
-    private List<GameObject> selectedParticles = new ArrayList<>(0);
+    private Quadtree<Particle> quadtree;
+    private List<QuadTreeItem<Particle>> particles = new ArrayList<>(1000);
+    private List<QuadTreeItem<Particle>> selectedParticles = new ArrayList<>(0);
 
     @Override
     public void init() {
@@ -45,28 +51,35 @@ public class QuadtreeDemo extends GameComponent {
         int w = getCfg().getGameWidth();
         int h = getCfg().getGameHeight();
 
-        this.quadtree = new Quadtree(new Rectangle(0, 0, w, h), 4);
-        this.mouseBounds = new Rectangle( (w / 2) - 64, (h / 2) - 64, 128, 128);
+        this.quadtree = new Quadtree<Particle>(new Rectangle(0, 0, w, h), 8);
+        this.mouseBounds = new Rectangle( (w / 2) - 32, (h / 2) - 32, 64, 64);
+
+        for (int i = 0; i < 400; i++) {
+            int x = (int) (Math.random() * w);
+            int y = (int) (Math.random() * h);
+            particles.add(createGameObject(new Point(x, y)));
+        }
     }
 
     @Override
     public void update(float delta) {
 
-        quadtree.clear();
-
-        for (Particle p : particles) {
-
-            p.move(delta);
-            p.limitToScreenBounds(this);
-
-            quadtree.insert(p);
+        for (QuadTreeItem<Particle> p : particles) {
+            p.item.update(p, delta);
+            quadtree.realocate(p);
         }
 
-        for (Particle p : particles) {
-            p.collided = quadtree.query(p, new ArrayList<>(8));
+        for (QuadTreeItem<Particle> p : particles) {
+            List<QuadTreeItem<Particle>> result = new LinkedList<>();
+            p.item.collided = quadtree.query(p, result);
+            onCollision(result);
         }
 
         findGameObjectsInMouseBounds();
+    }
+
+    private void onCollision(List<QuadTreeItem<Particle>> result) {
+        result.forEach(p->p.item.collided = true);
     }
 
     private float randRange() {
@@ -85,8 +98,8 @@ public class QuadtreeDemo extends GameComponent {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
-        for (Particle particle : particles) {
-            particle.draw(g);
+        for (QuadTreeItem<Particle> particle : particles) {
+            particle.item.draw(g);
         }
 
         highlightSelectedParticles(g);
@@ -123,12 +136,12 @@ public class QuadtreeDemo extends GameComponent {
 
         g.drawRect(mouseBounds.x, mouseBounds.y, mouseBounds.width, mouseBounds.height);
 
-        for (GameObject particle : selectedParticles) {
+        for (QuadTreeItem<Particle> particle : selectedParticles) {
             g.drawRect(
-                    (int) particle.getPosition().x,
-                    (int) particle.getPosition().y,
-                    (int) particle.getSize().x,
-                    (int) particle.getSize().y);
+                    (int) particle.item.getPosition().x,
+                    (int) particle.item.getPosition().y,
+                    (int) particle.item.getSize().x,
+                    (int) particle.item.getSize().y);
         }
     }
 
@@ -166,22 +179,30 @@ public class QuadtreeDemo extends GameComponent {
     private void removeGameObjectsInMouseBounds() {
 
         // Limpa consulta anterior
-        List<GameObject> particlesToRemove = new LinkedList<>();
+        List<QuadTreeItem<Particle>> particlesToRemove = new ArrayList<>(0);
 
         // Faz a pesquisa
         quadtree.query(mouseBounds, particlesToRemove);
 
         quadtree.removeAll(particlesToRemove);
+        // quadtree.clear();
 
         particles.removeAll(particlesToRemove);
-
     }
 
-    private Particle createGameObject(Point position) {
+    private QuadTreeItem<Particle> createGameObject(Point position) {
+
         Particle object = new Particle();
         object.setPosition(new Point2D.Float(position.x, position.y));
         object.setSize(randSize());
-        return object;
+
+        QuadTreeItem<Particle> item = new QuadTreeItem<>();
+        item.item = object;
+        item.bounds = object.getBounds();
+
+        quadtree.insert(item);
+
+        return item;
     }
 
     @Override
