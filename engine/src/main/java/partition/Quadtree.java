@@ -130,11 +130,11 @@ public class Quadtree<T> {
 
         for (int i = 0; i < itemCount; i++) {
 
-            QuadTreeItem<T> item = items.get(i);
-
             // Já era, outra thread já matou!
-            if (item == null)
+            if (i > items.size())
                 return result;
+
+            QuadTreeItem<T> item = items.get(i);
 
             if (item.bounds.intersects(area)) {
                 result.add(item);
@@ -164,12 +164,9 @@ public class Quadtree<T> {
     }
 
     public void resize(List<QuadTreeItem<T>> items) {
-
         clear();
-
         for (QuadTreeItem<T> item : items) {
             insert(item);
         }
-
     }
 }
