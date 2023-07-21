@@ -1,6 +1,5 @@
 package partition;
 
-import effects.Star;
 import engine.GameWindow;
 import entities.GameObject;
 import game.GameComponent;
@@ -10,7 +9,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -137,11 +137,12 @@ public class QuadtreeDemo extends GameComponent {
         g.drawRect(mouseBounds.x, mouseBounds.y, mouseBounds.width, mouseBounds.height);
 
         for (QuadTreeItem<Particle> particle : selectedParticles) {
+
             g.drawRect(
-                    (int) particle.item.getPosition().x,
-                    (int) particle.item.getPosition().y,
-                    (int) particle.item.getSize().x,
-                    (int) particle.item.getSize().y);
+                    particle.bounds.x,
+                    particle.bounds.y,
+                    particle.bounds.width,
+                    particle.bounds.height);
         }
     }
 
