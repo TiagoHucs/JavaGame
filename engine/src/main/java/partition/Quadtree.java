@@ -131,11 +131,17 @@ public class Quadtree<T> {
         for (int i = 0; i < itemCount; i++) {
 
             // Já era, outra thread já matou!
-            if (i > items.size())
+            if (items.size() == 0 || i > items.size())
                 return result;
 
+            // Opa peguei!
             QuadTreeItem<T> item = items.get(i);
 
+            // Já era, outra thread já matou denovo!
+            if (item == null || item.bounds == null)
+                return result;
+
+            // Agora vai!
             if (item.bounds.intersects(area)) {
                 result.add(item);
             }

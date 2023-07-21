@@ -58,13 +58,18 @@ public class QuadtreeDemo extends GameComponent {
         this.gameState = new GameState();
         this.gameState.state = GameState.State.PLAY;
 
+        int brushSize = 16;
         int w = getCfg().getGameWidth();
         int h = getCfg().getGameHeight();
 
-        this.quadtree = new Quadtree<Particle>(new Rectangle(0, 0, w, h), 8);
-        this.mouseBounds = new Rectangle( (w / 2) - 32, (h / 2) - 32, 64, 64);
+        this.quadtree = new Quadtree<Particle>(new Rectangle(0, 0, w, h), brushSize / 2);
 
-        for (int i = 0; i < 400; i++) {
+        this.mouseBounds = new Rectangle(
+                (w / 2) - (brushSize / 2),
+                (h / 2) - (brushSize / 2),
+                brushSize, brushSize);
+
+        for (int i = 0; i < w + h / brushSize; i++) {
             int x = (int) (Math.random() * w);
             int y = (int) (Math.random() * h);
             particles.add(createGameObject(new Point(x, y)));
