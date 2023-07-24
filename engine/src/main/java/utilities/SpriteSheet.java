@@ -62,7 +62,11 @@ public class SpriteSheet {
                 (int) (sheetOriginal.getWidth() * scale),
                 (int) (sheetOriginal.getHeight() * scale));
 
-        BufferedImage sheetScaled = new BufferedImage(size.width, size.height, sheetOriginal.getType());
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+
+        BufferedImage sheetScaled = gc.createCompatibleImage(size.width, size.height, sheetOriginal.getType());
 
         Graphics2D graphics2D = sheetScaled.createGraphics();
         graphics2D.drawImage(sheetOriginal, 0, 0, size.width, size.height, null);

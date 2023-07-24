@@ -33,24 +33,29 @@ public class ResourceManager {
             return images.get(resourceName);
         }
 
-        images.put(resourceName, ImageIO.read(getResource(resourceName)));
+        images.put(resourceName, uploadImageToGPU(resourceName));
 
         return getImage(resourceName);
     }
 
-    public synchronized BufferedImage getImage(String resourceName, int w, int h) throws IOException {
+    private synchronized BufferedImage uploadImageToGPU(String resourceName) throws IOException {
 
         if (images.containsKey(resourceName)) {
             return images.get(resourceName);
         }
 
-        BufferedImage bufferedImage = ImageIO.read(getResource(resourceName));
-        BufferedImage bufferedImageResized = new BufferedImage(w, h, bufferedImage.getType());
-        Graphics2D graphics2D = bufferedImageResized.createGraphics();
-        graphics2D.drawImage(bufferedImage, 0, 0, w, h, null);
-        graphics2D.dispose();
+        BufferedImage image = ImageIO.read(getResource(resourceName));
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+        BufferedImage convertedImage = gc.createCompatibleImage(image.getWidth(),
+                image.getHeight(),
+                image.getTransparency());
+        Graphics2D g2d = convertedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+        g2d.dispose();
 
-        images.put(resourceName, bufferedImageResized);
+        images.put(resourceName, convertedImage);
 
         return getImage(resourceName);
     }

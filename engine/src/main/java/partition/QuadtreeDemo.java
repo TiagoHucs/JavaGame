@@ -228,7 +228,7 @@ public class QuadtreeDemo extends GameComponent {
     }
 
     public static void main(String[] args) {
-        GameWindow game = new GameWindow(Toolkit.getDefaultToolkit().getScreenSize(), new QuadtreeDemo());
+        GameWindow game = new GameWindow(new QuadtreeDemo());
         game.run();
     }
 }

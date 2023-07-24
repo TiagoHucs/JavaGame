@@ -13,8 +13,15 @@ public class GameWindow extends JFrame implements Runnable {
     private GameComponent game;
     private GameRender render;
     private Canvas canvas;
+    private Rectangle viewport;
 
-    private Dimension viewport;
+    static {
+        System.setProperty("sun.java2d.opengl", "true");
+    }
+
+    public GameWindow(GameComponent game) {
+        this(Toolkit.getDefaultToolkit().getScreenSize(), game);
+    }
 
     public GameWindow(Dimension viewport, GameComponent game) {
         this.setFocusable(true);
@@ -24,6 +31,7 @@ public class GameWindow extends JFrame implements Runnable {
         this.setBackground(Color.BLACK);
 
         this.config = new Config(viewport);
+        this.viewport = new Rectangle(0, 0, viewport.width, viewport.height);
 
         if (Config.isDebugMode()) {
 
@@ -81,6 +89,7 @@ public class GameWindow extends JFrame implements Runnable {
     @Override
     public void paint(Graphics graphics) {
         // Só para ficar mais fácil na classe GameWindow, pois estou renderizando frame a frame manualmente
+        graphics.setClip(viewport.x, viewport.y, viewport.width, viewport.height);
         game.draw(graphics);
     }
 

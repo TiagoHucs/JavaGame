@@ -50,10 +50,14 @@ public class StarFieldEffect {
 
         layers = new BufferedImage[images.size()];
 
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+
         for (BufferedImage layerImage : images) {
             int i = images.indexOf(layerImage);
-            layers[i] = new BufferedImage(w, h, layerImage.getType());
-            Graphics graphics = layers[i].getGraphics();
+            layers[i] = gc.createCompatibleImage(w, h, layerImage.getType());
+            Graphics2D graphics = layers[i].createGraphics();
             renderLayer(graphics, layerImage);
             graphics.dispose();
         }
@@ -61,9 +65,13 @@ public class StarFieldEffect {
 
     private void createStaticBackgroundImage() {
 
-        staticBackground = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
-        Graphics graphics = staticBackground.getGraphics();
+        staticBackground = gc.createCompatibleImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D graphics = staticBackground.createGraphics();
         graphics.setColor(SPACE_COLOR);
         graphics.fillRect(0, 0, w, h);
 

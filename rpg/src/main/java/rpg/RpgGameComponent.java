@@ -48,7 +48,6 @@ public class RpgGameComponent extends GameComponent {
     public void draw(Graphics g2d) {
 
         g2d.setColor(Color.BLACK);
-        g2d.setClip(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
         g2d.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
 
         Iterator<MapLayer> mapLayerIterator = map.iterator();
