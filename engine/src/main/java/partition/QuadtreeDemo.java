@@ -28,9 +28,9 @@ public class QuadtreeDemo extends GameComponent {
         public void draw(Graphics g) {
 
             if (collided) g.setColor(Color.RED);
-            else g.setColor(Color.BLUE);
+            else g.setColor(Color.WHITE);
 
-            drawBordered(g, Color.WHITE, this);
+            drawBordered(g, Color.BLACK, this);
         }
     }
 
@@ -113,8 +113,11 @@ public class QuadtreeDemo extends GameComponent {
     @Override
     public void draw(Graphics g) {
 
-        g.setColor(Color.BLACK);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, getCfg().getGameWidth(), getCfg().getGameHeight());
+
+        if (debugQuadtree)
+            quadtree.draw(g);
 
         for (QuadTreeItem<Particle> particle : particles) {
             particle.item.draw(g);
@@ -122,9 +125,7 @@ public class QuadtreeDemo extends GameComponent {
 
         highlightSelectedParticles(g);
 
-        if (debugQuadtree)
-            quadtree.draw(g);
-
+        // Draw HUD
         drawShadowText(g, Color.GREEN, "Utilize o botão esquerdo do mouse para criar novos objetos na área verde, ou para remover utilizando os demais botões do mouse.", 2, g.getFont().getSize());
         drawShadowText(g, Color.GREEN, "Objetos encontrados na area verde: " + selectedParticles.size(), 2, g.getFont().getSize() * 2);
         drawShadowText(g, Color.GREEN, "Número total de objetos: " + quadtree.size(), 2, g.getFont().getSize() * 3);

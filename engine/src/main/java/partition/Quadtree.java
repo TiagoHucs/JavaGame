@@ -1,7 +1,6 @@
 package partition;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -16,7 +15,7 @@ public class Quadtree<T> {
         this.depth = 0;
         this.maxDepth = maxDepth;
         this.bounds = bounds;
-        this.items = new ArrayList<>(1000);
+        this.items = new CopyOnWriteArrayList<QuadTreeItem<T>>();
         this.child = new Quadtree[4];
         this.initChildBound();
     }
@@ -36,10 +35,11 @@ public class Quadtree<T> {
 
     public void removeAll(List<QuadTreeItem<T>> items) {
 
-        for (int i = 0; i < items.size(); i++) {
-            remove(items.get(i));
+        for (QuadTreeItem<T> item : items) {
+            remove(item);
         }
 
+        items.clear();
     }
 
     public int size() {
@@ -68,6 +68,7 @@ public class Quadtree<T> {
         }
 
         this.child = new Quadtree[4];
+        this.initChildBound();
     }
 
     public boolean insert(QuadTreeItem<T> item) {
@@ -107,7 +108,7 @@ public class Quadtree<T> {
 
     public void draw(Graphics g) {
 
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.BLACK);
         g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
         for (Quadtree<T> quadtree : child) {
@@ -121,43 +122,20 @@ public class Quadtree<T> {
 
     public List<QuadTreeItem<T>> search(Rectangle area) {
 
-        List<QuadTreeItem<T>> result = new LinkedList<>();
+        List<QuadTreeItem<T>> result = new CopyOnWriteArrayList<QuadTreeItem<T>>();
 
-        if (!this.bounds.intersects(area) || items == null)
+        if (!bounds.intersects(area))
             return result;
 
-        int itemCount = items.size();
-
-        for (int i = 0; i < itemCount; i++) {
-
-            // Já era, outra thread já matou!
-            if (items.size() == 0 || i > items.size())
-                return result;
-
-            // Opa peguei!
-            QuadTreeItem<T> item = items.get(i);
-
-            // Já era, outra thread já matou denovo!
-            if (item == null || item.bounds == null)
-                return result;
-
-            // Agora vai!
+        for (QuadTreeItem<T> item : items) {
             if (item.bounds.intersects(area)) {
                 result.add(item);
             }
         }
 
-        // Já era, outra thread já matou!
-        if (child == null)
-            return result;
-
-        int childCount = child.length;
-
-        for (int i = 0; i < childCount; i++) {
-
-            if (child[i] != null)
-                result.addAll(child[i].search(area));
-
+        for (Quadtree<T> quadtree : child) {
+            if (quadtree != null)
+                result.addAll(quadtree.search(area));
         }
 
         return result;
