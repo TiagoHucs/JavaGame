@@ -36,7 +36,6 @@ public class QuadtreeDemo extends GameComponent {
 
     private Rectangle mouseBounds;
     private Quadtree<Particle> quadtree;
-    private List<QuadTreeItem<Particle>> particles = new CopyOnWriteArrayList<>();
     private List<QuadTreeItem<Particle>> selectedParticles = new CopyOnWriteArrayList<>();
 
     private boolean debugQuadtree = true;
@@ -61,7 +60,7 @@ public class QuadtreeDemo extends GameComponent {
         for (int i = 0; i < w + h / brushSize; i++) {
             int x = (int) (Math.random() * w);
             int y = (int) (Math.random() * h);
-            particles.add(createGameObject(new Point(x, y)));
+            createGameObject(new Point(x, y));
         }
     }
 
@@ -92,7 +91,7 @@ public class QuadtreeDemo extends GameComponent {
     @Override
     public void update(float delta) {
 
-        for (QuadTreeItem<Particle> p : particles) {
+        for (QuadTreeItem<Particle> p : quadtree.items()) {
             update(p, delta);
             handleCollisions(p);
         }
@@ -119,7 +118,7 @@ public class QuadtreeDemo extends GameComponent {
         if (debugQuadtree)
             quadtree.draw(g);
 
-        for (QuadTreeItem<Particle> particle : particles) {
+        for (QuadTreeItem<Particle> particle : quadtree.items()) {
             particle.item.draw(g);
         }
 
@@ -184,23 +183,26 @@ public class QuadtreeDemo extends GameComponent {
                 break;
 
             default:
-                particles.add(createGameObject(position));
+                createGameObject(position);
                 break;
         }
 
     }
 
     private void findGameObjectsInMouseBounds() {
-        selectedParticles = quadtree.search(mouseBounds);
+        selectedParticles.clear();
+        quadtree.search(mouseBounds, selectedParticles);
     }
 
     private void removeGameObjectsInMouseBounds() {
 
-        List<QuadTreeItem<Particle>> particlesToRemove = quadtree.search(mouseBounds);
+        List<QuadTreeItem<Particle>> particlesToRemove = new CopyOnWriteArrayList<>();
 
-        particles.removeAll(particlesToRemove);
+        quadtree.search(mouseBounds, particlesToRemove);
 
-        quadtree.resize(particles);
+        quadtree.removeAll(particlesToRemove);
+
+        quadtree.resize();
     }
 
     private QuadTreeItem<Particle> createGameObject(Point position) {

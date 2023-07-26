@@ -42,6 +42,24 @@ public class Quadtree<T> {
         items.clear();
     }
 
+    public void items(List<QuadTreeItem<T>> listItems) {
+
+        listItems.addAll(this.items);
+
+        for (Quadtree<T> quadtree : child) {
+
+            if (quadtree != null)
+                quadtree.items(listItems);
+        }
+
+    }
+
+    public List<QuadTreeItem<T>> items() {
+        List<QuadTreeItem<T>> listItems = new CopyOnWriteArrayList<>();
+        this.items(listItems);
+        return listItems;
+    }
+
     public int size() {
 
         int total = items.size();
@@ -120,9 +138,7 @@ public class Quadtree<T> {
 
     }
 
-    public List<QuadTreeItem<T>> search(Rectangle area) {
-
-        List<QuadTreeItem<T>> result = new CopyOnWriteArrayList<QuadTreeItem<T>>();
+    public void search(Rectangle area, List<QuadTreeItem<T>> result) {
 
         for (QuadTreeItem<T> item : items) {
             if (item.bounds.intersects(area)) {
@@ -133,23 +149,22 @@ public class Quadtree<T> {
         for (Quadtree<T> quadtree : child) {
 
             if (quadtree != null) {
-
                 // Otimização, se o filho contem a area, por tabela todos os item estao dentro
                 if (area.contains(quadtree.bounds)) {
-                    result.addAll(quadtree.items);
+                    quadtree.items(result);
 
                 } else if (quadtree.bounds.intersects(area)) {
-                    result.addAll(quadtree.search(area));
+                    quadtree.search(area, result);
                 }
             }
 
         }
 
-        return result;
     }
 
     public List<QuadTreeItem<T>> search(QuadTreeItem<T> item) {
-        List<QuadTreeItem<T>> result = search(item.bounds);
+        List<QuadTreeItem<T>> result = new CopyOnWriteArrayList<QuadTreeItem<T>>();
+        search(item.bounds, result);
         result.remove(item);
         return result;
     }
@@ -159,5 +174,9 @@ public class Quadtree<T> {
         for (QuadTreeItem<T> item : items) {
             insert(item);
         }
+    }
+
+    public void resize() {
+        this.resize(this.items());
     }
 }
