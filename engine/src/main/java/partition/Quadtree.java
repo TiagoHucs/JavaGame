@@ -124,9 +124,6 @@ public class Quadtree<T> {
 
         List<QuadTreeItem<T>> result = new CopyOnWriteArrayList<QuadTreeItem<T>>();
 
-        if (!bounds.intersects(area))
-            return result;
-
         for (QuadTreeItem<T> item : items) {
             if (item.bounds.intersects(area)) {
                 result.add(item);
@@ -134,8 +131,18 @@ public class Quadtree<T> {
         }
 
         for (Quadtree<T> quadtree : child) {
-            if (quadtree != null)
-                result.addAll(quadtree.search(area));
+
+            if (quadtree != null) {
+
+                // Otimização, se o filho contem a area, por tabela todos os item estao dentro
+                if (area.contains(quadtree.bounds)) {
+                    result.addAll(quadtree.items);
+
+                } else if (quadtree.bounds.intersects(area)) {
+                    result.addAll(quadtree.search(area));
+                }
+            }
+
         }
 
         return result;

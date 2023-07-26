@@ -105,8 +105,8 @@ public class QuadtreeDemo extends GameComponent {
     }
 
     private Point2D.Float randSize() {
-        float w = (float) ThreadLocalRandom.current().nextDouble(8, mouseBounds.width);
-        float h = (float) ThreadLocalRandom.current().nextDouble(8, mouseBounds.height);
+        float w = (float) ThreadLocalRandom.current().nextDouble(mouseBounds.width / 2, mouseBounds.width);
+        float h = (float) ThreadLocalRandom.current().nextDouble(mouseBounds.height / 2, mouseBounds.height);
         return new Point2D.Float(w, h);
     }
 
