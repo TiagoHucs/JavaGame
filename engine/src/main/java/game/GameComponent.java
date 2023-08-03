@@ -119,21 +119,21 @@ public abstract class GameComponent implements KeyListener, MouseListener {
     }
     public void startAndPlay(float targetFps, GameRender graphics) {
 
-        final float timePerFrame = 1000000000F / targetFps;
-        final float fixedDeltaTime = 1.0F / targetFps;
-
         long previousTime = System.nanoTime();
 
-        float delta = 0F;
+        double timePerFrame = 1000000000 / targetFps;
+        float fixedDeltaTime = 1.0f / targetFps;
+        double delta = 0;
+        int frames = 0;
+        double time = System.currentTimeMillis();
 
         while (gameState.isGameRunning()) {
 
             long currentTime = System.nanoTime();
-
             delta += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;
 
-            if (delta >= 1F) {
+            if (delta >= 1) {
 
                 try {
                     update(fixedDeltaTime);
@@ -143,7 +143,14 @@ public abstract class GameComponent implements KeyListener, MouseListener {
                     error.printStackTrace(System.err);
                 }
 
+                frames++;
                 delta--;
+
+                if (System.currentTimeMillis() - time >= 1000) {
+                    System.out.println("FPS: " + frames);
+                    time+= 1000;
+                    frames = 0;
+                }
             }
         }
     }
