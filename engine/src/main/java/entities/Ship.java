@@ -18,7 +18,7 @@ public class Ship extends GameObject {
 
     public Ship() {
         super();
-        this.setImage("/image/player_1.png");
+        this.setImage("/imgs/SpaceShip-1.png.png");
         addEffect(new Shake(), new Recoil());
     }
 

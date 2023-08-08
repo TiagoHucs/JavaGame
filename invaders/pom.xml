@@ -19,6 +19,41 @@
             <groupId>br.eftgames</groupId>
             <artifactId>engine</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.akathist.maven.plugins.launch4j/launch4j-maven-plugin -->
+        <dependency>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>console</headerType>
+                            <outfile>target/buginvaders.exe</outfile>
+                            <jar>target/invaders-1.0-SNAPSHOT.jar</jar>
+                            <errTitle>Erro</errTitle>
+                            <classPath>
+                                <mainClass>invaders.Invaders</mainClass>
+                            </classPath>
+                            <icon>src/main/resources/icon/buginvaders.ico</icon> <!-- Opcional: Ícone do executável -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

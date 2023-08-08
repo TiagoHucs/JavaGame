@@ -34,7 +34,7 @@ public class PlayerState {
     @SneakyThrows
     PlayerState(int id) {
         this.id = id;
-        ship.setImage("/image/player_1.png");
+        ship.setImage("/imgs/SpaceShip-1.png.png");
         ship.addEffect(blinkEffect);
         lifeIcon = ResourceManager.get().getImage("/image/UI/icon-ship.png");
     }
